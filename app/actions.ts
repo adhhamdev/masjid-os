@@ -16,17 +16,14 @@ export const signUpAction = async (formData: FormData) => {
 
   const { error } = await supabase.auth.signUp({
     email,
-    password,
-    options: {
-      emailRedirectTo: `${origin}/auth/callback`,
-    },
+    password
   });
 
   if (error) {
     console.error(error.code + " " + error.message);
     return { error: error.message };
   } else {
-    return { success: "Check your email for a link to activate your account." };
+    return { success: "Account created successfully" };
   }
 };
 
@@ -70,7 +67,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
     return redirect(callbackUrl);
   }
 
-  return { success: "Check your email for a link to reset your password." };
+  return redirect("/reset-password");
 };
 
 export const resetPasswordAction = async (formData: FormData) => {
