@@ -6,7 +6,7 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-gray-800">Welcome to Our Software Product</h1>
         <p className="mt-4 text-lg text-gray-600">Transform your workflow with our innovative solutions.</p>
         <div className="mt-6">
-          <a href="/protected/dashboard" className="px-6 py-3 text-white bg-blue-600 rounded hover:bg-blue-700">
+          <a href="/admin/protected/dashboard" className="px-6 py-3 text-white bg-blue-600 rounded hover:bg-blue-700">
             Get Started
           </a>
         </div>

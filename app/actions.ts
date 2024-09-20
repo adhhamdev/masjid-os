@@ -17,12 +17,12 @@ export const signInAction = async (formData: FormData) => {
     return { error: error.message };
   }
 
-  return redirect("/protected/dashboard");
+  return redirect("/admin/protected/dashboard");
 };
 
 export const signOutAction = async () => {
   const supabase = createClient();
   await supabase.auth.signOut();
-  return redirect("/sign-in");
+  return redirect("/admin/sign-in");
 };
 
