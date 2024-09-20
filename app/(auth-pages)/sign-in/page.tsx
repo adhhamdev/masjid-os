@@ -6,7 +6,6 @@ import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 
 export default function Login() {
@@ -26,12 +25,6 @@ export default function Login() {
           <div className="text-center">
             <Image src="/mosque.png" alt="Mosque Logo" width={80} height={80} className="mx-auto" />
             <h1 className="mt-6 text-3xl font-extrabold text-emerald-900">Sign in</h1>
-            <p className="mt-2 text-sm text-emerald-600">
-              Don't have an account?{" "}
-              <Link className="font-medium text-emerald-600 hover:text-emerald-500" href="/sign-up">
-                Sign up
-              </Link>
-            </p>
           </div>
           <form className="mt-8 space-y-6" action={handleSubmit}>
             <div className="space-y-4">
@@ -60,15 +53,6 @@ export default function Login() {
                 />
               </div>
             </div>
-
-            <div className="flex items-center justify-between">
-              <div className="text-sm">
-                <Link href="/forgot-password" className="font-medium text-emerald-600 hover:text-emerald-500">
-                  Forgot your password?
-                </Link>
-              </div>
-            </div>
-
             <SubmitButton className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
               Sign in
             </SubmitButton>
