@@ -6,7 +6,6 @@ export const metadata: Metadata = {
     description: 'Mosque management dashboard',
 }
 
-export default async function Dashboard() {
-
-    return <DashboardContent />
+export default function Dashboard() {
+    return <DashboardContent />;
 }

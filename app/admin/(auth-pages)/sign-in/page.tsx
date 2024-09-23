@@ -5,6 +5,7 @@ import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LogIn } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -54,6 +55,7 @@ export default function Login() {
               </div>
             </div>
             <SubmitButton className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+              <LogIn className="mr-2 h-3 w-3" />
               Sign in
             </SubmitButton>
             {message && <FormMessage message={message} />}

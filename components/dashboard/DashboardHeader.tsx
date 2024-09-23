@@ -1,9 +1,10 @@
-import { signOutAction } from '@/app/actions'
-import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { Bell, ChevronDown, LogOut, Menu, Settings, User } from 'lucide-react'
-import Image from 'next/image'
+"use client";
+import { LogoutButton } from '@/components/logout-button';
+import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Bell, ChevronDown, Menu, Settings, User } from 'lucide-react';
+import Image from 'next/image';
 
 function ProfileDropdown({ isMobile = false }) {
     return (
@@ -17,7 +18,6 @@ function ProfileDropdown({ isMobile = false }) {
                             <ChevronDown className="h-4 w-4" />
                         </>
                     ) : (
-
                         <>
                             <Image className='select-none rounded-lg' src="/user.png" alt="Profile" width={24} height={24} />
                             <ChevronDown className="h-4 w-4" />
@@ -25,26 +25,17 @@ function ProfileDropdown({ isMobile = false }) {
                     )}
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align={isMobile ? "center" : "end"} className="w-56 p-2">
-                <DropdownMenuItem className="py-3 px-4 text-base cursor-pointer hover:bg-emerald-100">
+            <DropdownMenuContent align={isMobile ? "center" : "end"} className="w-48 p-1">
+                <DropdownMenuItem className="py-2 px-3 text-sm cursor-pointer hover:bg-emerald-100">
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                 </DropdownMenuItem>
-
-
-                <DropdownMenuItem className="py-3 px-4 text-base cursor-pointer hover:bg-emerald-100">
+                <DropdownMenuItem className="py-2 px-3 text-sm cursor-pointer hover:bg-emerald-100">
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Settings</span>
                 </DropdownMenuItem>
-                <hr className="my-2 h-1 bg-gray-300 rounded-full" />
-                <div>
-                    <form action={signOutAction} className="w-full">
-                        <Button variant="destructive" className="w-full flex items-center py-3 px-4 text-base cursor-pointer ">
-                            <LogOut className="mr-2 h-4 w-4" />
-                            <span>Logout</span>
-                        </Button>
-                    </form>
-                </div>
+                <hr className="my-1 h-1 bg-gray-300 rounded-full" />
+                <LogoutButton />
             </DropdownMenuContent>
         </DropdownMenu>
     )
@@ -93,10 +84,7 @@ export default function DashboardHeader() {
                             <Settings className="h-4 w-4" />
                             <span className='ml-2 hidden lg:block'>Prayer Settings</span>
                         </Button>
-
                     </nav>
-
-
                 </div>
             </div>
         </header>

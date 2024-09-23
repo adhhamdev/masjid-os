@@ -26,8 +26,8 @@ export default function DashboardMain() {
         governmentSectors: 'Government Sectors',
         projects: 'Project',
         donations: 'Donations',
-        members: 'Members',
-        recentActivities: ['Recent Activity 1', 'Recent Activity 2', 'Recent Activity 3'],
+        members: 'Mahallah',
+        finance: ['Finance 1', 'Finance 2', 'Finance 3'],
         events: 'Events',
     }
 
@@ -40,7 +40,7 @@ export default function DashboardMain() {
                     <StatCard title="Government Sectors" value={data.governmentSectors} icon={Globe} />
                     <StatCard title="Project" value={data.projects} icon={BarChart2} />
                     <StatCard title="Donations" value={`$${data.donations}`} icon={DollarSign} />
-                    <StatCard title="Members" value={data.members} icon={Users} />
+                    <StatCard title="Mahallah" value={data.members} icon={Users} />
                     <StatCard title="Events" value={data.events} icon={FileText} />
                     <Card className="md:col-span-2 bg-emerald-50 border-emerald-200">
                         <CardHeader>
@@ -48,7 +48,7 @@ export default function DashboardMain() {
                         </CardHeader>
                         <CardContent>
                             <ul className="space-y-2 text-emerald-700">
-                                {data.recentActivities.map((activity, index) => (
+                                {data.finance.map((activity, index) => (
                                     <li key={index}>{activity}</li>
                                 ))}
                             </ul>

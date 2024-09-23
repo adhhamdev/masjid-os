@@ -2,28 +2,32 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { createClient } from './utils/supabase/server';
 
-
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
   const supabase = createClient();
+  const { data: {user} } = await supabase.auth.getUser();
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  // If the user is not signed in and the current path is not / or /admin/sign-in, redirect to /admin/sign-in
-  if (!session && !req.nextUrl.pathname.startsWith('/admin/sign-in') && req.nextUrl.pathname !== '/') {
-    return NextResponse.redirect(new URL('/admin/sign-in', req.url))
+  if (!user && !req.nextUrl.pathname.startsWith('/admin/sign-in') && req.nextUrl.pathname !== '/') {
+    return NextResponse.redirect(new URL('/admin/sign-in', req.url));
   }
 
-  // If the user is signed in and the current path is /admin/sign-in, redirect to /admin/protected/dashboard
-  if (session && req.nextUrl.pathname === '/admin/sign-in') {
-    return NextResponse.redirect(new URL('/admin/protected/dashboard', req.url))
+  if (user && req.nextUrl.pathname === '/admin/sign-in') {
+    return NextResponse.redirect(new URL('/admin/protected/dashboard', req.url));
   }
 
-  return res
+  // Check for inactivity
+  const lastActivity = user?.last_sign_in_at;
+  const currentTime = new Date().getTime(); 
+  const inactivityLimit = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+  if (lastActivity && (currentTime - new Date(lastActivity).getTime()) > inactivityLimit) {
+    console.log('User is inactive');
+    await supabase.auth.signOut();
+    return NextResponse.redirect(new URL('/admin/sign-in', req.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|mosque.png).*)']
 }
