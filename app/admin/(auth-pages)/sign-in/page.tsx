@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 import Image from "next/image";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 
 export default function Login() {
   const [message, setMessage] = useState<Message | null>(null);
@@ -58,9 +58,7 @@ export default function Login() {
               <LogIn className="mr-2 h-4 w-4" />
               Sign in
             </SubmitButton>
-            <Suspense fallback={<div>Loading...</div>}>
-              {message && <FormMessage message={message} setMessage={setMessage} />}
-            </Suspense>
+            {message && <FormMessage message={message} setMessage={setMessage} />}
           </form>
         </div>
       </div>
