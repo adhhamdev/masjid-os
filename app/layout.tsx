@@ -1,3 +1,4 @@
+import { IdleTimerWrapper } from '@/components/IdleTimerWrapper';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import "./globals.css";
@@ -35,7 +36,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        {children}
+        <IdleTimerWrapper>
+          {children}
+        </IdleTimerWrapper>
       </body>
     </html>
   );

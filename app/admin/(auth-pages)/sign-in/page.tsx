@@ -11,17 +11,14 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
 function LoginForm() {
-  'use client'
-
   const searchParams = useSearchParams();
   const [message, setMessage] = useState<Message | null>(null);
 
   useEffect(() => {
-    if (searchParams.has('timeout')) {
-      setMessage({ error: 'You have been logged out due to inactivity. Please sign in again.' });
-    }
     if (searchParams.has('logout')) {
       setMessage({ success: 'You have been logged out. Please sign in again.' });
+    } else if (searchParams.has('timeout')) {
+      setMessage({ error: 'Your session has expired due to inactivity. Please sign in again.' });
     }
   }, [searchParams]);
 

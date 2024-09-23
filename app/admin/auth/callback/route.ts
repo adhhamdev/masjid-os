@@ -8,10 +8,7 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = createClient();
-    const { data: { session } } = await supabase.auth.exchangeCodeForSession(code);
-    if (session) {
-      await supabase.from('users').update({ last_sign_in_at: new Date().toISOString() }).eq('id', session.user.id);
-    }
+    await supabase.auth.exchangeCodeForSession(code);
   }
 
   return NextResponse.redirect(`${origin}/admin/protected/dashboard`);

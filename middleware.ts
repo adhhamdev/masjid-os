@@ -14,20 +14,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/admin/protected/dashboard', req.url));
   }
 
-  // Check for inactivity
-  const lastActivity = user?.last_sign_in_at;
-  const currentTime = new Date().getTime(); 
-  const inactivityLimit = 5 * 60 * 1000; // 5 minutes in milliseconds
-
-  if (lastActivity && (currentTime - new Date(lastActivity).getTime()) > inactivityLimit) {
-    console.log('User is inactive');
-    await supabase.auth.signOut();
-    return NextResponse.redirect(new URL('/admin/sign-in?timeout=true', req.url));
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|mosque.png).*)']
+  matcher: ['/((?!api|_next/static|_next/image|public).*)']
 }
