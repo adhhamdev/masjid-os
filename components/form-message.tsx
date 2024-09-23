@@ -1,24 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle, Info, XCircle } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
 
 export type Message =
   | { success: string }
   | { error: string }
   | { message: string };
 
-export function FormMessage({ message, setMessage }: { message: Message, setMessage: (message: Message) => void }) {
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    if (searchParams.has('timeout')) {
-      setMessage({ error: 'You have been logged out due to inactivity. Please sign in again.' });
-    }
-    if (searchParams.has('logout')) {
-      setMessage({ success: 'You have been logged out. Please sign in again.' });
-    }
-  }, [searchParams]);
+export function FormMessage({ message }: { message: Message }) {
   const getIcon = () => {
     if ("success" in message) return <CheckCircle className="w-5 h-5" />;
     if ("error" in message) return <XCircle className="w-5 h-5" />;
