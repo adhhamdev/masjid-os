@@ -13,7 +13,7 @@ export default function Login() {
 
   async function handleSubmit(formData: FormData) {
     const result = await signInAction(formData);
-    if ("error" in result) {
+    if (result?.error) {
       setMessage({ error: result.error });
     }
   }
@@ -23,7 +23,7 @@ export default function Login() {
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-2xl shadow-xl">
           <div className="text-center">
-            <Image src="/mosque.png" alt="Mosque Logo" width={80} height={80} className="mx-auto" />
+            <Image src="/mosque.png" alt="Mosque Logo" width={80} height={80} className="mx-auto" priority />
             <h1 className="mt-6 text-3xl font-extrabold text-emerald-900">Sign in</h1>
           </div>
           <form className="mt-8 space-y-6" action={handleSubmit}>

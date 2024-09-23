@@ -1,14 +1,14 @@
 "use server";
+import { createClient } from '@/utils/supabase/server';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-
-export const signInAction = async (formData: FormData) => {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+export async function signInAction(formData: FormData) {
   const supabase = createClient();
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -17,12 +17,14 @@ export const signInAction = async (formData: FormData) => {
     return { error: error.message };
   }
 
-  return redirect("/admin/protected/dashboard");
-};
+  revalidatePath('/', 'layout')
+  redirect('/admin/protected/dashboard')
+}
 
-export const signOutAction = async () => {
+export async function signOutAction() {
   const supabase = createClient();
-  await supabase.auth.signOut();
-  return redirect("/admin/sign-in");
-};
+  await supabase.auth.signOut()
+  revalidatePath('/', 'layout')
+  redirect('/admin/sign-in')
+}
 

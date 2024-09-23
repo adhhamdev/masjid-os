@@ -34,9 +34,9 @@ export default function DashboardMain() {
     return (
         <main className="p-8 relative z-10">
             <div className="mb-8">
-                <h2 className="text-3xl font-bold mb-4 text-emerald-900">Dashboard / Home</h2>
+                <h2 className="text-3xl font-bold mb-4 text-emerald-900">Overview / Home</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <StatCard title="Organization" value={data.organization} icon={Grid} />
+                    <StatCard title="Non-profit Organization" value={data.organization} icon={Grid} />
                     <StatCard title="Government Sectors" value={data.governmentSectors} icon={Globe} />
                     <StatCard title="Project" value={data.projects} icon={BarChart2} />
                     <StatCard title="Donations" value={`$${data.donations}`} icon={DollarSign} />
@@ -44,7 +44,7 @@ export default function DashboardMain() {
                     <StatCard title="Events" value={data.events} icon={FileText} />
                     <Card className="md:col-span-2 bg-emerald-50 border-emerald-200">
                         <CardHeader>
-                            <CardTitle className="text-emerald-800">Recent Activities</CardTitle>
+                            <CardTitle className="text-emerald-800">Finance</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <ul className="space-y-2 text-emerald-700">

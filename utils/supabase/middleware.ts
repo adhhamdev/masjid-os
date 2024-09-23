@@ -1,4 +1,4 @@
-import { createServerClient } from "@supabase/ssr";
+import { createClient } from "@/utils/supabase/server";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const updateSession = async (request: NextRequest) => {
@@ -8,38 +8,15 @@ export const updateSession = async (request: NextRequest) => {
       },
     });
 
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return request.cookies.getAll();
-          },
+    const supabase = createClient();
 
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value),
-            );
-            response = NextResponse.next({
-              request,
-            });
-            cookiesToSet.forEach(({ name, value, options }) =>
-              response.cookies.set(name, value, options),
-            );
-          },
-        },
-      },
-    );
+    const { data: { session } } = await supabase.auth.getSession();
 
-    const user = await supabase.auth.getUser();
-
-    if (request.nextUrl.pathname.startsWith("/admin/protected") && user.error) {
-      return NextResponse.redirect(new URL("/admin/sign-in", request.url));
-    }
-
-    if (request.nextUrl.pathname === "/admin" && !user.error) {
-      return NextResponse.redirect(new URL("/admin/protected/dashboard", request.url));
+    if (request.nextUrl.pathname.startsWith("/admin/protected")) {
+      if (!session) {
+        // If there's no session, redirect to sign-in
+        return NextResponse.redirect(new URL("/admin/sign-in", request.url));
+      }
     }
 
     return response;
