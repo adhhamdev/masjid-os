@@ -8,7 +8,7 @@ import { PlusIcon, Save, XIcon } from "lucide-react"
 
 export default function Info() {
     return (
-        <div className="min-h-screen bg-gray-50 pt-8">
+        <div className="min-h-screen py-8">
             <main className="container mx-auto">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-semibold text-gray-800">Masjid Information</h2>
@@ -198,7 +198,7 @@ export default function Info() {
                     <h3 className="text-lg font-semibold mb-4 text-gray-800">Masjid Photos</h3>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {[1, 2, 3, 4, 5].map((i) => (
-                            <div key={i} className="relative aspect-square bg-white shadow-md rounded-lg overflow-hidden">
+                            <div key={i} className="relative aspect-square shadow-inner border border-gray-300 rounded-lg overflow-hidden">
                                 <Button variant="destructive" className="absolute top-2 right-2 w-8 h-8 p-0 bg-red-500 hover:bg-red-600">
                                     <XIcon className="w-4 h-4" />
                                 </Button>
