@@ -7,21 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 import Image from "next/image";
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 
 export default function Login() {
   const [message, setMessage] = useState<Message | null>(null);
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    if (searchParams.has('timeout')) {
-      setMessage({ error: 'You have been logged out due to inactivity. Please sign in again.' });
-    }
-    if (searchParams.has('logout')) {
-      setMessage({ success: 'You have been logged out. Please sign in again.' });
-    }
-  }, [searchParams]);
 
   async function handleSubmit(formData: FormData) {
     const result = await signInAction(formData);
@@ -69,7 +58,9 @@ export default function Login() {
               <LogIn className="mr-2 h-4 w-4" />
               Sign in
             </SubmitButton>
-            {message && <FormMessage message={message} />}
+            <Suspense fallback={<div>Loading...</div>}>
+              {message && <FormMessage message={message} setMessage={setMessage} />}
+            </Suspense>
           </form>
         </div>
       </div>
