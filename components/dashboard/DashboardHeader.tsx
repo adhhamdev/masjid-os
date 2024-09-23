@@ -25,7 +25,7 @@ function ProfileDropdown({ isMobile = false }) {
                     )}
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align={isMobile ? "center" : "end"} className="w-48 p-1">
+            <DropdownMenuContent align={isMobile ? "center" : "end"} className="w-48 p-1 max-h-60">
                 <DropdownMenuItem className="py-2 px-3 text-sm cursor-pointer hover:bg-emerald-100">
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
@@ -34,7 +34,7 @@ function ProfileDropdown({ isMobile = false }) {
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Settings</span>
                 </DropdownMenuItem>
-                <hr className="my-1 h-1 bg-gray-300 rounded-full" />
+                <hr className="my-2 h-[2px] w-5/6 mx-auto bg-gray-400 rounded-full" />
                 <LogoutButton />
             </DropdownMenuContent>
         </DropdownMenu>

@@ -29,32 +29,6 @@
     --chart-3: 160 40% 50%;
     --chart-4: 100 70% 35%;
     --chart-5: 80 60% 40%;
-
-    /* --background: rgb(250, 250, 250);
-    --foreground: rgb(23, 31, 23);
-    --card: rgb(250, 250, 250);
-    --card-foreground: rgb(23, 31, 23);
-    --popover: rgb(250, 250, 250);
-    --popover-foreground: rgb(23, 31, 23);
-    --primary: rgb(46, 77, 46);
-    --primary-foreground: rgb(250, 250, 250);
-    --secondary: rgb(224, 230, 224);
-    --secondary-foreground: rgb(23, 31, 23);
-    --muted: rgb(224, 230, 224);
-    --muted-foreground: rgb(92, 102, 92);
-    --accent: rgb(51, 51, 51);
-    --accent-foreground: rgb(41, 61, 41);
-    --destructive: rgb(239, 68, 68);
-    --destructive-foreground: rgb(250, 250, 250);
-    --border: rgb(194, 204, 194);
-    --input: rgb(194, 204, 194);
-    --ring: rgb(46, 77, 46);
-    --radius: 0.5rem;
-    --chart-1: rgb(61, 102, 61);
-    --chart-2: rgb(69, 115, 92);
-    --chart-3: rgb(77, 128, 102);
-    --chart-4: rgb(89, 115, 54);
-    --chart-5: rgb(102, 128, 61); */
   }
 }
 
