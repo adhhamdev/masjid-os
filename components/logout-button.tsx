@@ -16,7 +16,7 @@ export function LogoutButton() {
 
     return (
         <form onSubmit={handleLogout} className="w-full">
-            <Button variant="destructive" className="w-full flex items-center py-2 px-3 text-sm cursor-pointer" disabled={isPending}>
+            <Button variant="outline" className="w-full flex items-center py-2 px-3 text-sm cursor-pointer" disabled={isPending}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>{isPending ? 'Logging out...' : 'Logout'}</span>
             </Button>

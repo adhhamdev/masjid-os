@@ -25,6 +25,6 @@ export async function signOutAction() {
   const supabase = createClient();
   await supabase.auth.signOut()
   revalidatePath('/', 'layout')
-  redirect('/admin/sign-in')
+  redirect('/admin/sign-in?logout=true')
 }
 

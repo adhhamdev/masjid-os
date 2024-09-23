@@ -7,7 +7,7 @@ export async function middleware(req: NextRequest) {
   const { data: {user} } = await supabase.auth.getUser();
 
   if (!user && !req.nextUrl.pathname.startsWith('/admin/sign-in') && req.nextUrl.pathname !== '/') {
-    return NextResponse.redirect(new URL('/admin/sign-in', req.url));
+    return NextResponse.redirect(new URL('/admin/sign-in?', req.url));
   }
 
   if (user && req.nextUrl.pathname === '/admin/sign-in') {
@@ -22,7 +22,7 @@ export async function middleware(req: NextRequest) {
   if (lastActivity && (currentTime - new Date(lastActivity).getTime()) > inactivityLimit) {
     console.log('User is inactive');
     await supabase.auth.signOut();
-    return NextResponse.redirect(new URL('/admin/sign-in', req.url));
+    return NextResponse.redirect(new URL('/admin/sign-in?timeout=true', req.url));
   }
 
   return NextResponse.next();

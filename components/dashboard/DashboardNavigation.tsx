@@ -13,7 +13,7 @@ export default function DashboardNavigation() {
         <nav className="bg-emerald-700 shadow-sm p-3 relative z-10">
             <ul className="flex space-x-2 overflow-x-auto">
                 <li>
-                    <Link href="/admin/protected/dashboard" passHref>
+                    <Link href="/admin/protected/dashboard">
                         <Button variant="ghost" size="sm" className="text-emerald-50 hover:text-emerald-200">Dashboard</Button>
                     </Link>
                 </li>
@@ -26,9 +26,11 @@ export default function DashboardNavigation() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-48 p-1">
-                            <DropdownMenuItem className="py-2 px-3 text-sm cursor-pointer hover:bg-emerald-100">
-                                <Info className="mr-2 h-3 w-3" />
-                                Masjid Info
+                            <DropdownMenuItem asChild className="py-2 px-3 text-sm cursor-pointer hover:bg-emerald-100">
+                                <Link href="/admin/protected/masjid/info">
+                                    <Info className="mr-2 h-4 w-4" />
+                                    Masjid Info
+                                </Link>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
