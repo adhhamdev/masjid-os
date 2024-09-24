@@ -15,12 +15,12 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Masjid OS",
-  description: "Mosque management system for Masjid OS",
+  title: "Islamic Center Management System",
+  description: "Streamline Your Masjid Management with Our Comprehensive System",
   keywords: ['mosque', 'management', 'Islamic', 'community'],
-  authors: [{ name: 'Masjid OS' }],
-  creator: 'Masjid OS',
-  publisher: 'Masjid OS',
+  authors: [{ name: 'Adhham Safwan', url: 'https://adhham.vercel.app' }],
+  creator: 'Adhham Safwan',
+  publisher: 'Islamic Center Management System',
   formatDetection: {
     email: false,
     address: false,

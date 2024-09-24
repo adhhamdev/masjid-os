@@ -8,7 +8,7 @@ import { PlusIcon, Save, XIcon } from "lucide-react"
 
 export default function Info() {
     return (
-        <div className="min-h-screen py-8">
+        <div className="min-h-screen py-8 bg-slate-100">
             <main className="container mx-auto">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-semibold text-gray-800">Masjid Information</h2>
