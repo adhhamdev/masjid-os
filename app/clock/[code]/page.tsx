@@ -1,9 +1,18 @@
 "use client"
 
+import FullDark from '@/components/clocks/full-dark'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
-const Dark1 = dynamic(() => import('@/components/clocks/dark1'), {
+const Dark1 = dynamic(() => import('@/components/clocks/full-dark'), {
+    loading: () => <p>Loading...</p>
+})
+
+const Poster1 = dynamic(() => import('@/components/clocks/poster'), {
+    loading: () => <p>Loading...</p>
+})
+
+const IqamahCountdown = dynamic(() => import('@/components/clocks/iqamath-countdown'), {
     loading: () => <p>Loading...</p>
 })
 
@@ -30,22 +39,24 @@ const ClientTime = () => {
 
     // Placeholder data for Azan and Iqamah times
     const azanTime = "05:30 AM"
-    const iqamahTime = "05:45 AM"
+    const iqamahTime = "12:00 PM";
 
     // Placeholder for Islamic date (you'll need to implement actual conversion)
-    const islamicDate = "15 Ramadan 1444"
+    const islamicDate = "15 Ramadan 1444";
     const englishDate = time.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 
     return (
-        <Dark1
-            hours={hours}
-            minutes={minutes}
-            seconds={seconds}
-            azanTime={azanTime}
-            iqamahTime={iqamahTime}
-            islamicDate={islamicDate}
-            englishDate={englishDate}
-        />
+        <div className='select-none pointer-events-none'>
+            <FullDark
+                hours={hours}
+                minutes={minutes}
+                seconds={seconds}
+                azanTime={azanTime}
+                iqamahTime={iqamahTime}
+                islamicDate={islamicDate}
+                englishDate={englishDate}
+            />
+        </div>
     )
 }
 

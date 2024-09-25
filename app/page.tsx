@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { MessageCircle } from "lucide-react"
 import Link from "next/link"
-import HomeContent from "./components/HomeContent"
-import MobileMenu from "./components/MobileMenu"
+import HomeContent from "../components/HomeContent"
+import MobileMenu from "../components/MobileMenu"
 
 export default function HomePage() {
   const whatsappNumber = "+94743193834"

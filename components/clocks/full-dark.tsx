@@ -1,7 +1,7 @@
 import AnimatedDigit from "@/components/animated-digit";
 import { montserrat } from "@/fonts";
 
-interface Dark1Props {
+interface FullDarkProps {
     hours: string;
     minutes: string;
     seconds: string;
@@ -11,7 +11,7 @@ interface Dark1Props {
     englishDate: string;
 }
 
-export default function Dark1({ hours, minutes, seconds, azanTime, iqamahTime, islamicDate, englishDate }: Dark1Props) {
+export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime, islamicDate, englishDate }: FullDarkProps) {
     return (
         <div className={`flex flex-col items-center justify-center w-screen h-screen bg-gradient-to-b from-[#000001] to-[#0f1925] ${montserrat.className}`}>
             <div className="text-white text-center">
