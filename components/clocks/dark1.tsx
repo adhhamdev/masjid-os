@@ -14,16 +14,16 @@ interface Dark1Props {
 export default function Dark1({ hours, minutes, seconds, azanTime, iqamahTime, islamicDate, englishDate }: Dark1Props) {
     return (
         <div className={`flex flex-col items-center justify-center w-screen h-screen bg-gradient-to-b from-[#000001] to-[#0f1925] ${montserrat.className}`}>
-            <div className="text-white text-center mb-8">
+            <div className="text-white text-center">
                 <div className="text-4xl font-bold mb-2">{islamicDate}</div>
                 <div className="text-2xl">{englishDate}</div>
             </div>
-            <div className="text-9xl font-bold tracking-wider flex items-center mb-12" aria-live="polite">
+            <div className="text-[10rem] font-bold tracking-wider flex items-center" aria-live="polite">
                 <span className="text-white w-[1.3em] text-center">{hours}</span>
                 <span className="text-white w-[0.3em] text-center">:</span>
                 <span className="text-white w-[1.3em] text-center">{minutes}</span>
                 <span className="text-white w-[0.3em] text-center">:</span>
-                <div className="flex text-gray-600 w-[1.3em]">
+                <div className="flex text-gray-600 w-[1.4em]">
                     <AnimatedDigit digit={seconds[0]} />
                     <AnimatedDigit digit={seconds[1]} />
                 </div>
