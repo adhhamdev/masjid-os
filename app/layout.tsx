@@ -1,17 +1,13 @@
 import { IdleTimerWrapper } from '@/components/IdleTimerWrapper';
+import { montserrat } from '@/fonts';
 import type { Metadata } from 'next';
-import { Poppins } from 'next/font/google';
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
-});
+
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
@@ -34,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={poppins.className} suppressHydrationWarning>
+    <html lang="en" className={montserrat.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
         <IdleTimerWrapper>
           {children}
