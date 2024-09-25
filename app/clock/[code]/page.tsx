@@ -1,14 +1,13 @@
 "use client"
 
-import FullDark from '@/components/clocks/full-dark'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
-const Dark1 = dynamic(() => import('@/components/clocks/full-dark'), {
+const FullDark = dynamic(() => import('@/components/clocks/full-dark'), {
     loading: () => <p>Loading...</p>
 })
 
-const Poster1 = dynamic(() => import('@/components/clocks/poster'), {
+const Poster = dynamic(() => import('@/components/clocks/poster'), {
     loading: () => <p>Loading...</p>
 })
 

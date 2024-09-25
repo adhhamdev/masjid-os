@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 export default function IqamahCountdown({ iqamahTime }: { iqamahTime: string }) {
 
     const [countdown, setCountdown] = useState(0)
+
     useEffect(() => {
         console.log(iqamahTime)
     }, [iqamahTime])
@@ -17,71 +18,20 @@ export default function IqamahCountdown({ iqamahTime }: { iqamahTime: string }) 
     }, [])
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100vh',
-            width: '100vw',
-            backgroundColor: '#1a202c',
-            fontFamily: 'sans-serif',
-            color: 'white',
-            overflow: 'hidden'
-        }}>
-            <div style={{
-                backgroundColor: '#2d3748',
-                padding: '1vh',
-                textAlign: 'center',
-                fontSize: 'clamp(1rem, 4vw, 2.5rem)',
-                fontWeight: 'bold',
-                borderBottom: '2px solid #4a5568'
-            }}>
-                IQAMATH COUNT DOWN
+        <div className="flex flex-col h-screen w-screen bg-gray-900 text-white font-sans overflow-hidden">
+            <div className="bg-gray-800 p-4 text-center text-2xl sm:text-3xl md:text-4xl font-bold border-b-2 border-gray-700">
+                IQAMAH COUNTDOWN
             </div>
-            <div style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#edf2f7',
-                padding: '2vh'
-            }}>
-                <div style={{
-                    color: '#e53e3e',
-                    fontSize: 'clamp(3rem, 20vw, 12rem)',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
-                }}>
+            <div className="flex-1 flex flex-col justify-center items-center bg-gray-100 p-8">
+                <div className="text-red-600 text-7xl sm:text-8xl md:text-9xl lg:text-[12rem] font-bold text-center shadow-lg">
                     {countdown.toString().padStart(2, '0')}
                 </div>
             </div>
-            <div style={{
-                backgroundColor: '#e2e8f0',
-                padding: '1vh',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <div style={{
-                    width: 'clamp(2rem, 8vw, 4rem)',
-                    height: 'clamp(2rem, 8vw, 4rem)',
-                    backgroundColor: '#e53e3e',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginRight: '1rem'
-                }}>
-                    <span style={{ color: 'white', fontSize: 'clamp(1rem, 5vw, 2.5rem)' }}>🚫</span>
+            <div className="bg-gray-200 p-4 flex items-center justify-center">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-red-600 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-white text-2xl sm:text-3xl">🚫</span>
                 </div>
-                <p style={{
-                    color: 'black',
-                    fontSize: 'clamp(0.8rem, 3vw, 1.5rem)',
-                    fontWeight: '600',
-                    textAlign: 'left',
-                    lineHeight: '1.2'
-                }}>
+                <p className="text-black text-lg sm:text-xl md:text-2xl font-semibold leading-tight">
                     Please Turn off Your<br />Mobile Phones
                 </p>
             </div>
