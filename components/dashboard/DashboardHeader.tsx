@@ -11,7 +11,7 @@ function ProfileDropdown({ isMobile = false }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={`flex items-center space-x-2 text-emerald-50 hover:text-emerald-200 ${isMobile ? 'w-full justify-start' : ''}`}>
+                <Button variant="ghost" size="lg" className={`flex items-center space-x-2 text-emerald-50 hover:text-emerald-200 ${isMobile ? 'w-full justify-start' : ''}`}>
                     {isMobile ? (
                         <>
                             <User className="mr-2 h-5 w-5" />
@@ -58,14 +58,14 @@ export default function DashboardHeader() {
                                     <Menu className="h-6 w-6" />
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="left" className="w-[300px] sm:w-[400px] bg-emerald-700 text-emerald-50">
+                            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-emerald-700 text-emerald-50">
                                 <SheetTitle className="text-emerald-50">Menu</SheetTitle>
                                 <SheetDescription className="text-emerald-100 mb-4">
                                     Access your account and settings
                                 </SheetDescription>
                                 <nav className="flex flex-col space-y-4 mt-8">
                                     <ProfileDropdown isMobile={true} />
-                                    <Button variant="ghost" size="sm" className="justify-start text-emerald-50 hover:text-emerald-200">
+                                    <Button variant="ghost" size="lg" className="justify-start text-emerald-50 hover:text-emerald-200">
                                         <Settings className="mr-2 h-5 w-5" />
                                         Prayer Settings
                                     </Button>
