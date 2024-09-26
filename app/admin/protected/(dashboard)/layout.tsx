@@ -1,5 +1,6 @@
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import DashboardNavigation from "@/components/dashboard/DashboardNavigation";
+import { IdleTimerWrapper } from "@/components/IdleTimerWrapper";
 
 export default function RootLayout({
     children,
@@ -8,9 +9,11 @@ export default function RootLayout({
 }) {
     return (
         <>
-            <DashboardHeader />
-            <DashboardNavigation />
-            {children}
+            <IdleTimerWrapper>
+                <DashboardHeader />
+                <DashboardNavigation />
+                {children}
+            </IdleTimerWrapper>
         </>
     );
 }

@@ -1,4 +1,3 @@
-import { IdleTimerWrapper } from '@/components/IdleTimerWrapper';
 import { montserrat } from '@/fonts';
 import type { Metadata } from 'next';
 import "./globals.css";
@@ -13,10 +12,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Islamic Center Management System",
   description: "Streamline Your Masjid Management with Our Comprehensive System",
-  keywords: ['mosque', 'management', 'Islamic', 'community'],
+  keywords: ['mosque', 'management', 'Islamic', 'islam', 'muslim', 'community', 'prayer', 'schedule', 'event', 'donation', 'volunteer', 'news', 'information'],
   authors: [{ name: 'Adhham Safwan', url: 'https://adhham.vercel.app' }],
   creator: 'Adhham Safwan',
-  publisher: 'Islamic Center Management System',
+  publisher: 'Adhham Safwan',
   formatDetection: {
     email: false,
     address: false,
@@ -32,9 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={montserrat.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        <IdleTimerWrapper>
-          {children}
-        </IdleTimerWrapper>
+        {children}
       </body>
     </html>
   );

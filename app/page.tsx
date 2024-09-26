@@ -4,7 +4,9 @@ import Link from "next/link"
 import HomeContent from "../components/HomeContent"
 import MobileMenu from "../components/MobileMenu"
 
-export default function HomePage() {
+export default async function HomePage() {
+
+  await new Promise(resolve => setTimeout(resolve, 2000));
   const whatsappNumber = "+94743193834"
   const whatsappMessage = encodeURIComponent("Hello! I'm interested in the Islamic Center Management System.")
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`

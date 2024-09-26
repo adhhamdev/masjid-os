@@ -12,7 +12,6 @@ function IslamicPattern() {
 }
 
 export default function Dashboard() {
-
     return (
         <div className="min-h-screen bg-emerald-200">
             <IslamicPattern />

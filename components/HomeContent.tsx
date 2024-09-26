@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Calendar, Home, MessageCircle, Users } from "lucide-react"
+import { Book, Calendar, DollarSign, Home, MessageCircle, Shield, Users } from "lucide-react"
 import Link from "next/link"
 
 export default function HomeContent() {
@@ -12,11 +12,17 @@ export default function HomeContent() {
             <section className="text-center mb-12 sm:mb-16">
                 <h2 className="text-3xl sm:text-4xl font-bold text-emerald-900 mb-4">Welcome to Islamic Center Management System</h2>
                 <p className="text-lg sm:text-xl text-emerald-700 mb-6 sm:mb-8">Streamline Your Masjid Management with Our Comprehensive System</p>
-                <div className="flex justify-center">
+                <div className="flex justify-center space-x-4">
                     <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">
                         <Button className="bg-green-500 text-white hover:bg-green-600 flex items-center justify-center">
                             <MessageCircle className="mr-2 h-4 w-4" />
                             WhatsApp Us
+                        </Button>
+                    </Link>
+                    <Link href="/admin/protected/dashboard">
+                        <Button className="bg-emerald-600 text-white hover:bg-emerald-700 flex items-center justify-center">
+                            <Home className="mr-2 h-4 w-4" />
+                            Go to Admin Portal
                         </Button>
                     </Link>
                 </div>
@@ -37,8 +43,70 @@ export default function HomeContent() {
                     icon={<Calendar className="mx-auto mb-4 text-emerald-500" size={48} />}
                     title="Event Scheduling"
                     description="Plan and promote Islamic Center events with our intuitive calendar system."
-                    className="sm:col-span-2 lg:col-span-1"
                 />
+                <FeatureCard
+                    icon={<Shield className="mx-auto mb-4 text-emerald-500" size={48} />}
+                    title="Secure Data"
+                    description="Keep your community's information safe with our robust security measures."
+                />
+                <FeatureCard
+                    icon={<Book className="mx-auto mb-4 text-emerald-500" size={48} />}
+                    title="Resource Management"
+                    description="Organize and share Islamic literature and educational materials easily."
+                />
+                <FeatureCard
+                    icon={<DollarSign className="mx-auto mb-4 text-emerald-500" size={48} />}
+                    title="Donation Tracking"
+                    description="Manage and track donations transparently with our integrated system."
+                />
+            </section>
+
+            <section className="mb-12 sm:mb-16">
+                <h3 className="text-2xl sm:text-3xl font-bold text-emerald-900 mb-6 text-center">Why Choose Our System?</h3>
+                <div className="grid md:grid-cols-2 gap-8">
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h4 className="text-xl font-semibold mb-4 text-emerald-800">Streamlined Management</h4>
+                        <p className="text-emerald-600 mb-4">Our system centralizes all aspects of Islamic Center management, saving you time and reducing administrative burden.</p>
+                        <ul className="list-disc list-inside text-emerald-600">
+                            <li>Automated prayer time updates</li>
+                            <li>Easy event creation and management</li>
+                            <li>Efficient community member database</li>
+                        </ul>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <h4 className="text-xl font-semibold mb-4 text-emerald-800">Enhanced Community Engagement</h4>
+                        <p className="text-emerald-600 mb-4">Foster a more connected and engaged community with our communication tools and features.</p>
+                        <ul className="list-disc list-inside text-emerald-600">
+                            <li>Announcement broadcasts</li>
+                            <li>Community forums</li>
+                            <li>Volunteer management</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section className="mb-12 sm:mb-16">
+                <h3 className="text-2xl sm:text-3xl font-bold text-emerald-900 mb-6 text-center">Testimonials</h3>
+                <div className="grid md:grid-cols-2 gap-8">
+                    <Testimonial
+                        quote="This system has revolutionized how we manage our Islamic Center. It's user-friendly and comprehensive!"
+                        author="Imam Abdullah, Masjid Al-Noor"
+                    />
+                    <Testimonial
+                        quote="The prayer time management and event scheduling features have made our administrative tasks so much easier."
+                        author="Fatima Hassan, Community Organizer"
+                    />
+                </div>
+            </section>
+
+            <section className="text-center">
+                <h3 className="text-2xl sm:text-3xl font-bold text-emerald-900 mb-6">Ready to Transform Your Islamic Center Management?</h3>
+                <Link href={whatsappLink} target="_blank" rel="noopener noreferrer" className="inline-block">
+                    <Button className="bg-green-500 text-white hover:bg-green-600 flex items-center justify-center">
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        WhatsApp Us
+                    </Button>
+                </Link>
             </section>
         </main>
     )
@@ -57,6 +125,20 @@ function FeatureCard({ icon, title, description, className = "" }: FeatureCardPr
             {icon}
             <h3 className="text-xl font-semibold mb-2 text-emerald-800">{title}</h3>
             <p className="text-emerald-600">{description}</p>
+        </div>
+    )
+}
+
+interface TestimonialProps {
+    quote: string
+    author: string
+}
+
+function Testimonial({ quote, author }: TestimonialProps) {
+    return (
+        <div className="bg-white p-6 rounded-lg shadow-md">
+            <p className="text-emerald-600 italic mb-4">"{quote}"</p>
+            <p className="text-emerald-800 font-semibold">- {author}</p>
         </div>
     )
 }

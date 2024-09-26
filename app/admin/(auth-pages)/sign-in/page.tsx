@@ -40,8 +40,11 @@ function LoginForm() {
             type="email"
             autoComplete="email"
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+            className="mt-1 block w-full rounded-md shadow-sm "
             placeholder="you@example.com"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck="false"
           />
         </div>
         <div>
@@ -50,10 +53,15 @@ function LoginForm() {
             id="password"
             name="password"
             type="password"
-            autoComplete="current-password"
+            autoComplete="current-passwor"
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+            className="mt-1 block w-full rounded-md shadow-sm"
             placeholder="••••••••"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck="false"
+            minLength={6}
+            maxLength={64}
           />
         </div>
       </div>
@@ -68,14 +76,15 @@ function LoginForm() {
 
 export default function Login() {
   return (
-    <div className="min-h-screen bg-emerald-800 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-emerald-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-2xl shadow-xl">
           <div className="text-center">
             <Image src="/mosque.png" alt="Mosque Logo" width={80} height={80} className="mx-auto" priority />
-            <h1 className="mt-6 text-3xl font-extrabold text-emerald-900">Sign in</h1>
+            <h1 className="mt-6 text-3xl font-extrabold text-emerald-900">Sign in as Admin</h1>
+            <p className="text-sm text-emerald-700 mt-2">Please enter your email and password to sign in.</p>
           </div>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div className="text-center text-emerald-900 mt-4 ">Loading...</div>}>
             <LoginForm />
           </Suspense>
         </div>
