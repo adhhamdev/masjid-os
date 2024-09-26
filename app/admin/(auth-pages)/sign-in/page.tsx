@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -87,8 +88,13 @@ export default function Login() {
           <Suspense fallback={<div className="text-center text-emerald-900 mt-4 ">Loading...</div>}>
             <LoginForm />
           </Suspense>
+          <hr className="my-8" />
+          <div className="text-center mt-6">
+            <p className="text-sm text-emerald-700">Not an admin?</p>
+            <Link href="https://wa.me/60193297778" target="_blank" className="text-emerald-700 font-bold underline">WhatsApp Us</Link> to get the product get started.
+          </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
