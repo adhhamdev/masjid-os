@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ChevronDown, Menu, Settings, User } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import NotificationPopover from './NotificationPopover';
 
 function ProfileDropdown({ isMobile = false }) {
@@ -77,10 +78,12 @@ export default function DashboardHeader() {
                 <nav className="hidden md:flex items-center space-x-4">
                     <NotificationPopover />
                     <ProfileDropdown />
-                    <Button variant="ghost" className="hidden md:flex items-center text-emerald-50 hover:text-emerald-200">
-                        <Settings className="h-4 w-4" />
-                        <span className='ml-2 hidden lg:block'>Prayer Settings</span>
-                    </Button>
+                    <Link href="/admin/protected/masjid/prayer-settings">
+                        <Button variant="ghost" className="hidden md:flex items-center text-emerald-50 hover:text-emerald-200">
+                            <Settings className="h-4 w-4" />
+                            <span className='ml-2 hidden lg:block'>Prayer Settings</span>
+                        </Button>
+                    </Link>
                 </nav>
             </div>
         </header>

@@ -9,16 +9,25 @@ interface FullDarkProps {
     iqamahTime: string;
     islamicDate: string;
     englishDate: string;
+    prayerName: string;
 }
 
-export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime, islamicDate, englishDate }: FullDarkProps) {
+export default function FullDark({
+    hours,
+    minutes,
+    seconds,
+    azanTime,
+    iqamahTime,
+    islamicDate,
+    englishDate,
+    prayerName,
+}: FullDarkProps) {
     return (
         <div className={`flex flex-col items-center justify-center w-screen h-screen bg-gradient-to-b from-[#000001] to-[#0f1925] ${montserrat.className} p-4`}>
             <div className="text-white text-center mb-4 sm:mb-6">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">{islamicDate}</div>
-                <div className="text-lg sm:text-xl md:text-2xl">{englishDate}</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">{`${islamicDate} | ${englishDate}`}</div>
             </div>
-            <div className="text-4xl sm:text-6xl md:text-7xl lg:text-[8rem] font-bold tracking-wider flex items-center mb-4 sm:mb-6" aria-live="polite">
+            <div className="text-4xl sm:text-6xl md:text-7xl lg:text-[9rem] font-bold tracking-wider flex items-center mb-4 sm:mb-6" aria-live="polite">
                 <span className="text-white w-[1.6em] text-center">{hours}</span>
                 <span className="text-white w-[0.3em] text-center">:</span>
                 <span className="text-white w-[1.6em] text-center">{minutes}</span>
@@ -28,12 +37,20 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
                     <AnimatedDigit digit={seconds[1]} />
                 </div>
             </div>
-            <div className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-white text-center">
-                <div className="mb-2 sm:mb-4">
-                    <span className="font-bold text-yellow-300">{azanTime}</span>
+            <div>
+                <div className="flex items-center">
+                    <div className="flex flex-col items-end mr-4 w-4">
+                        <span className="font-bold text-yellow-300 text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Dhur</span>
+                        <span className="text-yellow-300 text-sm sm:text-base md:text-lg lg:text-xl">الظهر</span>
+                    </div>
+                    <span className="font-bold text-yellow-300 text-3xl sm:text-4xl md:text-5xl lg:text-9xl">{azanTime}</span>
                 </div>
-                <div>
-                    <span className="font-bold text-green-300">{iqamahTime}</span>
+                <div className="flex items-center">
+                    <div className="flex flex-col items-end mr-4 w-4">
+                        <span className="font-bold text-green-300 text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Iqamah</span>
+                        <span className="text-green-300 text-sm sm:text-base md:text-lg lg:text-xl">الإقامة</span>
+                    </div>
+                    <span className="font-bold text-green-300 text-3xl sm:text-4xl md:text-5xl lg:text-9xl">{iqamahTime}</span>
                 </div>
             </div>
         </div>

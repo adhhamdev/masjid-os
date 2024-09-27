@@ -13,7 +13,7 @@ export default function NotFound() {
                     Oops! The page you're looking for seems to have wandered off. Let's guide you back to the right path.
                 </p>
                 <div className="mt-8">
-                    <Link href="/">
+                    <Link href="/admin/protected/dashboard">
                         <Button className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-emerald-700 bg-white hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition duration-150 ease-in-out">
                             <Home className="mr-2 h-5 w-5" />
                             Return to Homepage

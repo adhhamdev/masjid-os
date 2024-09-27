@@ -11,6 +11,10 @@ import Link from "next/link";
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 
+const whatsappNumber = "+94743193834"
+const whatsappMessage = encodeURIComponent("Hello! I'm interested in the Islamic Center Management System.")
+const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
+
 function LoginForm() {
   const searchParams = useSearchParams();
   const [message, setMessage] = useState<Message | null>(null);
@@ -91,7 +95,7 @@ export default function Login() {
           <hr className="my-8" />
           <div className="text-center mt-6">
             <p className="text-sm text-emerald-700">Not an admin?</p>
-            <Link href="https://wa.me/60193297778" target="_blank" className="text-emerald-700 font-bold underline">WhatsApp Us</Link> to get the product get started.
+            <Link href={whatsappLink} target="_blank" className="text-emerald-700 font-bold underline">WhatsApp Us</Link> to get the product get started.
           </div>
         </div>
       </div>

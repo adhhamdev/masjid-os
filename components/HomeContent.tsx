@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/button"
 import { Book, Calendar, DollarSign, Home, MessageCircle, Shield, Users } from "lucide-react"
 import Link from "next/link"
 
+const whatsappNumber = "+94743193834"
+const whatsappMessage = encodeURIComponent("Hello! I'm interested in the Islamic Center Management System.")
+const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
+
 export default function HomeContent() {
-    const whatsappNumber = "+94743193834"
-    const whatsappMessage = encodeURIComponent("Hello! I'm interested in the Islamic Center Management System.")
-    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
 
     return (
         <main className="container mx-auto px-4 py-8 sm:py-16">

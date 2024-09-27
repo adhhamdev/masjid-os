@@ -45,7 +45,7 @@ const ClientTime = () => {
     const englishDate = time.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 
     return (
-        <div className='select-none pointer-events-none'>
+        <div className=''>
             <FullDark
                 hours={hours}
                 minutes={minutes}
@@ -54,6 +54,7 @@ const ClientTime = () => {
                 iqamahTime={iqamahTime}
                 islamicDate={islamicDate}
                 englishDate={englishDate}
+                prayerName={"Dhuhr"}
             />
         </div>
     )
