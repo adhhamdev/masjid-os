@@ -28,3 +28,33 @@ export async function signOutAction() {
   redirect('/admin/sign-in?logout=true')
 }
 
+export async function getMasjidDetails() {
+  const supabase = createClient();
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError) {
+    console.error('Error fetching user:', userError);
+    return { error: userError.message };
+  }
+
+  if (!user) {
+    return { error: 'User not authenticated' };
+  }
+
+  const { data: masjid, error: masjidError } = await supabase
+    .from('masjid')
+    .select('*')
+    .eq('user', user.id)
+    .single();
+
+  if (masjidError) {
+    console.error('Error fetching masjid details:', masjidError);
+    return { error: masjidError.message };
+  }
+
+  // Revalidate the path to ensure fresh data
+  revalidatePath('/admin/protected/dashboard');
+
+  return { masjid };
+}
+

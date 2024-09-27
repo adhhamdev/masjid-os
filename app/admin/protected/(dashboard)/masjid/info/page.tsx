@@ -1,3 +1,4 @@
+import { getMasjidDetails } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -6,7 +7,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { PlusIcon, Save, XIcon } from "lucide-react"
 
-export default function Info() {
+export default async function Info() {
+
+    const { masjid } = await getMasjidDetails()
+
     return (
         <div className="min-h-screen py-8">
             <main className="container mx-auto">
@@ -109,6 +113,7 @@ export default function Info() {
                                             id="masjidName"
                                             placeholder="A & A CO."
                                             className="focus-visible:ring-gray-500"
+                                            defaultValue={masjid?.name}
                                         />
                                     </div>
                                     <div>
@@ -118,6 +123,7 @@ export default function Info() {
                                             placeholder="191/02, Yaseer Arafath Road, Maradhana, Beruwela"
                                             rows={2}
                                             className="focus-visible:ring-gray-500"
+                                            defaultValue={masjid?.address}
                                         />
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
