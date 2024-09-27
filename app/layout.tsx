@@ -10,7 +10,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Islamic Center Management System",
+  title: "Islamic Centre Management System",
   description: "Streamline Your Masjid Management with Our Comprehensive System",
   keywords: ['mosque', 'management', 'Islamic', 'islam', 'muslim', 'community', 'prayer', 'schedule', 'event', 'donation', 'volunteer', 'news', 'information'],
   authors: [{ name: 'Adhham Safwan', url: 'https://adhham.vercel.app' }],

@@ -3,7 +3,7 @@ import { Book, Calendar, DollarSign, Home, MessageCircle, Shield, Users } from "
 import Link from "next/link"
 
 const whatsappNumber = "+94743193834"
-const whatsappMessage = encodeURIComponent("Hello! I'm interested in the Islamic Center Management System.")
+const whatsappMessage = encodeURIComponent("Hello! I'm interested in the Islamic Centre Management System.")
 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
 
 export default function HomeContent() {
@@ -38,12 +38,12 @@ export default function HomeContent() {
                 <FeatureCard
                     icon={<Users className="mx-auto mb-4 text-emerald-500" size={48} />}
                     title="Community Management"
-                    description="Efficiently organize and engage with your Islamic Center's community members."
+                    description="Efficiently organize and engage with your Islamic Centre's community members."
                 />
                 <FeatureCard
                     icon={<Calendar className="mx-auto mb-4 text-emerald-500" size={48} />}
                     title="Event Scheduling"
-                    description="Plan and promote Islamic Center events with our intuitive calendar system."
+                    description="Plan and promote Islamic Centre events with our intuitive calendar system."
                 />
                 <FeatureCard
                     icon={<Shield className="mx-auto mb-4 text-emerald-500" size={48} />}
@@ -67,7 +67,7 @@ export default function HomeContent() {
                 <div className="grid md:grid-cols-2 gap-8">
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h4 className="text-xl font-semibold mb-4 text-emerald-800">Streamlined Management</h4>
-                        <p className="text-emerald-600 mb-4">Our system centralizes all aspects of Islamic Center management, saving you time and reducing administrative burden.</p>
+                        <p className="text-emerald-600 mb-4">Our system centralizes all aspects of Islamic Centre management, saving you time and reducing administrative burden.</p>
                         <ul className="list-disc list-inside text-emerald-600">
                             <li>Automated prayer time updates</li>
                             <li>Easy event creation and management</li>
@@ -90,7 +90,7 @@ export default function HomeContent() {
                 <h3 className="text-2xl sm:text-3xl font-bold text-emerald-900 mb-6 text-center">Testimonials</h3>
                 <div className="grid md:grid-cols-2 gap-8">
                     <Testimonial
-                        quote="This system has revolutionized how we manage our Islamic Center. It's user-friendly and comprehensive!"
+                        quote="This system has revolutionized how we manage our Islamic Centre. It's user-friendly and comprehensive!"
                         author="Imam Abdullah, Masjid Al-Noor"
                     />
                     <Testimonial
@@ -101,7 +101,7 @@ export default function HomeContent() {
             </section>
 
             <section className="text-center">
-                <h3 className="text-2xl sm:text-3xl font-bold text-emerald-900 mb-6">Ready to Transform Your Islamic Center Management?</h3>
+                <h3 className="text-2xl sm:text-3xl font-bold text-emerald-900 mb-6">Ready to Transform Your Islamic Centre Management?</h3>
                 <Link href={whatsappLink} target="_blank" rel="noopener noreferrer" className="inline-block">
                     <Button className="bg-green-500 text-white hover:bg-green-600 flex items-center justify-center">
                         <MessageCircle className="mr-2 h-4 w-4" />

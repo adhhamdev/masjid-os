@@ -49,7 +49,7 @@ export default function DashboardHeader() {
                 <div className="flex items-center justify-between w-full md:w-auto">
                     <div className="flex items-center">
                         <Image src="/mosque.png" alt="Mosque Logo" width={40} height={40} className="mr-2" />
-                        <h1 className="text-xs font-bold md:text-xl">YASEER ARAFATH JUMMAH MASJID</h1>
+                        <h1 className="text-xs font-bold md:text-xl">A & A CO.</h1>
                     </div>
                     <div className="flex items-center space-x-2 md:hidden">
                         <NotificationPopover isMobile={true} />
@@ -66,10 +66,12 @@ export default function DashboardHeader() {
                                 </SheetDescription>
                                 <nav className="flex flex-col space-y-4 mt-8">
                                     <ProfileDropdown isMobile={true} />
-                                    <Button variant="ghost" size="lg" className="justify-start text-emerald-50 hover:text-emerald-200">
-                                        <Settings className="mr-2 h-5 w-5" />
-                                        Prayer Settings
-                                    </Button>
+                                    <Link href="/admin/protected/masjid/prayer-settings">
+                                        <Button variant="ghost" size="lg" className="justify-start text-emerald-50 hover:text-emerald-200">
+                                            <Settings className="mr-2 h-5 w-5" />
+                                            Prayer Settings
+                                        </Button>
+                                    </Link>
                                 </nav>
                             </SheetContent>
                         </Sheet>
@@ -86,6 +88,6 @@ export default function DashboardHeader() {
                     </Link>
                 </nav>
             </div>
-        </header>
+        </header >
     )
 }

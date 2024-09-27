@@ -6,7 +6,7 @@ import { BarChart2, DollarSign, FileText, Globe, Grid, Users } from 'lucide-reac
 
 export default function DashboardMain() {
     const data = {
-        organization: 'YASEER ARAFATH JUMMAH MASJID',
+        organization: 'A & A CO.',
         governmentSectors: 'Government Sectors',
         projects: 'Project',
         donations: 'Donations',

@@ -107,7 +107,7 @@ export default function Info() {
                                         <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="masjidName">MASJID NAME</label>
                                         <Input
                                             id="masjidName"
-                                            placeholder="YASEER ARAFATH JUMMAH MASJID"
+                                            placeholder="A & A CO."
                                             className="focus-visible:ring-gray-500"
                                         />
                                     </div>

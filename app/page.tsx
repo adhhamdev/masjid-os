@@ -5,7 +5,7 @@ import HomeContent from "../components/HomeContent"
 import MobileMenu from "../components/MobileMenu"
 
 const whatsappNumber = "+94743193834"
-const whatsappMessage = encodeURIComponent("Hello! I'm interested in the Islamic Center Management System.")
+const whatsappMessage = encodeURIComponent("Hello! I'm interested in the Islamic Centre Management System.")
 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
 
 export default function HomePage() {
@@ -33,7 +33,7 @@ export default function HomePage() {
 
       <footer className="py-6 sm:py-8 mt-12">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-sm sm:text-base">&copy; 2024 Islamic Center Management System. All rights reserved.</p>
+          <p className="text-sm sm:text-base">&copy; 2024 Islamic Centre Management System. All rights reserved.</p>
         </div>
       </footer>
     </div>
