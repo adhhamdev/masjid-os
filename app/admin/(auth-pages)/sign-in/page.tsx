@@ -81,7 +81,7 @@ function LoginForm() {
 
 export default function Login() {
   return (
-    <div className="min-h-screen bg-emerald-100 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center" style={{ backgroundImage: 'url(/login-bg.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-2xl shadow-xl">
           <div className="text-center">
@@ -92,8 +92,8 @@ export default function Login() {
           <Suspense fallback={<div className="text-center text-emerald-900 mt-4 ">Loading...</div>}>
             <LoginForm />
           </Suspense>
-          <hr className="my-8" />
-          <div className="text-center mt-6">
+          {/* <hr className="my-8" /> */}
+          <div className="text-center mt-1">
             <p className="text-sm text-emerald-700">Not an admin?</p>
             <Link href={whatsappLink} target="_blank" className="text-emerald-700 font-bold underline">WhatsApp Us</Link> to get the product get started.
           </div>

@@ -27,7 +27,7 @@ export function FormMessage({ message }: { message: Message }) {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.3 }}
-        className={`flex items-center p-4 mb-4 text-sm rounded-lg ${getColorClasses()}`}
+        className={`flex items-center p-2 text-sm rounded-lg ${getColorClasses()}`}
         role="alert"
       >
         <div className="mr-3">{getIcon()}</div>
