@@ -3,7 +3,7 @@ import { LogoutButton } from '@/components/logout-button';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { ChevronDown, Menu, Settings, User } from 'lucide-react';
+import { ChevronDown, Clock, Menu, Settings, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import NotificationPopover from './NotificationPopover';
@@ -70,7 +70,7 @@ export default function DashboardHeader() {
                                     <ProfileDropdown isMobile={true} />
                                     <Link href="/admin/protected/masjid/clock-settings">
                                         <Button variant="ghost" size="lg" className="justify-start text-emerald-50 hover:text-emerald-200">
-                                            <Settings className="mr-2 h-5 w-5" />
+                                            <Clock className="mr-2 h-5 w-5" />
                                             Clock Settings
                                         </Button>
                                     </Link>
@@ -84,7 +84,7 @@ export default function DashboardHeader() {
                     <ProfileDropdown />
                     <Link href="/admin/protected/masjid/clock-settings">
                         <Button variant="ghost" className="hidden md:flex items-center text-emerald-50 hover:text-emerald-200">
-                            <Settings className="h-4 w-4" />
+                            <Clock className="h-4 w-4" />
                             <span className='ml-2 hidden lg:block'>Clock Settings</span>
                         </Button>
                     </Link>
