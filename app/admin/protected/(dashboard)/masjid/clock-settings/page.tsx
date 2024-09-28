@@ -13,7 +13,7 @@ export default function PrayerSettings() {
       <main className='container mx-auto'>
         <div className='flex justify-between items-center mb-4'>
           <h2 className='text-2xl font-semibold text-gray-800'>
-            Prayer Settings
+            Clock Settings
           </h2>
           <Button className='bg-emerald-500 hover:bg-emerald-600 text-white'>
             <Save className='w-4 h-4 mr-2' />

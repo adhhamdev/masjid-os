@@ -33,7 +33,7 @@ function ProfileDropdown({ isMobile = false }) {
                     <span>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href="/admin/protected/masjid/prayer-settings" className="py-2 px-3 text-sm cursor-pointer hover:bg-emerald-100">
+                    <Link href="/admin/protected/masjid/clock-settings" className="py-2 px-3 text-sm cursor-pointer hover:bg-emerald-100">
                         <Settings className="mr-2 h-4 w-4" />
                         <span>Settings</span>
                     </Link>
@@ -68,10 +68,10 @@ export default function DashboardHeader() {
                                 </SheetDescription>
                                 <nav className="flex flex-col space-y-4 mt-8">
                                     <ProfileDropdown isMobile={true} />
-                                    <Link href="/admin/protected/masjid/prayer-settings">
+                                    <Link href="/admin/protected/masjid/clock-settings">
                                         <Button variant="ghost" size="lg" className="justify-start text-emerald-50 hover:text-emerald-200">
                                             <Settings className="mr-2 h-5 w-5" />
-                                            Prayer Settings
+                                            Clock Settings
                                         </Button>
                                     </Link>
                                 </nav>
@@ -82,10 +82,10 @@ export default function DashboardHeader() {
                 <nav className="hidden md:flex items-center space-x-4">
                     <NotificationPopover />
                     <ProfileDropdown />
-                    <Link href="/admin/protected/masjid/prayer-settings">
+                    <Link href="/admin/protected/masjid/clock-settings">
                         <Button variant="ghost" className="hidden md:flex items-center text-emerald-50 hover:text-emerald-200">
                             <Settings className="h-4 w-4" />
-                            <span className='ml-2 hidden lg:block'>Prayer Settings</span>
+                            <span className='ml-2 hidden lg:block'>Clock Settings</span>
                         </Button>
                     </Link>
                 </nav>

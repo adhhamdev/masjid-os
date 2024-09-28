@@ -168,7 +168,7 @@ export default async function Info() {
                     <TabsContent value="prayer">
                         <Card>
                             <CardContent className="pt-4">
-                                <h3 className="text-lg font-semibold mb-4 text-gray-800">Prayer Settings</h3>
+                                <h3 className="text-lg font-semibold mb-4 text-gray-800">Clock Settings</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="location">LOCATION</label>
