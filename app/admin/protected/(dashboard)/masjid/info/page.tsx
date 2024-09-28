@@ -1,4 +1,4 @@
-import { getMasjidDetails } from "@/app/actions"
+import { getContactDetails, getMasjidDetails, getPrayerSettings } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,7 +9,9 @@ import { PlusIcon, Save, XIcon } from "lucide-react"
 
 export default async function Info() {
 
-    const { masjid } = await getMasjidDetails()
+    const { masjid } = await getMasjidDetails();
+    const { contact } = await getContactDetails(masjid?.contact);
+    const { prayerSettings } = await getPrayerSettings(masjid?.prayer_settings);
 
     return (
         <div className="min-h-screen py-8">
@@ -113,7 +115,7 @@ export default async function Info() {
                                             id="masjidName"
                                             placeholder="A & A CO."
                                             className="focus-visible:ring-gray-500"
-                                            defaultValue={masjid?.name}
+                                            defaultValue={contact?.masjid_name ?? ""}
                                         />
                                     </div>
                                     <div>
@@ -123,13 +125,13 @@ export default async function Info() {
                                             placeholder="191/02, Yaseer Arafath Road, Maradhana, Beruwela"
                                             rows={2}
                                             className="focus-visible:ring-gray-500"
-                                            defaultValue={masjid?.address}
+                                            defaultValue={contact?.address ?? ""}
                                         />
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                         <div>
                                             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="code">CODE</label>
-                                            <Select>
+                                            <Select defaultValue={contact?.country_code ?? ""}>
                                                 <SelectTrigger className="border-gray-300 focus:border-gray-500">
                                                     <SelectValue placeholder="Select code" />
                                                 </SelectTrigger>
@@ -140,23 +142,23 @@ export default async function Info() {
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="telephone">TELEPHONE NO</label>
-                                            <Input id="telephone" placeholder="779925059" className="border-gray-300 focus:border-gray-500" />
+                                            <Input id="telephone" placeholder="779925059" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.tel_no ?? ""} />
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="fax">FAX NO</label>
-                                            <Input id="fax" placeholder="777281718" className="border-gray-300 focus:border-gray-500" />
+                                            <Input id="fax" placeholder="777281718" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.fax_no ?? ""} />
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="email">EMAIL</label>
-                                            <Input id="email" type="email" placeholder="yaseerarafathjummahmasjidh@gmail.com" className="border-gray-300 focus:border-gray-500" />
+                                            <Input id="email" type="email" placeholder="yaseerarafathjummahmasjidh@gmail.com" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.email ?? ""} />
                                         </div>
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium mb-1 text-gray-700">SOCIAL MEDIA LINKS</label>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" />
-                                            <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" />
-                                            <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" />
+                                            <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[0]} />
+                                            <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[1]} />
+                                            <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[2]} />
                                         </div>
                                     </div>
                                 </div>
@@ -170,7 +172,7 @@ export default async function Info() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="location">LOCATION</label>
-                                        <Select>
+                                        <Select defaultValue={prayerSettings?.location}>
                                             <SelectTrigger className="border-gray-300 focus:border-gray-500">
                                                 <SelectValue placeholder="Select location" />
                                             </SelectTrigger>
@@ -185,7 +187,7 @@ export default async function Info() {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="juristic">JURISTIC</label>
-                                        <Select>
+                                        <Select defaultValue={prayerSettings?.juristic}>
                                             <SelectTrigger className="border-gray-300 focus:border-gray-500">
                                                 <SelectValue placeholder="Select juristic" />
                                             </SelectTrigger>
