@@ -8,17 +8,22 @@ export async function signInAction(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  try {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-  if (error) {
-    return { error: error.message };
+    if (error) {
+      return { error: error.message };
+    }
+
+    revalidatePath('/', 'layout')
+    redirect('/admin/protected/dashboard')
+  } catch (error) {
+    console.error('Sign-in error:', error);
+    return { error: 'An unexpected error occurred. Please try again.' };
   }
-
-  revalidatePath('/', 'layout')
-  redirect('/admin/protected/dashboard')
 }
 
 export async function signOutAction() {
