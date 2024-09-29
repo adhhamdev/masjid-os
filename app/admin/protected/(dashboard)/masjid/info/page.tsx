@@ -12,7 +12,7 @@ export default async function Info() {
     const { masjid } = await getMasjidDetails();
     const { contact } = await getContactDetails(masjid?.contact);
     const { prayerSettings } = await getPrayerSettings(masjid?.prayer_settings);
-
+    console.log(prayerSettings)
     return (
         <div className="min-h-screen py-8">
             <main className="container mx-auto">

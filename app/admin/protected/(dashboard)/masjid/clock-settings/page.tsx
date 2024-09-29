@@ -1,13 +1,18 @@
+import { getClockSettings, getMasjidDetails } from '@/app/actions';
+import IqamathTime from '@/components/IqamathTime';
 import ThemeSelector from '@/components/ThemeSelector';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Save } from 'lucide-react';
 
-export default function PrayerSettings() {
+export default async function PrayerSettings() {
+  const { masjid } = await getMasjidDetails();
+  const { clockSettings, iqamathTime, nightMode } = await getClockSettings(masjid?.clock_settings);
+  console.log(iqamathTime)
+  console.log(nightMode)
   return (
     <div className='min-h-screen py-8'>
       <main className='container mx-auto'>
@@ -32,8 +37,8 @@ export default function PrayerSettings() {
               <TabsTrigger value='theme' className='text-white whitespace-nowrap'>
                 Theme
               </TabsTrigger>
-              <TabsTrigger value='night-mood' className='text-white whitespace-nowrap'>
-                Night Mood
+              <TabsTrigger value='night-mode' className='text-white whitespace-nowrap'>
+                Night Mode
               </TabsTrigger>
             </TabsList>
           </div>
@@ -50,66 +55,26 @@ export default function PrayerSettings() {
                     id='masjidName'
                     placeholder='Enter Masjid Name'
                     className='focus-visible:ring-gray-500'
+                    defaultValue={masjid?.name}
                   />
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
           <TabsContent value='iqamath-time'>
-            <Card>
-              <CardContent className='space-y-4 pt-4'>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Prayers</TableHead>
-                      <TableHead>Azan Time</TableHead>
-                      <TableHead>Iqamath Time after Azan</TableHead>
-                      <TableHead>Fixed Iqamath Time</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'].map((prayer) => (
-                      <TableRow key={prayer}>
-                        <TableCell>{prayer}</TableCell>
-                        <TableCell>
-                          <Input
-                            type='time'
-                            className='w-full'
-                            placeholder='Azan Time'
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            type='number'
-                            className='w-full'
-                            placeholder='Minutes after Azan'
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            type='time'
-                            className='w-full'
-                            placeholder='Fixed Iqamath Time'
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+            <IqamathTime iqamathTime={iqamathTime} />
           </TabsContent>
           <TabsContent value='theme'>
-            <ThemeSelector />
+            <ThemeSelector theme={clockSettings?.theme.toString()} />
           </TabsContent>
-          <TabsContent value='night-mood'>
+          <TabsContent value='night-mode'>
             <Card>
-              <CardContent className='pt-4'>
+              <CardContent className="space-y-6 pt-4">
                 <h3 className='text-lg font-semibold mb-4 text-gray-800'>
-                  Night Mood
+                  Night Mode
                 </h3>
                 <div className='space-y-4'>
-                  <div className='flex items-center space-x-4'>
+                  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
                     <div>
                       <label htmlFor='fromTime' className='block text-sm font-medium text-gray-700 mb-1'>
                         From Time
@@ -118,6 +83,7 @@ export default function PrayerSettings() {
                         id='fromTime'
                         type='time'
                         className='w-full'
+                        defaultValue={nightMode?.from}
                       />
                     </div>
                     <div>
@@ -128,14 +94,15 @@ export default function PrayerSettings() {
                         id='toTime'
                         type='time'
                         className='w-full'
+                        defaultValue={nightMode?.to}
                       />
                     </div>
                     <div>
                       <label htmlFor='active' className='block text-sm font-medium text-gray-700 mb-1'>
                         Active
                       </label>
-                      <Select>
-                        <SelectTrigger id='active' className='w-[120px]'>
+                      <Select defaultValue={nightMode?.active.toString()}>
+                        <SelectTrigger id='active' className='w-full'>
                           <SelectValue placeholder='Select' />
                         </SelectTrigger>
                         <SelectContent>

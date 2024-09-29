@@ -90,7 +90,7 @@ export async function getContactDetails(contactId: string) {
 
 export async function getPrayerSettings(prayerId: string) {
   const supabase = createClient();
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  const { error: userError } = await supabase.auth.getUser();
 
   if (userError) {
     console.error('Error fetching user:', userError);
@@ -112,4 +112,52 @@ export async function getPrayerSettings(prayerId: string) {
   revalidatePath('/admin/protected/dashboard');
 
   return { prayerSettings };
+}
+
+export async function getClockSettings(clockSettingsId: string) {
+  const supabase = createClient();
+  const { error: userError } = await supabase.auth.getUser();
+
+  if (userError) {
+    console.error('Error fetching user:', userError);
+    return { error: userError.message };
+  }
+
+  const { data: clockSettings, error: clockError } = await supabase
+    .from('clock_settings')
+    .select('*')
+    .eq('id', clockSettingsId)
+    .single();
+
+  if (clockError) {
+    console.error('Error fetching clock settings:', clockError);
+    return { error: clockError.message };
+  }
+
+  const {data: iqamathTime, error: iqamathError} = await supabase
+    .from('iqamath_time')
+    .select('*')
+    .eq('id', clockSettings?.iqamath_time)
+    .single();
+
+  if (iqamathError) {
+    console.error('Error fetching iqamath time:', iqamathError);
+    return { error: iqamathError.message };
+  }
+
+  const {data: nightMode, error: nightModeError} = await supabase
+    .from('night_mode')
+    .select('*')
+    .eq('id', clockSettings?.night_mode)
+    .single();
+
+  if (nightModeError) {
+    console.error('Error fetching night mode:', nightModeError);
+    return { error: nightModeError.message };
+  }
+
+  // Revalidate the path to ensure fresh data
+  revalidatePath('/admin/protected/dashboard');
+
+  return { clockSettings, iqamathTime, nightMode };
 }

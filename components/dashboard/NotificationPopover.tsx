@@ -1,7 +1,7 @@
+import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Bell, X } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../ui/button";
 
 interface NotificationPopoverProps {
     isMobile?: boolean;
