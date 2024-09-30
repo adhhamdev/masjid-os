@@ -161,3 +161,12 @@ export async function getClockSettings(clockSettingsId: string) {
 
   return { clockSettings, iqamathTime, nightMode };
 }
+
+export async function updateClockSettings(formData: FormData) {
+  const supabase = createClient();
+  const masjidName = formData.get('masjid-name') as string;
+  const nightModeFrom = formData.get('nightmode-from') as string;
+  const nightModeTo = formData.get('nightmode-to') as string;
+  const nightModeActive = formData.get('nightmode-active') as string;
+  console.log(masjidName, nightModeFrom, nightModeTo, nightModeActive)
+}
