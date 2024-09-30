@@ -36,7 +36,6 @@ export default async function Info() {
                                     <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="title01">HISTORY 01</label>
                                     <Input
                                         id="title01"
-                                        placeholder="History of Masjid: EST.1992"
                                         className="focus-visible:ring-gray-500"
                                     />
                                 </div>
@@ -44,7 +43,6 @@ export default async function Info() {
                                     <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="desc1">Description</label>
                                     <Textarea
                                         id="desc1"
-                                        placeholder="Enter description here"
                                         rows={4}
                                         className="focus-visible:ring-gray-500"
                                     />
@@ -53,7 +51,6 @@ export default async function Info() {
                                     <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="title02">HISTORY 02</label>
                                     <Input
                                         id="title02"
-                                        placeholder="About Mahallah Peoples' status of education and economy"
                                         className="focus-visible:ring-gray-500"
                                     />
                                 </div>
@@ -61,7 +58,6 @@ export default async function Info() {
                                     <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="desc02">Description</label>
                                     <Textarea
                                         id="desc02"
-                                        placeholder="Enter description here"
                                         rows={4}
                                         className="focus-visible:ring-gray-500"
                                     />
@@ -70,7 +66,6 @@ export default async function Info() {
                                     <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="title03">HISTORY 03</label>
                                     <Input
                                         id="title03"
-                                        placeholder="About Mahallah Peoples' status of education and economy"
                                         className="focus-visible:ring-gray-500"
                                     />
                                 </div>
@@ -78,7 +73,6 @@ export default async function Info() {
                                     <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="desc03">Description</label>
                                     <Textarea
                                         id="desc03"
-                                        placeholder="Enter description here"
                                         rows={4}
                                         className="focus-visible:ring-gray-500"
                                     />
@@ -87,7 +81,6 @@ export default async function Info() {
                                     <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="title04">HISTORY 04</label>
                                     <Input
                                         id="title04"
-                                        placeholder="About Mahallah Peoples' status of education and economy"
                                         className="focus-visible:ring-gray-500"
                                     />
                                 </div>
@@ -95,7 +88,6 @@ export default async function Info() {
                                     <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="desc04">Description</label>
                                     <Textarea
                                         id="desc04"
-                                        placeholder="Enter description here"
                                         rows={4}
                                         className="focus-visible:ring-gray-500"
                                     />
@@ -113,7 +105,6 @@ export default async function Info() {
                                         <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="masjidName">MASJID NAME</label>
                                         <Input
                                             id="masjidName"
-                                            placeholder="A & A CO."
                                             className="focus-visible:ring-gray-500"
                                             defaultValue={contact?.masjid_name ?? ""}
                                         />
@@ -122,7 +113,6 @@ export default async function Info() {
                                         <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="address">ADDRESS</label>
                                         <Textarea
                                             id="address"
-                                            placeholder="191/02, Yaseer Arafath Road, Maradhana, Beruwela"
                                             rows={2}
                                             className="focus-visible:ring-gray-500"
                                             defaultValue={contact?.address ?? ""}
@@ -142,15 +132,15 @@ export default async function Info() {
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="telephone">TELEPHONE NO</label>
-                                            <Input id="telephone" placeholder="779925059" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.tel_no ?? ""} />
+                                            <Input id="telephone" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.tel_no ?? ""} />
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="fax">FAX NO</label>
-                                            <Input id="fax" placeholder="777281718" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.fax_no ?? ""} />
+                                            <Input id="fax" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.fax_no ?? ""} />
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="email">EMAIL</label>
-                                            <Input id="email" type="email" placeholder="yaseerarafathjummahmasjidh@gmail.com" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.email ?? ""} />
+                                            <Input id="email" type="email" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.email ?? ""} />
                                         </div>
                                     </div>
                                     <div>
