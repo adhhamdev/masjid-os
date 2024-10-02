@@ -86,7 +86,7 @@ export default function HomeContent() {
                 </div>
             </section>
 
-            <section className="mb-12 sm:mb-16">
+            {/* <section className="mb-12 sm:mb-16">
                 <h3 className="text-2xl sm:text-3xl font-bold text-emerald-900 mb-6 text-center">Testimonials</h3>
                 <div className="grid md:grid-cols-2 gap-8">
                     <Testimonial
@@ -98,7 +98,7 @@ export default function HomeContent() {
                         author="Fatima Hassan, Community Organizer"
                     />
                 </div>
-            </section>
+            </section> */}
 
             <section className="text-center">
                 <h3 className="text-2xl sm:text-3xl font-bold text-emerald-900 mb-6">Ready to Transform Your Islamic Centre Management?</h3>

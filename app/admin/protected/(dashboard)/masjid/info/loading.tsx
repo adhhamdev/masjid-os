@@ -5,7 +5,6 @@ export default function Loading() {
             <main className='container mx-auto'>
                 <div className='flex justify-between items-center mb-4'>
                     <h2 className='text-2xl font-semibold text-gray-800'>Masjid Information</h2>
-                    <div className='bg-emerald-500 animate-pulse h-8 w-24 rounded'></div>
                 </div>
                 <div className='space-y-4'>
                     {Array.from({ length: 4 }).map((_, index) => (

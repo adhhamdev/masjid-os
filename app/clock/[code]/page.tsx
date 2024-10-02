@@ -17,14 +17,34 @@ const IqamahCountdown = dynamic(() => import('@/components/clocks/iqamath-countd
 
 const ClientTime = () => {
     const [time, setTime] = useState(new Date())
+    const [temperature, setTemperature] = useState<string>('')
 
     useEffect(() => {
         const timer = setInterval(() => {
             setTime(new Date())
         }, 1000)
 
+        const fetchTemperature = async () => {
+            try {
+                const latitude = 51.5074
+                const longitude = -0.1278
+                const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`, { next: { revalidate: 30 * 60 * 1000 } })
+                const data = await response.json()
+                const temp = data.current_weather.temperature
+                setTemperature(`${temp}°C`)
+            } catch (error) {
+                console.error('Error fetching temperature:', error)
+                setTemperature('N/A')
+            }
+        }
+
+        fetchTemperature()
+        // Fetch temperature every 30 minutes
+        const temperatureTimer = setInterval(fetchTemperature, 30 * 60 * 1000)
+
         return () => {
             clearInterval(timer)
+            clearInterval(temperatureTimer)
         }
     }, [])
 
@@ -38,14 +58,14 @@ const ClientTime = () => {
 
     // Placeholder data for Azan and Iqamah times
     const azanTime = "05:30 AM"
-    const iqamahTime = "12:00 PM";
+    const iqamahTime = "12:00 PM"
 
     // Placeholder for Islamic date (you'll need to implement actual conversion)
-    const islamicDate = "15 Ramadan 1444";
+    const islamicDate = "15 Ramadan 1444"
     const englishDate = time.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 
     return (
-        <div className=''>
+        <div>
             <FullDark
                 hours={hours}
                 minutes={minutes}
@@ -55,11 +75,10 @@ const ClientTime = () => {
                 islamicDate={islamicDate}
                 englishDate={englishDate}
                 prayerName={"Dhuhr"}
+                temperature={temperature}
             />
         </div>
     )
 }
 
-export default function Clock() {
-    return <ClientTime />
-}
+export default ClientTime

@@ -18,9 +18,9 @@ export default function ThemeSelector({ theme }: { theme: string }) {
                 <h3 className='text-lg font-semibold mb-4 text-gray-800'>
                     Select Theme
                 </h3>
-                <RadioGroup value={selectedTheme} onValueChange={handleThemeChange}>
+                <RadioGroup value={selectedTheme} onValueChange={handleThemeChange} name="theme">
                     <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'>
-                        {['1', '2', '3', '4', '5', '6'].map((themeitem) => (
+                        {['1'].map((themeitem) => (
                             <div key={themeitem} className='flex items-center space-x-2'>
                                 <RadioGroupItem value={themeitem} id={themeitem} className='sr-only' />
                                 <Label

@@ -134,10 +134,16 @@ export async function getClockSettings(clockSettingsId: string) {
     return { error: clockError.message };
   }
 
+  return {clockSettings} ;
+
+}
+
+export async function getIqamathTime(iqamathTimeId: string) {
+  const supabase = createClient();
   const {data: iqamathTime, error: iqamathError} = await supabase
     .from('iqamath_time')
     .select('*')
-    .eq('id', clockSettings?.iqamath_time)
+    .eq('id', iqamathTimeId)
     .single();
 
   if (iqamathError) {
@@ -145,10 +151,15 @@ export async function getClockSettings(clockSettingsId: string) {
     return { error: iqamathError.message };
   }
 
+  return {iqamathTime};
+}
+
+export async function getNightMode(nightModeId: string) {
+  const supabase = createClient();
   const {data: nightMode, error: nightModeError} = await supabase
     .from('night_mode')
     .select('*')
-    .eq('id', clockSettings?.night_mode)
+    .eq('id', nightModeId)
     .single();
 
   if (nightModeError) {
@@ -156,17 +167,110 @@ export async function getClockSettings(clockSettingsId: string) {
     return { error: nightModeError.message };
   }
 
-  // Revalidate the path to ensure fresh data
-  revalidatePath('/admin/protected/dashboard');
-
-  return { clockSettings, iqamathTime, nightMode };
+  return {nightMode};
 }
 
-export async function updateClockSettings(formData: FormData) {
-  const supabase = createClient();
-  const masjidName = formData.get('masjid-name') as string;
-  const nightModeFrom = formData.get('nightmode-from') as string;
-  const nightModeTo = formData.get('nightmode-to') as string;
-  const nightModeActive = formData.get('nightmode-active') as string;
-  console.log(masjidName, nightModeFrom, nightModeTo, nightModeActive)
+export async function updateClockMasjidDetails(formData: FormData, masjid: any) {
+  try {
+    const supabase = createClient();
+  
+    const masjidName = formData.get('masjid-name') as string;
+    const { error: masjidError } = await supabase
+        .from('clock_settings')
+        .update({ masjid_name: masjidName })
+        .eq('id', masjid.clock_settings);
+    if (masjidError) {
+      console.error('Error updating masjid:', masjidError);
+      return { error: 'Failed to update masjid details. Please try again.'};
+      }
+
+    revalidatePath('/admin/protected/masjid/clock-settings')
+    return { success: 'Masjid details updated successfully' }
+  } catch (error) {
+    console.error('Error updating masjid details:', error)
+    return { error: 'Failed to update masjid details. Please try again.' }
+  }
+}
+
+export async function updateClockIqamathTime(formData: FormData, clockSettings: any) {
+  try {
+    const supabase = createClient();
+    const prayerTimes = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+    const updatedIqamathTime: Record<string, [string, string]> = {};
+
+    prayerTimes.forEach(prayer => {
+      const minutes = formData.get(`minutes-${prayer}`) as string;
+      const fixedTime = formData.get(`fixed-time-${prayer}`) as string;
+      updatedIqamathTime[prayer] = [minutes || '', fixedTime || ''];
+    });
+
+    console.log(updatedIqamathTime)
+
+    const { fajr, dhuhr, asr, maghrib, isha } = updatedIqamathTime;
+    const { error: iqamathError } = await supabase
+      .from('iqamath_time')
+      .update({ fajr, dhuhr, asr, maghrib, isha })
+      .eq('id', clockSettings.iqamath_time);
+
+    if (iqamathError) {
+      console.error('Error updating iqamath time:', iqamathError);
+      return { error: 'Failed to update iqamath time. Please try again.' };
+    }
+
+    revalidatePath('/admin/protected/masjid/clock-settings')
+    return { success: 'Iqamath time updated successfully' }
+  } catch (error) {
+    console.error('Error updating iqamath time:', error)
+    return { error: 'Failed to update iqamath time. Please try again.' }
+  }
+}
+
+export async function updateClockTheme(formData: FormData, masjid: any) {
+  try {
+    const supabase = createClient();
+    const theme = formData.get('theme') as string;
+    const { error: themeError } = await supabase
+      .from('clock_settings')
+      .update({ theme: theme })
+      .eq('id', masjid.clock_settings);
+
+    if (themeError) {
+      console.error('Error updating theme:', themeError);
+      return { error: 'Failed to update theme. Please try again.' }
+    }
+
+    revalidatePath('/admin/protected/masjid/clock-settings')
+    return { success: 'Theme updated successfully' }
+  } catch (error) {
+    console.error('Error updating theme:', error)
+    return { error: 'Failed to update theme. Please try again.' }
+  }
+}
+
+export async function updateClockNightMode(formData: FormData, clockSettings: any) {
+  try {
+    const supabase = createClient();
+    const nightModeFrom = formData.get('nightmode-from') as string;
+    const nightModeTo = formData.get('nightmode-to') as string;
+    const nightModeActive = formData.get('nightmode-active') as string;
+    const { error: nightModeError } = await supabase
+      .from('night_mode')
+      .update({
+        from: nightModeFrom,
+        to: nightModeTo,
+        active: nightModeActive,
+      })
+      .eq('id', clockSettings.night_mode);
+
+    if (nightModeError) {
+      console.error('Error updating night mode:', nightModeError);
+      return { error: 'Failed to update night mode. Please try again.' }
+    }
+
+    revalidatePath('/admin/protected/masjid/clock-settings')
+    return { success: 'Night mode updated successfully' }
+  } catch (error) {
+    console.error('Error updating night mode:', error)
+    return { error: 'Failed to update night mode. Please try again.' }
+  }
 }

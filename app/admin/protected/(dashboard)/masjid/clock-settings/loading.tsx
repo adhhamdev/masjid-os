@@ -5,7 +5,6 @@ export default function ClockLoading() {
             <main className='container mx-auto'>
                 <div className='flex justify-between items-center mb-4'>
                     <h2 className='text-2xl font-semibold text-gray-800'>Clock Settings</h2>
-                    <div className='h-10 w-24 bg-gray-300 rounded animate-pulse'></div>
                 </div>
                 <div className='space-y-4'>
                     <div className='h-10 w-full max-w-md bg-gray-300 rounded animate-pulse'></div>

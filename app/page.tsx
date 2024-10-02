@@ -16,8 +16,6 @@ export default function HomePage() {
         <nav className="flex justify-between items-center">
           <h1 className="text-xl sm:text-2xl font-bold text-emerald-800">Islamic Center Management System</h1>
           <div className="hidden md:flex space-x-4">
-            <Button variant="ghost" className="text-emerald-700">Features</Button>
-            <Button variant="ghost" className="text-emerald-700">About</Button>
             <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">
               <Button className="bg-green-500 text-white hover:bg-green-600 flex items-center">
                 <MessageCircle className="mr-2 h-4 w-4" />
