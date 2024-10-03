@@ -18,6 +18,7 @@ const IqamahCountdown = dynamic(() => import('@/components/clocks/iqamath-countd
 const ClientTime = () => {
     const [time, setTime] = useState(new Date())
     const [temperature, setTemperature] = useState<string>('')
+    const [location, setLocation] = useState<string>('')
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -26,6 +27,7 @@ const ClientTime = () => {
 
         const fetchTemperature = async () => {
             try {
+                // working on location based time
                 const latitude = 51.5074
                 const longitude = -0.1278
                 const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`, { next: { revalidate: 30 * 60 * 1000 } })
