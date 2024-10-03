@@ -18,11 +18,11 @@ interface IqamathTimeProps {
 function IqamathTime({ iqamathTime }: IqamathTimeProps) {
     console.log(iqamathTime)
     const azanTimes: Prayer[] = [
-        { name: 'fajr', time: iqamathTime?.fajr?.[1], minutes: iqamathTime?.fajr?.[0] },
-        { name: 'dhuhr', time: iqamathTime?.dhuhr?.[1], minutes: iqamathTime?.dhuhr?.[0] },
-        { name: 'asr', time: iqamathTime?.asr?.[1], minutes: iqamathTime?.asr?.[0] },
-        { name: 'maghrib', time: iqamathTime?.maghrib?.[1], minutes: iqamathTime?.maghrib?.[0] },
-        { name: 'isha', time: iqamathTime?.isha?.[1], minutes: iqamathTime?.isha?.[0] },
+        { name: 'fajr', time: iqamathTime?.fajr?.[1], minutes: iqamathTime?.fajr?.[0] || "" },
+        { name: 'dhuhr', time: iqamathTime?.dhuhr?.[1], minutes: iqamathTime?.dhuhr?.[0] || "" },
+        { name: 'asr', time: iqamathTime?.asr?.[1], minutes: iqamathTime?.asr?.[0] || "" },
+        { name: 'maghrib', time: iqamathTime?.maghrib?.[1], minutes: iqamathTime?.maghrib?.[0] || "" },
+        { name: 'isha', time: iqamathTime?.isha?.[1], minutes: iqamathTime?.isha?.[0] || "" },
     ];
 
     const [selectedInputs, setSelectedInputs] = useState<Record<string, 'minutes' | 'fixed'>>(

@@ -1,12 +1,12 @@
 'use client'
 
 import { updateClockTheme } from '@/app/actions'
-import { FormMessage } from '@/components/form-message'
-import ThemeSelector from '@/components/ThemeSelector'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Loader2, Save } from 'lucide-react'
 import { useState, useTransition } from 'react'
+import { FormMessage } from './form-message'
 
 export default function ThemeTab({ theme, masjid }: { theme: string, masjid: any }) {
     const [isPending, startTransition] = useTransition()
@@ -24,7 +24,20 @@ export default function ThemeTab({ theme, masjid }: { theme: string, masjid: any
         <form action={handleSubmit}>
             <Card>
                 <CardContent className='space-y-4 pt-4'>
-                    <ThemeSelector theme={theme} />
+                    <div>
+                        <label className='block text-sm font-medium mb-1 text-gray-700' htmlFor='theme'>
+                            Theme
+                        </label>
+                        <Select defaultValue={theme} name="theme">
+                            <SelectTrigger className='border-gray-300 focus:border-gray-500'>
+                                <SelectValue placeholder='Select theme' />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value='light'>Light</SelectItem>
+                                <SelectItem value='dark'>Dark</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                     <div className='space-y-2'>
                         <Button
                             type="submit"

@@ -12,8 +12,6 @@ export default async function ClockSettings({ searchParams }: { searchParams: { 
   const { iqamathTime } = await getIqamathTime(clockSettings?.iqamath_time)
   const { nightMode } = await getNightMode(clockSettings?.night_mode)
 
-  console.log(iqamathTime, nightMode, clockSettings)
-
   const msg = searchParams.success ? { success: searchParams.success } : searchParams.error ? { error: searchParams.error } : searchParams.message ? { message: searchParams.message } : null
 
   return (

@@ -1,5 +1,7 @@
 'use client'
 
+import { lcdTime } from '@/fonts';
+
 interface FullDarkProps {
     hours: string;
     minutes: string;
@@ -10,6 +12,7 @@ interface FullDarkProps {
     englishDate: string;
     prayerName: string;
     temperature: string;
+    masjidName: string;
 }
 
 import { useEffect, useState } from 'react';
@@ -38,6 +41,7 @@ function gregorianToIslamicDate(date: Date) {
 export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime, islamicDate, englishDate, prayerName, temperature }: FullDarkProps) {
     const [time, setTime] = useState(new Date())
     const [labels] = useState(['TIME', 'MAGHRIB', 'IQAMAH'])
+    const masjidName = "Test Masjid"
 
     useEffect(() => {
         const timer = setInterval(() => setTime(new Date()), 1000)
@@ -62,13 +66,10 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
 
     return (
         <div className="flex flex-col h-screen bg-black text-white p-4">
-            <div className="flex justify-between items-center mb-4">
-                <div className="w-24"></div>
+            <div className="mb-4">
                 <div className="text-2xl text-center text-yellow-300">
-                    {formatIslamicDate(time)} | {formatGregorianDate(time)}
-                </div>
-                <div className="text-4xl text-yellow-300">
-                    {temperature}
+                    {formatIslamicDate(time)} | {formatGregorianDate(time)} | {temperature} <br />
+                    {masjidName}
                 </div>
             </div>
             <div className="flex flex-1">
@@ -93,17 +94,17 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
                     <div className="flex-1 flex items-center">
-                        <div className="text-[12rem] font-extrabold text-yellow-300 tracking-wider w-full text-center leading-none" suppressHydrationWarning>
+                        <div className={`text-[13rem] font-extrabold text-yellow-300 tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
                             {formatTime(time, true)}
                         </div>
                     </div>
                     <div className="flex-1 flex items-center">
-                        <div className="text-[12rem] font-extrabold text-white tracking-wider w-full text-center leading-none">
+                        <div className={`text-[13rem] font-extrabold text-white tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
                             {formatTime(time)}
                         </div>
                     </div>
                     <div className="flex-1 flex items-center">
-                        <div className="text-[12rem] font-extrabold text-green-300 tracking-wider w-full text-center leading-none">
+                        <div className={`text-[13rem] font-extrabold text-green-300 tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
                             {formatTime(new Date(time.getTime() + 7 * 60000))}
                         </div>
                     </div>
