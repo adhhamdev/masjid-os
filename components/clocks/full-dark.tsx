@@ -68,7 +68,7 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
                     {formatIslamicDate(time)} | {formatGregorianDate(time)}
                 </div>
                 <div className="text-4xl text-yellow-300">
-                    {temperature}°C
+                    {temperature}
                 </div>
             </div>
             <div className="flex flex-1">
