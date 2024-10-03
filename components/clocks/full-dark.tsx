@@ -35,9 +35,8 @@ function gregorianToIslamicDate(date: Date) {
     return { day, month, year };
 }
 
-export default function Component() {
+export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime, islamicDate, englishDate, prayerName, temperature }: FullDarkProps) {
     const [time, setTime] = useState(new Date())
-    const [temperature] = useState(36)
     const [labels] = useState(['TIME', 'MAGHRIB', 'IQAMAH'])
 
     useEffect(() => {
