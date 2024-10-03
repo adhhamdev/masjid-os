@@ -94,17 +94,17 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
                     <div className="flex-1 flex items-center">
-                        <div className={`text-[14rem] font-bold text-yellow-300 tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
+                        <div className={`text-[14rem] text-yellow-300 tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
                             {formatTime(time, true)}
                         </div>
                     </div>
                     <div className="flex-1 flex items-center">
-                        <div className={`text-[14rem] font-bold text-white tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
+                        <div className={`text-[14rem] text-white tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
                             {formatTime(time)}
                         </div>
                     </div>
                     <div className="flex-1 flex items-center">
-                        <div className={`text-[13rem] font-bold text-green-300 tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
+                        <div className={`text-[13rem] text-green-300 tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
                             {formatTime(new Date(time.getTime() + 7 * 60000))}
                         </div>
                     </div>
