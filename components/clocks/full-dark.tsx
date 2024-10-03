@@ -65,11 +65,11 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
     }
 
     return (
-        <div className="flex flex-col h-screen bg-black text-white p-4">
-            <div className="mb-4">
+        <div className="flex flex-col h-screen bg-black text-white">
+            <div className="">
                 <div className="text-2xl text-center text-yellow-300">
                     {formatIslamicDate(time)} | {formatGregorianDate(time)} | {temperature} <br />
-                    {masjidName}
+                    <span className='font-bold text-xl'>{masjidName}</span>
                 </div>
             </div>
             <div className="flex flex-1">
@@ -94,12 +94,12 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
                     <div className="flex-1 flex items-center">
-                        <div className={`text-[13rem] font-extrabold text-yellow-300 tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
+                        <div className={`text-[14rem] font-extrabold text-yellow-300 tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
                             {formatTime(time, true)}
                         </div>
                     </div>
                     <div className="flex-1 flex items-center">
-                        <div className={`text-[13rem] font-extrabold text-white tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
+                        <div className={`text-[14rem] font-extrabold text-white tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
                             {formatTime(time)}
                         </div>
                     </div>
