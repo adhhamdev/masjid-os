@@ -1,12 +1,12 @@
 'use client'
 
 import { updateClockIqamathTime } from '@/app/actions'
+import { FormMessage } from '@/components/form-message'
+import IqamathTime from '@/components/IqamathTime'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { Loader2, Save } from 'lucide-react'
 import { useState, useTransition } from 'react'
-import { FormMessage } from './form-message'
 
 export default function IqamathTimeTab({ iqamathTime, clockSettings }: { iqamathTime: any, clockSettings: any }) {
     const [isPending, startTransition] = useTransition()
@@ -21,26 +21,11 @@ export default function IqamathTimeTab({ iqamathTime, clockSettings }: { iqamath
     }
 
     return (
+
         <form action={handleSubmit}>
             <Card>
                 <CardContent className='space-y-4 pt-4'>
-                    {['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'].map((prayer) => (
-                        <div key={prayer}>
-                            <label
-                                className='block text-sm font-medium mb-1 text-gray-700'
-                                htmlFor={`${prayer}IqamathTime`}
-                            >
-                                {prayer.charAt(0).toUpperCase() + prayer.slice(1)} Iqamath Time
-                            </label>
-                            <Input
-                                id={`${prayer}IqamathTime`}
-                                placeholder={`Enter ${prayer} iqamath time`}
-                                className='focus-visible:ring-gray-500'
-                                defaultValue={iqamathTime?.[prayer]}
-                                name={`${prayer}-iqamath-time`}
-                            />
-                        </div>
-                    ))}
+                    <IqamathTime iqamathTime={iqamathTime} />
                     <div className='space-y-2'>
                         <Button
                             type="submit"

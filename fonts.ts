@@ -7,7 +7,6 @@ export const montserrat = Montserrat({
 });
 
 export const lcdTime = localFont({
-  // src: 'lib/fonts/DS-DIGIB.ttf',
   src: 'lib/fonts/lcd-time.ttf',
   weight: '400',
 });

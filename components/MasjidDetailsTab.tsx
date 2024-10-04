@@ -1,12 +1,12 @@
 'use client'
 
 import { updateClockMasjidDetails } from '@/app/actions'
+import { FormMessage } from '@/components/form-message'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Loader2, Save } from 'lucide-react'
 import { useState, useTransition } from 'react'
-import { FormMessage } from './form-message'
 
 export default function MasjidDetailsTab({ clockSettings, masjid }: { clockSettings: any, masjid: any }) {
     const [isPending, startTransition] = useTransition()

@@ -1,4 +1,5 @@
 "use client";
+import NotificationPopover from '@/components/dashboard/NotificationPopover';
 import { LogoutButton } from '@/components/logout-button';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -6,7 +7,6 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from 
 import { ChevronDown, Clock, Menu, Settings, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import NotificationPopover from './NotificationPopover';
 
 function ProfileDropdown({ isMobile = false }) {
     return (

@@ -1,8 +1,8 @@
+import HomeContent from "@/components/HomeContent"
+import MobileMenu from "@/components/MobileMenu"
 import { Button } from "@/components/ui/button"
 import { MessageCircle } from "lucide-react"
 import Link from "next/link"
-import HomeContent from "../components/HomeContent"
-import MobileMenu from "../components/MobileMenu"
 
 const whatsappNumber = "+94743193834"
 const whatsappMessage = encodeURIComponent("Hello! I'm interested in the Islamic Centre Management System.")
