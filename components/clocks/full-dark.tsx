@@ -67,9 +67,8 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
     return (
         <div className="flex flex-col h-screen bg-black text-white overflow-hidden">
             <div className="py-1 flex-shrink-0">
-                <div className="text-sm text-center text-yellow-300">
-                    {formatIslamicDate(time)} | {formatGregorianDate(time)} | {temperature}
-                    <div className='font-bold text-base'>{masjidName}</div>
+                <div className="text-base text-center text-yellow-300">
+                    {formatIslamicDate(time)} <span className='text-white'>|</span> {formatGregorianDate(time)} <span className='text-white'>|</span> {temperature} <span className='text-white'>|</span> <span className='font-bold text-white'>{masjidName}</span>
                 </div>
             </div>
             <div className="flex flex-1 min-h-0">
@@ -95,7 +94,7 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
                 <div className="flex-1 flex flex-col justify-between">
                     {[{ time: formatTime(time, true), color: 'text-yellow-300' }, { time: formatTime(time), color: 'text-white' }, { time: formatTime(new Date(time.getTime() + 7 * 60000)), color: 'text-red-600' }].map((item, index) => (
                         <div key={index} className="flex-1 flex items-center justify-center min-h-0 py-1">
-                            <div className={`text-[20vw] ${item.color} w-full text-center ${lcdTime.className} tracking-widest leading-[0.9]`} suppressHydrationWarning>
+                            <div className={`text-[20.5vw] ${item.color} w-full text-center ${lcdTime.className} tracking-widest leading-[0.9]`} suppressHydrationWarning>
                                 {item.time}
                             </div>
                         </div>

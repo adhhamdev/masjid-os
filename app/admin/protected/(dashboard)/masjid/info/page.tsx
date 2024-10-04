@@ -1,8 +1,9 @@
 import { getContactDetails, getMasjidDetails, getPrayerSettings } from "@/app/actions"
+import ContactTab from "@/components/ContactTab"
+import PrayerSettingsTab from "@/components/PrayerSettingsTab"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { PlusIcon, Save, XIcon } from "lucide-react"
@@ -12,6 +13,7 @@ export default async function Info() {
     const { masjid } = await getMasjidDetails();
     const { contact } = await getContactDetails(masjid?.contact);
     const { prayerSettings } = await getPrayerSettings(masjid?.prayer_settings);
+
     return (
         <div className="min-h-screen py-8">
             <main className="container mx-auto">
@@ -96,99 +98,10 @@ export default async function Info() {
                         </Card>
                     </TabsContent>
                     <TabsContent value="contact">
-                        <Card>
-                            <CardContent className="pt-4">
-                                <h3 className="text-lg font-semibold mb-4 text-gray-800">CONTACT DETAILS</h3>
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="masjidName">MASJID NAME</label>
-                                        <Input
-                                            id="masjidName"
-                                            className="focus-visible:ring-gray-500"
-                                            defaultValue={contact?.masjid_name ?? ""}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="address">ADDRESS</label>
-                                        <Textarea
-                                            id="address"
-                                            rows={2}
-                                            className="focus-visible:ring-gray-500"
-                                            defaultValue={contact?.address ?? ""}
-                                        />
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="code">CODE</label>
-                                            <Select defaultValue={contact?.country_code ?? ""}>
-                                                <SelectTrigger className="border-gray-300 focus:border-gray-500">
-                                                    <SelectValue placeholder="Select code" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="sri-lanka">Sri Lanka (+94)</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="telephone">TELEPHONE NO</label>
-                                            <Input id="telephone" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.tel_no ?? ""} />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="fax">FAX NO</label>
-                                            <Input id="fax" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.fax_no ?? ""} />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="email">EMAIL</label>
-                                            <Input id="email" type="email" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.email ?? ""} />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium mb-1 text-gray-700">SOCIAL MEDIA LINKS</label>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[0]} />
-                                            <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[1]} />
-                                            <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[2]} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <ContactTab contact={contact} />
                     </TabsContent>
                     <TabsContent value="prayer">
-                        <Card>
-                            <CardContent className="pt-4">
-                                <h3 className="text-lg font-semibold mb-4 text-gray-800">Clock Settings</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="location">LOCATION</label>
-                                        <Select defaultValue={prayerSettings?.location}>
-                                            <SelectTrigger className="border-gray-300 focus:border-gray-500">
-                                                <SelectValue placeholder="Select location" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="colombo">Colombo</SelectItem>
-                                                <SelectItem value="galle">Galle</SelectItem>
-                                                <SelectItem value="kandy">Kandy</SelectItem>
-                                                <SelectItem value="jaffna">Jaffna</SelectItem>
-                                                <SelectItem value="batticaloa">Batticaloa</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="juristic">JURISTIC</label>
-                                        <Select defaultValue={prayerSettings?.juristic}>
-                                            <SelectTrigger className="border-gray-300 focus:border-gray-500">
-                                                <SelectValue placeholder="Select juristic" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="shafi-hanbli-maliki">Shafi, Hanbli, Maliki</SelectItem>
-                                                <SelectItem value="hanafi">Hanafi</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <PrayerSettingsTab prayerSettings={prayerSettings} />
                     </TabsContent>
                 </Tabs>
                 <div className="mt-8">

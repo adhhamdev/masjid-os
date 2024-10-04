@@ -274,3 +274,7 @@ export async function updateClockNightMode(formData: FormData, clockSettings: an
     return { error: 'Failed to update night mode. Please try again.' }
   }
 }
+
+export async function updateContactDetails(formData : any) {
+
+}

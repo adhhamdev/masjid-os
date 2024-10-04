@@ -1,4 +1,3 @@
-"use client"
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,7 +14,6 @@ interface IqamathTimeProps {
 }
 
 function IqamathTime({ iqamathTime }: IqamathTimeProps) {
-    console.log(iqamathTime)
     const azanTimes: Prayer[] = [
         { name: 'fajr', time: iqamathTime?.fajr?.[1], minutes: iqamathTime?.fajr?.[0] || "" },
         { name: 'dhuhr', time: iqamathTime?.dhuhr?.[1], minutes: iqamathTime?.dhuhr?.[0] || "" },
