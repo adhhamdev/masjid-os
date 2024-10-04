@@ -65,19 +65,19 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
     }
 
     return (
-        <div className="flex flex-col h-screen bg-black text-white">
-            <div className="">
-                <div className="text-2xl text-center text-yellow-300">
-                    {formatIslamicDate(time)} | {formatGregorianDate(time)} | {temperature} <br />
-                    <span className='font-bold text-xl'>{masjidName}</span>
+        <div className="flex flex-col h-screen bg-black text-white overflow-hidden">
+            <div className="py-1 flex-shrink-0">
+                <div className="text-sm text-center text-yellow-300">
+                    {formatIslamicDate(time)} | {formatGregorianDate(time)} | {temperature}
+                    <div className='font-bold text-base'>{masjidName}</div>
                 </div>
             </div>
-            <div className="flex flex-1">
-                <div className="flex flex-col w-24 mr-4">
+            <div className="flex flex-1 min-h-0">
+                <div className="flex flex-col w-16">
                     {labels.map((label, index) => (
                         <div
                             key={index}
-                            className="flex-1 bg-gray-800 flex items-center justify-center"
+                            className="flex-1 bg-gradient-to-b from-gray-800 to-gray-900 border-2 border-white flex items-center justify-center"
                             style={{
                                 borderTopLeftRadius: index === 0 ? '0.25rem' : '0',
                                 borderTopRightRadius: index === 0 ? '0.25rem' : '0',
@@ -86,28 +86,20 @@ export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime
                                 borderBottom: index !== labels.length - 1 ? '1px solid #4B5563' : 'none'
                             }}
                         >
-                            <span className="transform -rotate-90 origin-center whitespace-nowrap text-2xl font-bold">
+                            <span className="transform -rotate-90 origin-center whitespace-nowrap text-lg font-bold">
                                 {label}
                             </span>
                         </div>
                     ))}
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
-                    <div className="flex-1 flex items-center">
-                        <div className={`text-[14rem] text-yellow-300 tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
-                            {formatTime(time, true)}
+                    {[{ time: formatTime(time, true), color: 'text-yellow-300' }, { time: formatTime(time), color: 'text-white' }, { time: formatTime(new Date(time.getTime() + 7 * 60000)), color: 'text-red-600' }].map((item, index) => (
+                        <div key={index} className="flex-1 flex items-center justify-center min-h-0 py-1">
+                            <div className={`text-[20vw] ${item.color} w-full text-center ${lcdTime.className} tracking-widest leading-[0.9]`} suppressHydrationWarning>
+                                {item.time}
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex-1 flex items-center">
-                        <div className={`text-[14rem] text-white tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
-                            {formatTime(time)}
-                        </div>
-                    </div>
-                    <div className="flex-1 flex items-center">
-                        <div className={`text-[13rem] text-green-300 tracking-wider w-full text-center leading-none ${lcdTime.className}`} suppressHydrationWarning>
-                            {formatTime(new Date(time.getTime() + 7 * 60000))}
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>
