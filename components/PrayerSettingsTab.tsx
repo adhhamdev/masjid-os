@@ -1,6 +1,6 @@
 "use client"
 
-import { updateContactDetails } from '@/app/actions'
+import { updatePrayerSettings } from '@/app/actions'
 import { FormMessage } from '@/components/form-message'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Loader2, Save } from 'lucide-react'
 import { useState, useTransition } from 'react'
 
-export default function PrayerSettingsTab({ prayerSettings }: { prayerSettings: any }) {
+export default function PrayerSettingsTab({ prayerSettings, prayerSettingsId }: { prayerSettings: any, prayerSettingsId: any }) {
 
     const [isPending, startTransition] = useTransition()
     const [message, setMessage] = useState<any>(null)
@@ -16,7 +16,7 @@ export default function PrayerSettingsTab({ prayerSettings }: { prayerSettings: 
     const handleSubmit = async (formData: FormData) => {
         setMessage(null)
         startTransition(async () => {
-            const response = await updateContactDetails(formData);
+            const response = await updatePrayerSettings(formData, prayerSettingsId);
             setMessage(response)
         })
     }
@@ -24,12 +24,12 @@ export default function PrayerSettingsTab({ prayerSettings }: { prayerSettings: 
     return (
         <form action={handleSubmit}>
             <Card>
-                <CardContent className="pt-4">
-                    <h3 className="text-lg font-semibold mb-4 text-gray-800">Clock Settings</h3>
+                <CardContent className="space-y-4 pt-4">
+                    <h3 className="text-lg font-semibold mb-4 text-gray-800">Prayer Settings</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="location">LOCATION</label>
-                            <Select defaultValue={prayerSettings?.location}>
+                            <Select defaultValue={prayerSettings?.location} name="location">
                                 <SelectTrigger className="border-gray-300 focus:border-gray-500">
                                     <SelectValue placeholder="Select location" />
                                 </SelectTrigger>
@@ -44,7 +44,7 @@ export default function PrayerSettingsTab({ prayerSettings }: { prayerSettings: 
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="juristic">JURISTIC</label>
-                            <Select defaultValue={prayerSettings?.juristic}>
+                            <Select defaultValue={prayerSettings?.juristic} name="juristic">
                                 <SelectTrigger className="border-gray-300 focus:border-gray-500">
                                     <SelectValue placeholder="Select juristic" />
                                 </SelectTrigger>
@@ -66,7 +66,7 @@ export default function PrayerSettingsTab({ prayerSettings }: { prayerSettings: 
                             ) : (
                                 <Save className='w-4 h-4 mr-2' />
                             )}
-                            Save Iqamath Times
+                            Save Prayer Settings
                         </Button>
                         {message && (
                             <FormMessage message={message} />

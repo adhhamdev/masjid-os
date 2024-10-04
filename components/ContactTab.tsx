@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Save } from 'lucide-react'
 import { useState, useTransition } from 'react'
 
-export default function ContactTab({ contact }: { contact: any }) {
+export default function ContactTab({ contact, contactId }: { contact: any, contactId: any }) {
 
     const [isPending, startTransition] = useTransition()
     const [message, setMessage] = useState<any>(null)
@@ -17,7 +17,7 @@ export default function ContactTab({ contact }: { contact: any }) {
     const handleSubmit = async (formData: FormData) => {
         setMessage(null)
         startTransition(async () => {
-            const response = await updateContactDetails(formData);
+            const response = await updateContactDetails(formData, contactId);
             setMessage(response)
         })
     }
@@ -25,7 +25,7 @@ export default function ContactTab({ contact }: { contact: any }) {
     return (
         <form action={handleSubmit}>
             <Card>
-                <CardContent className="pt-4">
+                <CardContent className="space-y-4 pt-4">
                     <h3 className="text-lg font-semibold mb-4 text-gray-800">CONTACT DETAILS</h3>
                     <div className="space-y-4">
                         <div>
@@ -34,6 +34,7 @@ export default function ContactTab({ contact }: { contact: any }) {
                                 id="masjidName"
                                 className="focus-visible:ring-gray-500"
                                 defaultValue={contact?.masjid_name ?? ""}
+                                name="masjid-name"
                             />
                         </div>
                         <div>
@@ -43,12 +44,13 @@ export default function ContactTab({ contact }: { contact: any }) {
                                 rows={2}
                                 className="focus-visible:ring-gray-500"
                                 defaultValue={contact?.address ?? ""}
+                                name="address"
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                                 <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="code">CODE</label>
-                                <Select defaultValue={contact?.country_code ?? ""}>
+                                <Select defaultValue={contact?.country_code ?? ""} name="country-code">
                                     <SelectTrigger className="border-gray-300 focus:border-gray-500">
                                         <SelectValue placeholder="Select code" />
                                     </SelectTrigger>
@@ -59,23 +61,23 @@ export default function ContactTab({ contact }: { contact: any }) {
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="telephone">TELEPHONE NO</label>
-                                <Input id="telephone" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.tel_no ?? ""} />
+                                <Input id="telephone" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.tel_no ?? ""} name="tel-no" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="fax">FAX NO</label>
-                                <Input id="fax" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.fax_no ?? ""} />
+                                <Input id="fax" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.fax_no ?? ""} name="fax-no" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="email">EMAIL</label>
-                                <Input id="email" type="email" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.email ?? ""} />
+                                <Input id="email" type="email" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.email ?? ""} name="email" />
                             </div>
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-1 text-gray-700">SOCIAL MEDIA LINKS</label>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[0]} />
-                                <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[1]} />
-                                <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[2]} />
+                                <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[0]} name="social-links-1" />
+                                <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[1]} name="social-links-2" />
+                                <Input placeholder="www.abc.com/xyz masjid" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.social_links[2]} name="social-links-3" />
                             </div>
                         </div>
                     </div>
@@ -90,7 +92,7 @@ export default function ContactTab({ contact }: { contact: any }) {
                             ) : (
                                 <Save className='w-4 h-4 mr-2' />
                             )}
-                            Save Iqamath Times
+                            Save Contact Info
                         </Button>
                         {message && (
                             <FormMessage message={message} />
