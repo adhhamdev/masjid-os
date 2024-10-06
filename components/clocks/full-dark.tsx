@@ -1,104 +1,96 @@
-'use client'
-
 import { lcdTime } from '@/fonts';
-
-interface FullDarkProps {
-    hours: string;
-    minutes: string;
-    seconds: string;
-    azanTime: string;
-    iqamahTime: string;
-    islamicDate: string;
-    englishDate: string;
-    prayerName: string;
-    temperature: string;
-    masjidName: string;
-}
-
+import { formatTime, getEnglishDate, getIslamicDate } from '@/lib/utils';
+import { CalculationMethod, Coordinates, PrayerTimes } from 'adhan';
 import { useEffect, useState } from 'react';
 
-const ISLAMIC_EPOCH = 1948439.5;
-const ISLAMIC_MONTHS = [
-    "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani",
-    "Jumada al-Ula", "Jumada al-Thani", "Rajab", "Sha'ban",
-    "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"
-];
-
-function gregorianToIslamicDate(date: Date) {
-    const jd = Math.floor((date.getTime() / 86400000) + 2440587.5);
-    const l = jd - 1948440 + 10632;
-    const n = Math.floor((l - 1) / 10631);
-    const l2 = l - 10631 * n + 354;
-    const j = Math.floor((10985 - l2) / 5316) * Math.floor((50 * l2) / 17719) + Math.floor(l2 / 5670) * Math.floor((43 * l2) / 15238);
-    const l3 = l2 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
-    const month = Math.floor((24 * l3) / 709);
-    const day = l3 - Math.floor((709 * month) / 24);
-    const year = 30 * n + j - 30;
-
-    return { day, month, year };
+interface FullDarkProps {
+    iqamathTime: {
+        fajr: string[];
+        dhuhr: string[];
+        asr: string[];
+        maghrib: string[];
+        isha: string[];
+    };
+    temperature: string;
+    masjidName: string;
+    clockSettings: any;
+    prayerSettings: any;
 }
 
-export default function FullDark({ hours, minutes, seconds, azanTime, iqamahTime, islamicDate, englishDate, prayerName, temperature }: FullDarkProps) {
+const locationCoordinates = {
+    colombo: { latitude: 6.9271, longitude: 79.8612 },
+    kandy: { latitude: 7.2906, longitude: 80.6337 },
+    batticaloa: { latitude: 7.7170, longitude: 81.7000 },
+    jaffna: { latitude: 9.6615, longitude: 80.0255 },
+    galle: { latitude: 6.0535, longitude: 80.2210 },
+}
+
+export default function FullDark({ iqamathTime, temperature, masjidName, clockSettings, prayerSettings }: FullDarkProps) {
     const [time, setTime] = useState(new Date())
-    const [labels] = useState(['TIME', 'MAGHRIB', 'IQAMAH'])
-    const masjidName = "Test Masjid"
+    const [nextPrayer, setNextPrayer] = useState<{ name: string; time: Date; iqamah: string } | null>(null)
 
     useEffect(() => {
-        const timer = setInterval(() => setTime(new Date()), 1000)
+        const timer = setInterval(() => {
+            const now = new Date()
+            setTime(now)
+            calculateNextPrayer(now)
+        }, 1000)
         return () => clearInterval(timer)
-    }, [])
+    }, [prayerSettings])
 
-    const formatTime = (date: Date, includeSeconds = false) => {
-        const hours = date.getHours().toString().padStart(2, '0')
-        const minutes = date.getMinutes().toString().padStart(2, '0')
-        const seconds = date.getSeconds().toString().padStart(2, '0')
-        return includeSeconds ? `${hours}:${minutes}:${seconds}` : `${hours}:${minutes}`
-    }
+    function calculateNextPrayer(currentTime: Date) {
+        const coordinates = new Coordinates(
+            locationCoordinates[prayerSettings.location as keyof typeof locationCoordinates].latitude,
+            locationCoordinates[prayerSettings.location as keyof typeof locationCoordinates].longitude
+        )
+        const params = CalculationMethod.MuslimWorldLeague();
+        const prayerTimes = new PrayerTimes(coordinates, currentTime, params)
 
-    const formatIslamicDate = (date: Date) => {
-        const { day, month, year } = gregorianToIslamicDate(date)
-        return `${day} ${ISLAMIC_MONTHS[month - 1]} ${year}`
-    }
+        const prayers = [
+            { name: 'Fajr', time: prayerTimes.fajr, iqamah: iqamathTime.fajr[1] },
+            { name: 'Dhuhr', time: prayerTimes.dhuhr, iqamah: iqamathTime.dhuhr[1] },
+            { name: 'Asr', time: prayerTimes.asr, iqamah: iqamathTime.asr[1] },
+            { name: 'Maghrib', time: prayerTimes.maghrib, iqamah: iqamathTime.maghrib[1] },
+            { name: 'Isha', time: prayerTimes.isha, iqamah: iqamathTime.isha[1] },
+        ]
 
-    const formatGregorianDate = (date: Date) => {
-        return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
+        const nextPrayer = prayers.find(prayer => prayer.time > currentTime)
+        setNextPrayer(nextPrayer || prayers[0])
     }
 
     return (
-        <div className="flex flex-col h-screen bg-black text-white overflow-hidden">
-            <div className="py-1 flex-shrink-0">
-                <div className="text-base text-center text-yellow-300">
-                    {formatIslamicDate(time)} <span className='text-white'>|</span> {formatGregorianDate(time)} <span className='text-white'>|</span> {temperature} <span className='text-white'>|</span> <span className='font-bold text-white'>{masjidName}</span>
+        <div className="flex h-screen bg-black text-white overflow-hidden">
+            {/* Left vertical bar */}
+            <div className="flex flex-col justify-center items-center w-16 bg-gray-900 border-r border-gray-700 py-4">
+                <div className="flex flex-col items-center justify-between h-2/3">
+                    <div className="text-lg sm:text-xl md:text-2xl font-semibold transform rotate-180 whitespace-nowrap writing-vertical">TIME</div>
+                    <div className="text-lg sm:text-xl md:text-2xl font-semibold transform rotate-180 whitespace-nowrap writing-vertical">{nextPrayer?.name.toUpperCase() || 'Next Prayer'}</div>
+                    <div className="text-lg sm:text-xl md:text-2xl font-semibold transform rotate-180 whitespace-nowrap writing-vertical">IQAMAH</div>
                 </div>
             </div>
-            <div className="flex flex-1 min-h-0">
-                <div className="flex flex-col w-16">
-                    {labels.map((label, index) => (
-                        <div
-                            key={index}
-                            className="flex-1 bg-gradient-to-b from-gray-800 to-gray-900 border-2 border-white flex items-center justify-center"
-                            style={{
-                                borderTopLeftRadius: index === 0 ? '0.25rem' : '0',
-                                borderTopRightRadius: index === 0 ? '0.25rem' : '0',
-                                borderBottomLeftRadius: index === labels.length - 1 ? '0.25rem' : '0',
-                                borderBottomRightRadius: index === labels.length - 1 ? '0.25rem' : '0',
-                                borderBottom: index !== labels.length - 1 ? '1px solid #4B5563' : 'none'
-                            }}
-                        >
-                            <span className="transform -rotate-90 origin-center whitespace-nowrap text-lg font-bold">
-                                {label}
-                            </span>
-                        </div>
-                    ))}
+
+            <div className="flex-1 flex flex-col">
+                <div className="py-1 flex-shrink-0">
+                    <div className="text-xs sm:text-sm md:text-base text-center text-yellow-300">
+                        {getIslamicDate()} <span className='text-white'>|</span> {getEnglishDate()} <span className='text-white'>|</span> {temperature}°C <span className='text-white'>|</span> <span className='font-bold text-white'>{masjidName}</span>
+                    </div>
                 </div>
-                <div className="flex-1 flex flex-col justify-between">
-                    {[{ time: formatTime(time, true), color: 'text-yellow-300' }, { time: formatTime(time), color: 'text-white' }, { time: formatTime(new Date(time.getTime() + 7 * 60000)), color: 'text-red-600' }].map((item, index) => (
-                        <div key={index} className="flex-1 flex items-center justify-center min-h-0 py-1">
-                            <div className={`text-[20.5vw] ${item.color} w-full text-center ${lcdTime.className} tracking-widest leading-[0.9]`} suppressHydrationWarning>
-                                {item.time}
+                <div className="flex-1 flex flex-col justify-center items-center space-y-4">
+                    <div
+                        className={`text-6xl sm:text-8xl md:text-10xl lg:text-[17.5vw] font-extrabold ${lcdTime.className}`}
+                        suppressHydrationWarning
+                        dangerouslySetInnerHTML={{ __html: formatTime(time, true) }}
+                    />
+                    {nextPrayer && (
+                        <>
+                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-yellow-400 ${lcdTime.className}`} suppressHydrationWarning
+                                dangerouslySetInnerHTML={{ __html: formatTime(nextPrayer.time, true) }}>
                             </div>
-                        </div>
-                    ))}
+                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-500 ${lcdTime.className}`} suppressHydrationWarning>
+                                {nextPrayer.iqamah}
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

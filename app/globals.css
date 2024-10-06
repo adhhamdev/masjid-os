@@ -54,3 +54,10 @@
 .animate-pulse {
   animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+@layer utilities {
+  .writing-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+}
