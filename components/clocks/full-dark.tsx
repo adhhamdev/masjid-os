@@ -60,7 +60,6 @@ export default function FullDark({ iqamathTime, temperature, masjidName, clockSe
 
     return (
         <div className="flex h-screen bg-black text-white overflow-hidden">
-            {/* Left vertical bar */}
             <div className="flex flex-col justify-center items-center w-16 bg-gray-900 border-r border-gray-700 py-4">
                 <div className="flex flex-col items-center justify-between h-2/3">
                     <div className="text-lg sm:text-xl md:text-2xl font-semibold transform rotate-180 whitespace-nowrap writing-vertical">TIME</div>

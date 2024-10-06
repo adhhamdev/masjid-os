@@ -381,3 +381,19 @@ export async function updatePrayerSettings(
     return { error: 'Failed to update prayer settings. Please try again.' };
   }
 }
+
+// SUPERADMIN
+export async function getMosques() {
+  const supabase = createClient();
+  const { data: mosques, error } = await supabase
+    .from('masjid')
+    .select('*')
+    .order('name', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching mosques:', error);
+    return { error: error.message };
+  }
+
+  return { mosques };
+}
