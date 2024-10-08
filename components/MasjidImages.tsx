@@ -31,27 +31,38 @@ export function MasjidImages({ initialImages, masjidId }: MasjidImagesProps) {
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         setIsUploading(true)
         try {
-            const newImages = [...images]
-            for (const file of acceptedFiles) {
-                if (newImages.length >= 5) break
-                const reader = new FileReader();
-                reader.onload = async (event) => {
-                    if (event.target && typeof event.target.result === 'string') {
-                        const base64Content = event.target.result.split(',')[1]
-                        const fileData = {
-                            name: file.name,
-                            type: file.type,
-                            size: file.size,
-                            content: base64Content
+            const uploadPromises = acceptedFiles.slice(0, 5 - images.length).map(file => {
+                return new Promise<string>((resolve, reject) => {
+                    const reader = new FileReader()
+                    reader.onload = async event => {
+                        if (event.target?.result && typeof event.target.result === 'string') {
+                            const base64Content = event.target.result.split(',')[1]
+                            const fileData = {
+                                name: file.name,
+                                type: file.type,
+                                size: file.size,
+                                content: base64Content
+                            }
+                            try {
+                                const result = await uploadMasjidImage(fileData)
+                                resolve(result)
+                            } catch (error) {
+                                reject(error)
+                            }
+                        } else {
+                            reject(new Error('Failed to read file'))
                         }
-                        const result = await uploadMasjidImage(fileData)
-                        console.log('result: ', result);
-                        newImages.push(result)
                     }
-                }
-                reader.readAsDataURL(file)
-            }
+                    reader.onerror = () => reject(new Error('Failed to read file'))
+                    reader.readAsDataURL(file)
+                })
+            })
+
+            const uploadedImages = await Promise.all(uploadPromises)
+            const newImages = [...images, ...uploadedImages]
+            console.log('newImages: ', newImages)
             setImages(newImages)
+            await updateMasjidPhotos(masjidId, newImages)
             showToast("Images uploaded successfully", "Your masjid photos have been updated.")
         } catch (error) {
             console.error('Error uploading images:', error)
@@ -59,7 +70,7 @@ export function MasjidImages({ initialImages, masjidId }: MasjidImagesProps) {
         } finally {
             setIsUploading(false)
         }
-    }, [images, masjidId, toast])
+    }, [images, masjidId, showToast])
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -107,8 +118,13 @@ export function MasjidImages({ initialImages, masjidId }: MasjidImagesProps) {
                         <Image
                             src={image}
                             alt={`Masjid photo ${index + 1}`}
+                            className="object-contain w-full h-full"
                             fill
-                            className="object-cover"
+                            fetchPriority='low'
+                            loading='lazy'
+                            priority={false}
+                            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
+                            quality={1}
                         />
                     </div>
                 ))}

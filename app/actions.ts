@@ -443,7 +443,7 @@ export async function uploadMasjidImage(fileData: FileData) {
   const fileName = `${uuidv4()}.${fileData.name.split('.').pop()}`;
   const { data, error } = await supabase.storage
     .from('masjid-images')
-    .upload(fileName, buffer, { contentType: fileData.type, upsert: true });
+    .upload(fileName, buffer, { contentType: fileData.type });
 
   if (error) {
     throw error;
@@ -454,15 +454,12 @@ export async function uploadMasjidImage(fileData: FileData) {
     data: { publicUrl },
   } = supabase.storage.from('masjid-images').getPublicUrl(fileName);
 
-  console.log('publicUrl: ', publicUrl);
-
   return publicUrl;
 }
 
 export async function removeMasjidImage(imageUrl: string) {
   const supabase = createClient();
   const fileName = imageUrl.split('/').pop();
-  console.log('fileName: ', fileName);
   if (!fileName) {
     throw new Error('Invalid image URL');
   }
@@ -477,13 +474,16 @@ export async function removeMasjidImage(imageUrl: string) {
 }
 
 export async function updateMasjidPhotos(masjidId: string, photos: string[]) {
+  console.log('photos: ', photos);
   const supabase = createClient();
   const { error } = await supabase
     .from('masjid')
-    .update({ photos })
+    .update({ photos: photos })
     .eq('id', masjidId);
 
   if (error) {
     throw error;
   }
+
+  revalidatePath('/admin/protected/masjid/info');
 }

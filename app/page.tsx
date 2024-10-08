@@ -1,5 +1,4 @@
 import HomeContent from "@/components/HomeContent"
-import MobileMenu from "@/components/MobileMenu"
 import { Button } from "@/components/ui/button"
 import { MessageCircle } from "lucide-react"
 import Link from "next/link"
@@ -23,7 +22,6 @@ export default function HomePage() {
               </Button>
             </Link>
           </div>
-          <MobileMenu whatsappLink={whatsappLink} />
         </nav>
       </header>
 

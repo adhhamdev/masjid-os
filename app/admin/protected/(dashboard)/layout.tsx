@@ -12,6 +12,7 @@ export default async function RootLayout({
 
     const { masjid } = await getMasjidDetails();
     const { contact } = await getContactDetails(masjid?.contact);
+
     return (
         <>
             <IdleTimerWrapper>

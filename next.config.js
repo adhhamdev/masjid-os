@@ -5,7 +5,6 @@ const nextConfig = {
       {
         hostname: 'mxvrzrhbgzzmpajfltld.supabase.co',
         protocol: 'https',
-        pathname: '/storage/v1/object/public/masjid-images/**',
       },
     ],
   },
