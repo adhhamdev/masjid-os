@@ -25,6 +25,10 @@ const locationCoordinates = {
     galle: { latitude: 6.0535, longitude: 80.2210 },
 }
 
+function addMinutes(date: Date, minutes: number): Date {
+    return new Date(date.getTime() + minutes * 60000);
+}
+
 export default function FullDark({ iqamathTime, temperature, masjidName, clockSettings, prayerSettings }: FullDarkProps) {
     const [time, setTime] = useState(new Date())
     const [nextPrayer, setNextPrayer] = useState<{ name: string; time: Date; iqamah: string } | null>(null)
@@ -46,12 +50,22 @@ export default function FullDark({ iqamathTime, temperature, masjidName, clockSe
         const params = CalculationMethod.MuslimWorldLeague();
         const prayerTimes = new PrayerTimes(coordinates, currentTime, params)
 
+        function getIqamahTime(prayerTime: Date, iqamahSetting: string[]): string {
+            if (iqamahSetting[2] === "1") {
+                return formatTime(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), parseInt(iqamahSetting[1].slice(0, 2)), parseInt(iqamahSetting[1].slice(3, 5)), parseInt(iqamahSetting[1].slice(6, 8))), true)
+            } else {
+                const minutesToAdd = parseInt(iqamahSetting[0], 10);
+
+                return formatTime(addMinutes(prayerTime, minutesToAdd), true);
+            }
+        }
+
         const prayers = [
-            { name: 'Fajr', time: prayerTimes.fajr, iqamah: iqamathTime.fajr[1] },
-            { name: 'Dhuhr', time: prayerTimes.dhuhr, iqamah: iqamathTime.dhuhr[1] },
-            { name: 'Asr', time: prayerTimes.asr, iqamah: iqamathTime.asr[1] },
-            { name: 'Maghrib', time: prayerTimes.maghrib, iqamah: iqamathTime.maghrib[1] },
-            { name: 'Isha', time: prayerTimes.isha, iqamah: iqamathTime.isha[1] },
+            { name: 'Fajr', time: prayerTimes.fajr, iqamah: getIqamahTime(prayerTimes.fajr, iqamathTime.fajr) },
+            { name: 'Dhuhr', time: prayerTimes.dhuhr, iqamah: getIqamahTime(prayerTimes.dhuhr, iqamathTime.dhuhr) },
+            { name: 'Asr', time: prayerTimes.asr, iqamah: getIqamahTime(prayerTimes.asr, iqamathTime.asr) },
+            { name: 'Maghrib', time: prayerTimes.maghrib, iqamah: getIqamahTime(prayerTimes.maghrib, iqamathTime.maghrib) },
+            { name: 'Isha', time: prayerTimes.isha, iqamah: getIqamahTime(prayerTimes.isha, iqamathTime.isha) },
         ]
 
         const nextPrayer = prayers.find(prayer => prayer.time > currentTime)
@@ -60,11 +74,11 @@ export default function FullDark({ iqamathTime, temperature, masjidName, clockSe
 
     return (
         <div className="flex h-screen bg-black text-white overflow-hidden">
-            <div className="flex flex-col justify-center items-center w-16 bg-gray-900 border-r border-gray-700 py-4">
-                <div className="flex flex-col items-center justify-between h-2/3">
-                    <div className="text-lg sm:text-xl md:text-2xl font-semibold transform rotate-180 whitespace-nowrap writing-vertical">TIME</div>
-                    <div className="text-lg sm:text-xl md:text-2xl font-semibold transform rotate-180 whitespace-nowrap writing-vertical">{nextPrayer?.name.toUpperCase() || 'Next Prayer'}</div>
-                    <div className="text-lg sm:text-xl md:text-2xl font-semibold transform rotate-180 whitespace-nowrap writing-vertical">IQAMAH</div>
+            <div className="flex flex-col justify-center items-center w-16 border-2 border-white py-4 bg-gradient-to-r from-gray-900 to-gray-700">
+                <div className="flex flex-col items-center justify-between h-4/5">
+                    <div className="text-lg sm:text-xl md:text-3xl font-extrabold transform rotate-180 whitespace-nowrap writing-vertical text-white">TIME</div>
+                    <div className="text-lg sm:text-xl md:text-3xl font-extrabold transform rotate-180 whitespace-nowrap writing-vertical text-white">{nextPrayer?.name.toUpperCase() || 'Next Prayer'}</div>
+                    <div className="text-lg sm:text-xl md:text-3xl font-extrabold transform rotate-180 whitespace-nowrap writing-vertical text-white">IQAMAH</div>
                 </div>
             </div>
 
@@ -85,8 +99,9 @@ export default function FullDark({ iqamathTime, temperature, masjidName, clockSe
                             <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-yellow-400 ${lcdTime.className}`} suppressHydrationWarning
                                 dangerouslySetInnerHTML={{ __html: formatTime(nextPrayer.time, true) }}>
                             </div>
-                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-500 ${lcdTime.className}`} suppressHydrationWarning>
-                                {nextPrayer.iqamah}
+                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-500 `} suppressHydrationWarning
+                                dangerouslySetInnerHTML={{ __html: nextPrayer.iqamah }}>
+
                             </div>
                         </>
                     )}

@@ -7,14 +7,51 @@ export async function middleware(req: NextRequest) {
   await updateSession(req);
 
   const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!user && !req.nextUrl.pathname.startsWith('/admin/sign-in') && req.nextUrl.pathname !== '/') {
-    return NextResponse.redirect(new URL('/admin/sign-in', req.url));
+  const path = req.nextUrl.pathname;
+
+  // Admin routes
+  if (path.startsWith('/admin')) {
+    if (!user && path !== '/admin/sign-in') {
+      return NextResponse.redirect(new URL('/admin/sign-in', req.url));
+    }
+    // if (user && path !== '/admin/sign-in' && user.role === 'authenticated') {
+    //   return NextResponse.redirect(
+    //     new URL('/admin/protected/dashboard', req.url)
+    //   );
+    // }
+    if (user && path !== '/admin/sign-in' && user.role !== 'authenticated') {
+      return NextResponse.redirect(new URL('/admin/sign-in', req.url));
+    }
   }
 
-  if (user && req.nextUrl.pathname === '/admin/sign-in') {
-    return NextResponse.redirect(new URL('/admin/protected/dashboard', req.url));
+  // Superadmin routes
+  if (path.startsWith('/superadmin')) {
+    if (!user && path !== '/superadmin/sign-in') {
+      return NextResponse.redirect(new URL('/superadmin/sign-in', req.url));
+    }
+    if (
+      user &&
+      path !== '/superadmin/sign-in' &&
+      user.role !== 'service_role'
+    ) {
+      return NextResponse.redirect(new URL('/superadmin/sign-in', req.url));
+    }
+    if (
+      user &&
+      path === '/superadmin/sign-in' &&
+      user.role === 'service_role'
+    ) {
+      return NextResponse.redirect(new URL('/superadmin', req.url));
+    }
+  }
+
+  // Allow access to the home page
+  if (path === '/') {
+    return NextResponse.next();
   }
 
   return NextResponse.next();
@@ -22,6 +59,6 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|clock/.*|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    '/((?!_next/static|_next/image|favicon.ico|clock/.*|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
-}
+};

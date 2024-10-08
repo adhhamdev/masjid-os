@@ -7,6 +7,7 @@ interface Prayer {
     name: string
     time: string | undefined
     minutes: number[]
+    mode: string
 }
 
 interface IqamathTimeProps {
@@ -15,19 +16,25 @@ interface IqamathTimeProps {
 
 function IqamathTime({ iqamathTime }: IqamathTimeProps) {
     const azanTimes: Prayer[] = [
-        { name: 'fajr', time: iqamathTime?.fajr?.[1], minutes: iqamathTime?.fajr?.[0] || "" },
-        { name: 'dhuhr', time: iqamathTime?.dhuhr?.[1], minutes: iqamathTime?.dhuhr?.[0] || "" },
-        { name: 'asr', time: iqamathTime?.asr?.[1], minutes: iqamathTime?.asr?.[0] || "" },
-        { name: 'maghrib', time: iqamathTime?.maghrib?.[1], minutes: iqamathTime?.maghrib?.[0] || "" },
-        { name: 'isha', time: iqamathTime?.isha?.[1], minutes: iqamathTime?.isha?.[0] || "" },
+        { name: 'fajr', time: iqamathTime?.fajr?.[1], minutes: iqamathTime?.fajr?.[0] || "", mode: iqamathTime?.fajr?.[2] || "" },
+        { name: 'dhuhr', time: iqamathTime?.dhuhr?.[1], minutes: iqamathTime?.dhuhr?.[0] || "", mode: iqamathTime?.dhuhr?.[2] || "" },
+        { name: 'asr', time: iqamathTime?.asr?.[1], minutes: iqamathTime?.asr?.[0] || "", mode: iqamathTime?.asr?.[2] || "" },
+        { name: 'maghrib', time: iqamathTime?.maghrib?.[1], minutes: iqamathTime?.maghrib?.[0] || "", mode: iqamathTime?.maghrib?.[2] || "" },
+        { name: 'isha', time: iqamathTime?.isha?.[1], minutes: iqamathTime?.isha?.[0] || "", mode: iqamathTime?.isha?.[2] || "" },
     ];
 
-    const [selectedInputs, setSelectedInputs] = useState<Record<string, 'minutes' | 'fixed'>>(
-        Object.fromEntries(azanTimes.map(prayer => [prayer.name, prayer.time ? 'fixed' : 'minutes']))
+    const [selectedModes, setSelectedModes] = useState<{ [key: string]: '0' | '1' }>(
+        {
+            fajr: iqamathTime?.fajr?.[2] || "0",
+            dhuhr: iqamathTime?.dhuhr?.[2] || "0",
+            asr: iqamathTime?.asr?.[2] || "0",
+            maghrib: iqamathTime?.maghrib?.[2] || "0",
+            isha: iqamathTime?.isha?.[2] || "0",
+        }
     );
 
     function handleCheckboxChange(prayerName: string, checked: boolean) {
-        setSelectedInputs(prev => ({ ...prev, [prayerName]: checked ? 'fixed' : 'minutes' }));
+        setSelectedModes(prev => ({ ...prev, [prayerName]: checked ? '1' : '0' }));
     }
 
     return (
@@ -37,7 +44,6 @@ function IqamathTime({ iqamathTime }: IqamathTimeProps) {
                     <div key={prayer.name} className="mb-6 pb-6 border-b last:border-b-0">
                         <div className="flex flex-col sm:flex-row sm:items-center mb-2">
                             <h3 className="text-lg font-semibold mb-2 sm:mb-0 sm:w-1/4">{prayer.name.charAt(0).toUpperCase() + prayer.name.slice(1)}</h3>
-                            <p className="text-sm text-gray-600 sm:w-1/4">Azan Time: {prayer.time || 'N/A'}</p>
                         </div>
                         <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                             <div className="flex-1">
@@ -47,7 +53,7 @@ function IqamathTime({ iqamathTime }: IqamathTimeProps) {
                                     type="number"
                                     className="w-full"
                                     placeholder="Minutes after Azan"
-                                    disabled={selectedInputs[prayer.name] === 'fixed'}
+                                    disabled={selectedModes[prayer.name] === '1'}
                                     defaultValue={prayer?.minutes.toString()}
                                     name={`minutes-${prayer.name}`}
                                     required
@@ -60,7 +66,7 @@ function IqamathTime({ iqamathTime }: IqamathTimeProps) {
                                     type="time"
                                     className="w-full "
                                     placeholder="Fixed Iqamath Time"
-                                    disabled={selectedInputs[prayer.name] === 'minutes'}
+                                    disabled={selectedModes[prayer.name] === '0'}
                                     defaultValue={prayer.time}
                                     name={`fixed-time-${prayer.name}`}
                                     step='1'
@@ -70,11 +76,12 @@ function IqamathTime({ iqamathTime }: IqamathTimeProps) {
                             <div className="flex items-center space-x-2 sm:w-1/4">
                                 <Checkbox
                                     id={`fixed-${prayer.name}`}
-                                    checked={selectedInputs[prayer.name] === 'fixed'}
+                                    checked={selectedModes[prayer.name] === '1'}
                                     onCheckedChange={(checked) => handleCheckboxChange(prayer.name, checked as boolean)}
                                 />
                                 <Label htmlFor={`fixed-${prayer.name}`}>Fixed Time</Label>
                             </div>
+                            <input type="hidden" name={`iqamath-mode-${prayer.name}`} value={selectedModes[prayer.name]} />
                         </div>
                     </div>
                 ))}

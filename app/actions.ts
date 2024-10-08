@@ -1,5 +1,5 @@
 'use server';
-import { createClient } from '@/utils/supabase/server';
+import { createAdminClient, createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -8,10 +8,17 @@ export async function signInAction(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
+
+  console.log(data.session?.user);
+
+  if (data.user?.role !== 'authenticated') {
+    supabase.auth.signOut();
+    redirect('/admin/sign-in');
+  }
 
   if (error) {
     return { error: error.message };
@@ -19,6 +26,31 @@ export async function signInAction(formData: FormData) {
 
   revalidatePath('/', 'layout');
   redirect('/admin/protected/dashboard');
+}
+
+export async function superAdminSignInAction(formData: FormData) {
+  const supabase = createAdminClient();
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
+
+  const { error, data } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  console.log(data.session?.user);
+
+  if (data.user?.role !== 'service_role') {
+    supabase.auth.signOut();
+    return { error: 'You are not authorized!' };
+  }
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath('/superadmin', 'page');
+  redirect('/superadmin');
 }
 
 export async function signOutAction() {
@@ -238,12 +270,17 @@ export async function updateClockIqamathTime(
   try {
     const supabase = createClient();
     const prayerTimes = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
-    const updatedIqamathTime: Record<string, [string, string]> = {};
+    const updatedIqamathTime: Record<string, [string, string, string]> = {};
 
     prayerTimes.forEach((prayer) => {
       const minutes = formData.get(`minutes-${prayer}`) as string;
       const fixedTime = formData.get(`fixed-time-${prayer}`) as string;
-      updatedIqamathTime[prayer] = [minutes || '', fixedTime || ''];
+      const mode = formData.get(`iqamath-mode-${prayer}`) as string;
+      updatedIqamathTime[prayer] = [
+        minutes || '',
+        fixedTime || '',
+        mode || '0',
+      ];
     });
 
     console.log(updatedIqamathTime);
