@@ -74,7 +74,7 @@ export default function ContactTab({ contact, contactId }: { contact: any, conta
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="email">EMAIL</label>
-                                <Input id="email" type="email" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.email ?? ""} name="email" autoComplete="email" required />
+                                <Input id="email" type="email" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.email ?? "mail2icms@gmail.com"} name="email" autoComplete="email" required />
                             </div>
                         </div>
                         <div>
