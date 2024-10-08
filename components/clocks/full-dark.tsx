@@ -99,7 +99,7 @@ export default function FullDark({ iqamathTime, temperature, masjidName, clockSe
                             <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-yellow-400 ${lcdTime.className}`} suppressHydrationWarning
                                 dangerouslySetInnerHTML={{ __html: formatTime(nextPrayer.time, true) }}>
                             </div>
-                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-500 `} suppressHydrationWarning
+                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-500 ${lcdTime.className}`} suppressHydrationWarning
                                 dangerouslySetInnerHTML={{ __html: nextPrayer.iqamah }}>
 
                             </div>

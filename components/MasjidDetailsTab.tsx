@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Loader2, Save } from 'lucide-react'
 import { useState, useTransition } from 'react'
 
-export default function MasjidDetailsTab({ clockSettings, masjid }: { clockSettings: any, masjid: any }) {
+export default function MasjidDetailsTab({ masjid, masjidName }: { masjid: any, masjidName: string }) {
     const [isPending, startTransition] = useTransition()
     const [message, setMessage] = useState<any>(null)
 
@@ -34,7 +34,7 @@ export default function MasjidDetailsTab({ clockSettings, masjid }: { clockSetti
                             id='masjidName'
                             placeholder='Enter Masjid Name'
                             className='focus-visible:ring-gray-500'
-                            defaultValue={clockSettings?.masjid_name}
+                            defaultValue={masjidName}
                             name='masjid-name'
                         />
                     </div>

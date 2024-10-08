@@ -2,6 +2,7 @@
 import { createAdminClient, createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function signInAction(formData: FormData) {
   const supabase = createClient();
@@ -12,8 +13,6 @@ export async function signInAction(formData: FormData) {
     email,
     password,
   });
-
-  console.log(data.session?.user);
 
   if (data.user?.role !== 'authenticated') {
     supabase.auth.signOut();
@@ -37,8 +36,6 @@ export async function superAdminSignInAction(formData: FormData) {
     email,
     password,
   });
-
-  console.log(data.session?.user);
 
   if (data.user?.role !== 'service_role') {
     supabase.auth.signOut();
@@ -247,15 +244,15 @@ export async function updateClockMasjidDetails(
 
     const masjidName = formData.get('masjid-name') as string;
     const { error: masjidError } = await supabase
-      .from('clock_settings')
+      .from('contact')
       .update({ masjid_name: masjidName })
-      .eq('id', masjid.clock_settings);
+      .eq('id', masjid.contact);
     if (masjidError) {
       console.error('Error updating masjid:', masjidError);
       return { error: 'Failed to update masjid details. Please try again.' };
     }
 
-    revalidatePath('/admin/protected/masjid/clock-settings');
+    revalidatePath('/admin/protected', 'layout');
     return { success: 'Masjid details updated successfully' };
   } catch (error) {
     console.error('Error updating masjid details:', error);
@@ -282,8 +279,6 @@ export async function updateClockIqamathTime(
         mode || '0',
       ];
     });
-
-    console.log(updatedIqamathTime);
 
     const { fajr, dhuhr, asr, maghrib, isha } = updatedIqamathTime;
     const { error: iqamathError } = await supabase
@@ -433,4 +428,62 @@ export async function getMosques() {
   }
 
   return { mosques };
+}
+
+type FileData = {
+  name: string;
+  type: string;
+  size: number;
+  content: string; // base64 encoded file content
+};
+
+export async function uploadMasjidImage(fileData: FileData) {
+  const supabase = createClient();
+  const buffer = Buffer.from(fileData.content, 'base64');
+  const fileName = `${uuidv4()}.${fileData.name.split('.').pop()}`;
+  const { data, error } = await supabase.storage
+    .from('masjid-images')
+    .upload(fileName, buffer, { contentType: fileData.type, upsert: true });
+
+  if (error) {
+    throw error;
+  }
+
+  // Get the public URL of the uploaded file
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from('masjid-images').getPublicUrl(fileName);
+
+  console.log('publicUrl: ', publicUrl);
+
+  return publicUrl;
+}
+
+export async function removeMasjidImage(imageUrl: string) {
+  const supabase = createClient();
+  const fileName = imageUrl.split('/').pop();
+  console.log('fileName: ', fileName);
+  if (!fileName) {
+    throw new Error('Invalid image URL');
+  }
+
+  const { error } = await supabase.storage
+    .from('masjid-images')
+    .remove([fileName]);
+
+  if (error) {
+    throw error;
+  }
+}
+
+export async function updateMasjidPhotos(masjidId: string, photos: string[]) {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('masjid')
+    .update({ photos })
+    .eq('id', masjidId);
+
+  if (error) {
+    throw error;
+  }
 }

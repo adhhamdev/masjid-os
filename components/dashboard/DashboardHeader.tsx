@@ -44,14 +44,17 @@ function ProfileDropdown({ isMobile = false }) {
         </DropdownMenu>
     )
 }
-export default function DashboardHeader() {
+export default function DashboardHeader({ masjidName }: { masjidName: string }) {
     return (
         <header className="bg-emerald-800 text-emerald-50 py-4 relative z-10">
             <div className="container mx-auto flex flex-wrap justify-between items-center">
                 <div className="flex items-center justify-between w-full md:w-auto">
-                    <div className="flex items-center">
+                    <div className="flex items-center space-x-3">
                         <Image src="/mosque.png" alt="Mosque Logo" width={40} height={40} className="mr-2" />
-                        <h1 className="text-xs font-bold md:text-xl">A & A CO.</h1>
+                        <div className="flex flex-col">
+                            <h1 className="text-sm font-bold md:text-lg">A & A CO.</h1>
+                            <p className="text-xs md:text-sm text-emerald-200 font-medium">{masjidName}</p>
+                        </div>
                     </div>
                     <div className="flex items-center space-x-2 md:hidden">
                         <NotificationPopover isMobile={true} />

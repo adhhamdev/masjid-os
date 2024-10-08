@@ -1,4 +1,4 @@
-import { getClockSettings, getIqamathTime, getMasjidDetails, getNightMode } from '@/app/actions'
+import { getClockSettings, getContactDetails, getIqamathTime, getMasjidDetails, getNightMode } from '@/app/actions'
 import { FormMessage } from '@/components/form-message'
 import IqamathTimeTab from '@/components/IqamathTimeTab'
 import MasjidDetailsTab from '@/components/MasjidDetailsTab'
@@ -11,6 +11,7 @@ export default async function ClockSettings({ searchParams }: { searchParams: { 
   const { clockSettings } = await getClockSettings(masjid?.clock_settings)
   const { iqamathTime } = await getIqamathTime(clockSettings?.iqamath_time)
   const { nightMode } = await getNightMode(clockSettings?.night_mode)
+  const { contact } = await getContactDetails(masjid?.contact)
 
   const msg = searchParams.success ? { success: searchParams.success } : searchParams.error ? { error: searchParams.error } : searchParams.message ? { message: searchParams.message } : null
 
@@ -46,7 +47,7 @@ export default async function ClockSettings({ searchParams }: { searchParams: { 
           </div>
 
           <TabsContent value='masjid-details'>
-            <MasjidDetailsTab clockSettings={clockSettings} masjid={masjid} />
+            <MasjidDetailsTab masjid={masjid} masjidName={contact?.masjid_name} />
           </TabsContent>
 
           <TabsContent value='iqamath-time'>

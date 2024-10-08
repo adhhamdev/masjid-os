@@ -35,6 +35,9 @@ export default function ContactTab({ contact, contactId }: { contact: any, conta
                                 className="focus-visible:ring-gray-500"
                                 defaultValue={contact?.masjid_name ?? ""}
                                 name="masjid-name"
+                                required
+                                autoFocus
+                                autoComplete="name"
                             />
                         </div>
                         <div>
@@ -45,12 +48,14 @@ export default function ContactTab({ contact, contactId }: { contact: any, conta
                                 className="focus-visible:ring-gray-500"
                                 defaultValue={contact?.address ?? ""}
                                 name="address"
+                                required
+                                autoComplete="address"
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                                 <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="code">CODE</label>
-                                <Select defaultValue={contact?.country_code ?? ""} name="country-code">
+                                <Select defaultValue={contact?.country_code ?? ""} name="country-code" required>
                                     <SelectTrigger className="border-gray-300 focus:border-gray-500">
                                         <SelectValue placeholder="Select code" />
                                     </SelectTrigger>
@@ -61,15 +66,15 @@ export default function ContactTab({ contact, contactId }: { contact: any, conta
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="telephone">TELEPHONE NO</label>
-                                <Input id="telephone" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.tel_no ?? ""} name="tel-no" />
+                                <Input id="telephone" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.tel_no ?? "743193834"} name="tel-no" autoComplete="tel" required />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="fax">FAX NO</label>
-                                <Input id="fax" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.fax_no ?? ""} name="fax-no" />
+                                <Input id="fax" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.fax_no ?? "779206511"} name="fax-no" autoComplete="fax" required />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1 text-gray-700" htmlFor="email">EMAIL</label>
-                                <Input id="email" type="email" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.email ?? ""} name="email" />
+                                <Input id="email" type="email" className="border-gray-300 focus:border-gray-500" defaultValue={contact?.email ?? ""} name="email" autoComplete="email" required />
                             </div>
                         </div>
                         <div>

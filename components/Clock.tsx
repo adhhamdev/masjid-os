@@ -16,7 +16,7 @@ const IqamahCountdown = dynamic(() => import('@/components/clocks/iqamath-countd
     loading: () => <p>Loading...</p>
 })
 
-const Clock = ({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode }: any) => {
+const Clock = ({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, masjidName }: any) => {
     const [temperature, setTemperature] = useState<string>('')
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const Clock = ({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode }
         <div>
             <FullDark
                 iqamathTime={iqamathTime}
-                masjidName={clockSettings?.masjid_name}
+                masjidName={masjidName}
                 temperature={temperature}
                 clockSettings={clockSettings}
                 prayerSettings={prayerSettings}

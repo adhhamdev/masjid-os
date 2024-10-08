@@ -99,7 +99,6 @@ export function formatTime(date: Date, use12Hour: boolean = false): string {
     ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
-    console.log(hours);
   }
 
   const formattedHours = hours.toString().padStart(2, '0');

@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster";
 import { montserrat } from '@/fonts';
 import type { Metadata } from 'next';
 import "./globals.css";
@@ -32,6 +33,7 @@ export default function RootLayout({
     <html lang="en" className={montserrat.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
         {children}
+        <Toaster />
       </body>
     </html>
   );
