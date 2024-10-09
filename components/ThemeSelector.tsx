@@ -11,6 +11,14 @@ export default function ThemeSelector({ theme }: { theme: string }) {
         setSelectedTheme(value);
     };
 
+    const themes = [
+        { id: '1', name: 'Black', image: '/clocks/black.png' },
+        { id: '2', name: 'White', image: '/clocks/white.png' },
+        { id: '3', name: 'Blue', image: '/clocks/blue.png' },
+        { id: '4', name: 'Green', image: '/clocks/green.png' },
+        { id: '5', name: 'Red', image: '/clocks/red.png' },
+    ]
+
     return (
         <>
             <h3 className='text-lg font-semibold mb-4 text-gray-800'>
@@ -18,23 +26,23 @@ export default function ThemeSelector({ theme }: { theme: string }) {
             </h3>
             <RadioGroup value={selectedTheme} onValueChange={handleThemeChange} name="theme">
                 <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'>
-                    {['1'].map((themeitem) => (
-                        <div key={themeitem} className='flex items-center space-x-2'>
-                            <RadioGroupItem value={themeitem} id={themeitem} className='sr-only' />
+                    {themes.map((themeitem) => (
+                        <div key={themeitem.id} className='flex items-center space-x-2'>
+                            <RadioGroupItem value={themeitem.id} id={themeitem.id} className='sr-only' />
                             <Label
-                                htmlFor={themeitem}
+                                htmlFor={themeitem.id}
                                 className='flex flex-col items-center cursor-pointer'
                             >
                                 <div className='relative'>
                                     <Image
-                                        src={`/mosque-poster-bg.jpg`}
-                                        alt={`Theme ${themeitem}`}
+                                        src={themeitem.image}
+                                        alt={themeitem.name}
                                         width={200}
                                         height={150}
-                                        className={`rounded-md border-2 transition-all duration-200 ease-in-out ${selectedTheme === themeitem ? 'border-emerald-500' : 'border-transparent'
+                                        className={`rounded-md border-2 transition-all duration-200 ease-in-out ${selectedTheme === themeitem.id ? 'border-emerald-500' : 'border-transparent'
                                             }`}
                                     />
-                                    {selectedTheme === themeitem && (
+                                    {selectedTheme === themeitem.id && (
                                         <div className='absolute top-2 right-2 bg-emerald-500 text-white rounded-full p-1'>
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -43,7 +51,7 @@ export default function ThemeSelector({ theme }: { theme: string }) {
                                     )}
                                 </div>
                                 <span className='mt-2 text-sm font-medium text-gray-700'>
-                                    Theme {themeitem}
+                                    {themeitem.name}
                                 </span>
                             </Label>
                         </div>
