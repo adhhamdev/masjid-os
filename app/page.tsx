@@ -12,7 +12,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
       <header className="container mx-auto px-4 py-6 relative z-10">
-        <nav className="flex justify-between items-center">
+        <nav className="flex justify-center md:justify-between items-center">
           <h1 className="text-xl sm:text-2xl font-bold text-emerald-800">Islamic Center Management System</h1>
           <div className="hidden md:flex space-x-4">
             <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">
