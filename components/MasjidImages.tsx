@@ -115,17 +115,16 @@ export function MasjidImages({ initialImages, masjidId }: MasjidImagesProps) {
                                 <XIcon className="w-4 h-4" />
                             )}
                         </Button>
-                        <Image
-                            src={image}
-                            alt={`Masjid photo ${index + 1}`}
-                            className="object-contain w-full h-full"
-                            fill
-                            fetchPriority='low'
-                            loading='lazy'
-                            priority={false}
-                            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
-                            quality={1}
-                        />
+                        {image && (
+                            <Image
+                                src={image}
+                                alt={`Masjid photo ${index + 1}`}
+                                className="object-contain w-full h-full"
+                                fill
+                                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
+                                quality={1}
+                            />
+                        )}
                     </div>
                 ))}
                 {images.length < 5 && (
