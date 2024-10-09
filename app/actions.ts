@@ -14,13 +14,12 @@ export async function signInAction(formData: FormData) {
     password,
   });
 
-  if (data.user?.role !== 'authenticated') {
-    supabase.auth.signOut();
-    redirect('/admin/sign-in');
-  }
-
   if (error) {
     return { error: error.message };
+  }
+
+  if (data.user?.role !== 'authenticated') {
+    redirect('/admin/sign-in');
   }
 
   revalidatePath('/', 'layout');
@@ -37,13 +36,12 @@ export async function superAdminSignInAction(formData: FormData) {
     password,
   });
 
-  if (data.user?.role !== 'service_role') {
-    supabase.auth.signOut();
-    return { error: 'You are not authorized!' };
-  }
-
   if (error) {
     return { error: error.message };
+  }
+
+  if (data.user?.role !== 'service_role') {
+    return { error: 'You are not authorized!' };
   }
 
   revalidatePath('/superadmin', 'page');

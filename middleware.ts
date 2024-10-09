@@ -1,28 +1,23 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { updateSession } from './utils/supabase/middleware';
-import { createClient } from './utils/supabase/server';
+import { createAdminClient, createClient } from './utils/supabase/server';
 
 export async function middleware(req: NextRequest) {
   await updateSession(req);
-
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   const path = req.nextUrl.pathname;
 
   // Admin routes
   if (path.startsWith('/admin')) {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     if (!user && path !== '/admin/sign-in') {
       return NextResponse.redirect(new URL('/admin/sign-in', req.url));
     }
-    // if (user && path !== '/admin/sign-in' && user.role === 'authenticated') {
-    //   return NextResponse.redirect(
-    //     new URL('/admin/protected/dashboard', req.url)
-    //   );
-    // }
     if (user && path !== '/admin/sign-in' && user.role !== 'authenticated') {
       return NextResponse.redirect(new URL('/admin/sign-in', req.url));
     }
@@ -30,6 +25,11 @@ export async function middleware(req: NextRequest) {
 
   // Superadmin routes
   if (path.startsWith('/superadmin')) {
+    const supabase = createAdminClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     if (!user && path !== '/superadmin/sign-in') {
       return NextResponse.redirect(new URL('/superadmin/sign-in', req.url));
     }
