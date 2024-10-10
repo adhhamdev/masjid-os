@@ -417,29 +417,6 @@ export async function updatePrayerSettings(
   }
 }
 
-// SUPERADMIN
-export async function getMosques() {
-  const supabase = createClient();
-  const { data: mosques, error } = await supabase
-    .from('masjid')
-    .select('*')
-    .order('name', { ascending: true });
-
-  if (error) {
-    console.error('Error fetching mosques:', error);
-    return { error: error.message };
-  }
-
-  return { mosques };
-}
-
-type FileData = {
-  name: string;
-  type: string;
-  size: number;
-  content: string; // base64 encoded file content
-};
-
 export async function uploadMasjidImage(fileData: FileData) {
   const supabase = createClient();
   const buffer = Buffer.from(fileData.content, 'base64');
@@ -489,4 +466,132 @@ export async function updateMasjidPhotos(masjidId: string, photos: string[]) {
   }
 
   revalidatePath('/admin/protected/masjid/info');
+}
+
+// SUPERADMIN
+export async function getMosquesAdmin() {
+  const supabase = createAdminClient();
+  const { data: mosques, error } = await supabase.from('masjid').select(`
+      *,
+      contact (
+        masjid_name
+      )
+    `);
+
+  if (error) {
+    console.error('Error fetching mosques:', error);
+    return { error: error.message };
+  }
+
+  return { mosques };
+}
+
+type FileData = {
+  name: string;
+  type: string;
+  size: number;
+  content: string; // base64 encoded file content
+};
+
+export async function getMasjidDetailsAdmin(masjidId: string) {
+  const supabase = createAdminClient();
+  const { data } = await supabase.auth.admin.getUserById(
+    '3d974148-a02c-4a19-92cd-869e9c246249'
+  );
+  console.log(data.user);
+  const { data: masjid, error } = await supabase
+    .from('masjid')
+    .select(
+      `
+      *,
+      contact (*),
+      prayer_settings (*),
+      clock_settings (
+        *,
+        iqamath_time (*),
+        night_mode (*)
+      )
+    `
+    )
+    .eq('id', masjidId)
+    .single();
+
+  if (error) {
+    console.error('Error fetching masjid details:', error);
+    return { error: error.message };
+  }
+
+  return { masjid };
+}
+
+export async function updateContactDetailsAdmin(data: any, contactId: string) {
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from('contact')
+    .update({
+      masjid_name: data.masjidName,
+      email: data.email,
+      address: data.address,
+      country_code: data.countryCode,
+      tel_no: data.telNo,
+      fax_no: data.faxNo,
+      social_links: data.socialLinks,
+    })
+    .eq('id', contactId);
+
+  if (error) {
+    console.error('Error updating contact details:', error);
+    throw error;
+  }
+}
+
+export async function updatePrayerSettingsAdmin(
+  data: any,
+  prayerSettingsId: string
+) {
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from('prayer_settings')
+    .update({
+      location: data.location,
+      juristic: data.juristic,
+    })
+    .eq('id', prayerSettingsId);
+
+  if (error) {
+    console.error('Error updating prayer settings:', error);
+    throw error;
+  }
+}
+
+export async function getGlobalSettings() {
+  const supabase = createAdminClient();
+  const { data: globalSettings, error } = await supabase
+    .from('global_settings')
+    .select('*')
+    .single();
+
+  if (error) {
+    console.error('Error fetching global settings:', error);
+    return { error: error.message };
+  }
+
+  return { globalSettings };
+}
+
+export async function updateGlobalSettings(data: { hijri_date: string }) {
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from('global_settings')
+    .update({
+      hijri_date: data.hijri_date,
+    })
+    .eq('id', 1);
+
+  if (error) {
+    console.error('Error updating global settings:', error);
+    throw error;
+  }
+
+  revalidatePath('/superadmin');
 }

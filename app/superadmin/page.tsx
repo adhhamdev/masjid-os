@@ -1,23 +1,38 @@
+import GlobalSettingsModal from "@/components/GlobalSettingsModal";
 import { Masjid } from "@/components/Masjid";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createAdminClient } from "@/utils/supabase/server";
-import { Plus, Search } from "lucide-react";
-import { getMosques } from "../actions";
+import { Plus, Search, Settings } from "lucide-react";
+import { getGlobalSettings, getMosquesAdmin } from "../actions";
 
 export default async function SuperAdminPage() {
-    const { mosques } = await getMosques();
+    const { mosques, error } = await getMosquesAdmin();
+    const { globalSettings, error: globalSettingsError } = await getGlobalSettings();
 
-    const supabase = createAdminClient()
+    if (error) {
+        console.error('Error fetching mosques:', error);
+    }
+
+    if (globalSettingsError) {
+        console.error('Error fetching global settings:', globalSettingsError);
+    }
 
     return (
         <div className="container mx-auto p-4 space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <h1 className="text-3xl font-bold text-primary">Super Administration</h1>
-                <Button className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add New Masjid
-                </Button>
+                <div className="flex gap-2">
+                    <Button className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add New Masjid
+                    </Button>
+                    <GlobalSettingsModal globalSettings={globalSettings}>
+                        <Button variant="outline" className="w-full sm:w-auto">
+                            <Settings className="w-4 h-4 mr-2" />
+                            Global Settings
+                        </Button>
+                    </GlobalSettingsModal>
+                </div>
             </div>
 
             <div className="relative">
