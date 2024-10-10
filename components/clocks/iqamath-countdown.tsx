@@ -1,22 +1,10 @@
 "use client"
-import { useEffect, useState } from 'react';
 
-export default function IqamahCountdown({ iqamahTime }: { iqamahTime: string }) {
+interface IqamahCountdownProps {
+    countdown: number;
+}
 
-    const [countdown, setCountdown] = useState(0)
-
-    useEffect(() => {
-        console.log(iqamahTime)
-    }, [iqamahTime])
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCountdown((prevCount: number) => (prevCount > 0 ? prevCount - 1 : 0))
-        }, 1000)
-
-        return () => clearInterval(timer)
-    }, [])
-
+export default function IqamahCountdown({ countdown }: IqamahCountdownProps) {
     return (
         <div className="flex flex-col h-screen w-screen bg-gray-900 text-white font-sans overflow-hidden">
             <div className="bg-gray-800 p-4 text-center text-2xl sm:text-3xl md:text-4xl font-bold border-b-2 border-gray-700">
@@ -36,5 +24,5 @@ export default function IqamahCountdown({ iqamahTime }: { iqamahTime: string }) 
                 </p>
             </div>
         </div>
-    )
+    );
 }

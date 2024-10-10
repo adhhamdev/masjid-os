@@ -270,10 +270,15 @@ export async function updateClockIqamathTime(
     prayerTimes.forEach((prayer) => {
       const minutes = formData.get(`minutes-${prayer}`) as string;
       const fixedTime = formData.get(`fixed-time-${prayer}`) as string;
+      let formattedFixedTime = '';
+      if (fixedTime) {
+        const [fixedHours, fixedMinutes] = fixedTime.split(':');
+        formattedFixedTime = `${fixedHours}:${fixedMinutes}:00`;
+      }
       const mode = formData.get(`iqamath-mode-${prayer}`) as string;
       updatedIqamathTime[prayer] = [
         minutes || '',
-        fixedTime || '',
+        formattedFixedTime || fixedTime || '',
         mode || '0',
       ];
     });
