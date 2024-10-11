@@ -21,7 +21,7 @@ export function Masjid({ mosque }: any) {
                     <Clock className="w-4 h-4 mr-2" />
                     Clock: {mosque.clock_code}
                 </div>
-                <Link href={`/clock/${mosque.clock_code}`}>
+                <Link href={`/clock/${mosque.clock_code}`} target="_blank">
                     <Button variant="outline" className="w-full mt-4">
                         <Clock className="w-4 h-4 mr-2" />
                         Open Clock

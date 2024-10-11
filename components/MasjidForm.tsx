@@ -42,7 +42,7 @@ export default function MasjidForm({ masjid }: { masjid: any }) {
                 title: 'Success',
                 description: 'Masjid deleted successfully',
             })
-            router.push('/superadmin/masjids') // Redirect to masjid list page
+            router.push('/superadmin')
         } catch (error) {
             toast({
                 title: 'Error',

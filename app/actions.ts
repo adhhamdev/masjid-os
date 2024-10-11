@@ -579,12 +579,12 @@ export async function getGlobalSettings() {
   return { globalSettings };
 }
 
-export async function updateGlobalSettings(data: { hijri_date: string }) {
+export async function updateGlobalSettings(formData: FormData) {
   const supabase = createAdminClient();
   const { error } = await supabase
     .from('global_settings')
     .update({
-      hijri_date: data.hijri_date,
+      hijri_date: formData.get('hijri_date') as string,
     })
     .eq('id', 1);
 
@@ -612,73 +612,220 @@ export async function updateMasjidProStatus(
 
 export async function deleteMasjid(masjidId: number) {
   const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from('masjid')
-    .delete()
-    .eq('id', masjidId)
-    .select('user')
-    .single();
 
-  if (error) throw error;
+  try {
+    const { data: masjid, error: masjidError } = await supabase
+      .from('masjid')
+      .delete()
+      .eq('id', masjidId)
+      .select('*')
+      .single();
+    if (masjidError) throw masjidError;
 
-  if (data?.user) {
-    const { error: userError } = await supabase.auth.admin.deleteUser(
-      data.user
-    );
-    if (userError) throw userError;
+    // Delete clock_settings and its related records
+    if (masjid.clock_settings) {
+      const { data: clockSettings, error: clockSettingsError } = await supabase
+        .from('clock_settings')
+        .select('*')
+        .eq('id', masjid.clock_settings)
+        .single();
+
+      if (clockSettingsError) throw clockSettingsError;
+
+      if (clockSettings) {
+        // Delete iqamath_time
+        if (clockSettings.iqamath_time) {
+          const { error: iqamathError } = await supabase
+            .from('iqamath_time')
+            .delete()
+            .eq('id', clockSettings.iqamath_time)
+            .select('*')
+            .single();
+          if (iqamathError) throw iqamathError;
+        }
+
+        // Delete night_mode
+        if (clockSettings.night_mode) {
+          const { error: nightModeError } = await supabase
+            .from('night_mode')
+            .delete()
+            .eq('id', clockSettings.night_mode)
+            .select('*')
+            .single();
+          if (nightModeError) throw nightModeError;
+        }
+
+        // Delete clock_settings
+        const { error: deleteClockSettingsError } = await supabase
+          .from('clock_settings')
+          .delete()
+          .eq('id', masjid.clock_settings)
+          .select('*')
+          .single();
+        if (deleteClockSettingsError) throw deleteClockSettingsError;
+      }
+    }
+
+    // Delete prayer_settings
+    if (masjid.prayer_settings) {
+      const { error: prayerSettingsError } = await supabase
+        .from('prayer_settings')
+        .delete()
+        .eq('id', masjid.prayer_settings)
+        .select('*')
+        .single();
+      if (prayerSettingsError) throw prayerSettingsError;
+    }
+
+    // Delete contact
+    if (masjid.contact) {
+      const { error: contactError } = await supabase
+        .from('contact')
+        .delete()
+        .eq('id', masjid.contact)
+        .select('*')
+        .single();
+      if (contactError) throw contactError;
+    }
+
+    // Finally, delete the user
+    if (masjid.user) {
+      const { error: userError } = await supabase.auth.admin.deleteUser(
+        masjid.user
+      );
+      if (userError) throw userError;
+    }
+
+    revalidatePath('/superadmin');
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting masjid:', error);
+    return { error: 'Failed to delete masjid and associated data' };
   }
-
-  return { success: true };
 }
 
-export async function createMasjid(data: {
-  masjidName: string;
-  email: string;
-}) {
+export async function createMasjid(formData: FormData) {
   const supabase = createAdminClient();
+  let createdIds: { [key: string]: string | number } = {};
 
-  // First, create a new user
-  const { data: userData, error: userError } =
-    await supabase.auth.admin.createUser({
-      email: data.email,
-      password: generateTemporaryPassword(), // Implement this function to generate a secure temporary password
-      email_confirm: true,
-    });
+  try {
+    // First, create a new user
+    const { data: userData, error: userError } =
+      await supabase.auth.admin.createUser({
+        email: formData.get('email') as string,
+        password: formData.get('password') as string,
+        email_confirm: true,
+      });
 
-  if (userError) {
-    console.error('Error creating user:', userError);
-    return { error: userError.message };
+    if (userError) throw userError;
+    createdIds.user = userData.user.id;
+
+    // Create entries
+    const { data: contactData } = await supabase
+      .from('contact')
+      .insert({
+        masjid_name: formData.get('name') as string,
+        email: formData.get('email') as string,
+        social_links: [],
+      })
+      .select()
+      .single();
+    if (!contactData) throw new Error('Failed to create contact');
+    createdIds.contact = contactData.id;
+
+    const { data: prayerSettingsData } = await supabase
+      .from('prayer_settings')
+      .insert({})
+      .select()
+      .single();
+    if (!prayerSettingsData)
+      throw new Error('Failed to create prayer settings');
+    createdIds.prayerSettings = prayerSettingsData.id;
+
+    const { data: iqamathTimeData } = await supabase
+      .from('iqamath_time')
+      .insert({})
+      .select()
+      .single();
+    if (!iqamathTimeData) throw new Error('Failed to create iqamath time');
+    createdIds.iqamathTime = iqamathTimeData.id;
+
+    const { data: nightModeData } = await supabase
+      .from('night_mode')
+      .insert({})
+      .select()
+      .single();
+    if (!nightModeData) throw new Error('Failed to create night mode');
+    createdIds.nightMode = nightModeData.id;
+
+    const { data: clockSettingsData } = await supabase
+      .from('clock_settings')
+      .insert({
+        iqamath_time: iqamathTimeData.id,
+        night_mode: nightModeData.id,
+      })
+      .select()
+      .single();
+    if (!clockSettingsData) throw new Error('Failed to create clock settings');
+    createdIds.clockSettings = clockSettingsData.id;
+
+    const { data: masjidData } = await supabase
+      .from('masjid')
+      .insert({
+        photos: [],
+        user: userData.user.id,
+        contact: contactData.id,
+        prayer_settings: prayerSettingsData.id,
+        clock_settings: clockSettingsData.id,
+        clock_code: formData.get('clock-code') as string,
+      })
+      .select()
+      .single();
+    if (!masjidData) throw new Error('Failed to create masjid');
+
+    revalidatePath('/superadmin');
+
+    return { masjid: masjidData };
+  } catch (error) {
+    console.error('Error creating masjid:', error);
+
+    // Undo everything in reverse order
+    if (createdIds.masjid) {
+      await supabase.from('masjid').delete().eq('id', createdIds.masjid);
+    }
+    if (createdIds.clockSettings) {
+      await supabase
+        .from('clock_settings')
+        .delete()
+        .eq('id', createdIds.clockSettings);
+    }
+    if (createdIds.nightMode) {
+      await supabase.from('night_mode').delete().eq('id', createdIds.nightMode);
+    }
+    if (createdIds.iqamathTime) {
+      await supabase
+        .from('iqamath_time')
+        .delete()
+        .eq('id', createdIds.iqamathTime);
+    }
+    if (createdIds.prayerSettings) {
+      await supabase
+        .from('prayer_settings')
+        .delete()
+        .eq('id', createdIds.prayerSettings);
+    }
+    if (createdIds.contact) {
+      await supabase.from('contact').delete().eq('id', createdIds.contact);
+    }
+    if (createdIds.user) {
+      await supabase.auth.admin.deleteUser(createdIds.user as string);
+    }
+
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else {
+      return { error: 'An unexpected error occurred' };
+    }
   }
-
-  // Then, create the masjid entry
-  const { data: masjidData, error: masjidError } = await supabase
-    .from('masjid')
-    .insert({
-      user: userData.user.id,
-      contact: {
-        masjid_name: data.masjidName,
-        email: data.email,
-      },
-      prayer_settings: {},
-      clock_settings: {},
-    })
-    .select()
-    .single();
-
-  if (masjidError) {
-    console.error('Error creating masjid:', masjidError);
-    // If masjid creation fails, delete the user we just created
-    await supabase.auth.admin.deleteUser(userData.user.id);
-    return { error: masjidError.message };
-  }
-
-  // TODO: Send email to the new user with their temporary password
-
-  return { masjid: masjidData };
-}
-
-function generateTemporaryPassword() {
-  // Implement a secure password generation function
-  // This is a simple example and should be replaced with a more secure implementation
-  return Math.random().toString(36).slice(-8);
 }

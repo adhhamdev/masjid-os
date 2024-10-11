@@ -3,90 +3,137 @@
 import { createMasjid } from '@/app/actions'
 import { useToast } from '@/components/hooks/use-toast'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader2, Plus } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 
-export function AddMasjidModal() {
-    const [isOpen, setIsOpen] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const router = useRouter()
+interface AddMasjidModalProps {
+    includeAdditionalFields?: boolean
+}
+
+export function AddMasjidModal({ includeAdditionalFields = false }: AddMasjidModalProps) {
+    const [open, setOpen] = useState(false)
+    const [passwordError, setPasswordError] = useState('')
+    const [name, setName] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [clockCode, setClockCode] = useState('')
     const { toast } = useToast()
+    const [isPending, startTransition] = useTransition()
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        setIsLoading(true)
+    const handleSubmit = async (formData: FormData) => {
+        const password = formData.get('password') as string
+        const confirmPassword = formData.get('confirm-password') as string
 
-        const formData = new FormData(event.currentTarget)
-        const masjidName = formData.get('masjidName') as string
-        const email = formData.get('email') as string
-
-        try {
-            const result = await createMasjid({ masjidName, email })
-            if (result.error) {
-                throw new Error(result.error)
-            }
-            toast({
-                title: 'Success',
-                description: 'New Masjid created successfully',
-            })
-            setIsOpen(false)
-            router.refresh()
-        } catch (error) {
-            toast({
-                title: 'Error',
-                description: error instanceof Error ? error.message : 'Failed to create new Masjid',
-                variant: 'destructive',
-            })
-        } finally {
-            setIsLoading(false)
+        if (password !== confirmPassword) {
+            setPasswordError("Passwords don't match")
+            return
         }
+
+        setPasswordError('')
+        startTransition(async () => {
+            const result = await createMasjid(formData)
+
+            if (result.error) {
+                toast({
+                    title: "Error",
+                    description: result.error,
+                    variant: "destructive",
+                })
+            } else {
+                toast({
+                    title: "Success",
+                    description: "Masjid created successfully",
+                })
+                setOpen(false)
+            }
+        })
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button variant="default">
                     <Plus className="w-4 h-4 mr-2" />
-                    Add New Masjid
+                    Add Masjid
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Add New Masjid</DialogTitle>
-                    <DialogDescription>
-                        Enter the details for the new Masjid.
-                    </DialogDescription>
                 </DialogHeader>
-                <form onSubmit={handleSubmit}>
-                    <div className="space-y-4">
-                        <div>
-                            <Label htmlFor="masjidName">Masjid Name</Label>
-                            <Input id="masjidName" name="masjidName" required />
-                        </div>
-                        <div>
-                            <Label htmlFor="email">Email</Label>
-                            <Input id="email" name="email" type="email" required />
-                        </div>
+                <form action={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="name">Masjid Name</Label>
+                        <Input
+                            id="name"
+                            name="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Enter masjid name"
+                            required
+                        />
                     </div>
-                    <DialogFooter className="mt-6">
-                        <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-                            Cancel
-                        </Button>
-                        <Button type="submit" disabled={isLoading}>
-                            {isLoading ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Creating...
-                                </>
-                            ) : (
-                                'Create Masjid'
-                            )}
-                        </Button>
-                    </DialogFooter>
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="Enter email"
+                            required
+                        />
+                    </div>
+                    <>
+                        <div className="space-y-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                name='password'
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Enter password"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="confirmPassword">Confirm Password</Label>
+                            <Input
+                                id="confirmPassword"
+                                type="password"
+                                name='confirm-password'
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                placeholder="Confirm password"
+                                required
+                            />
+                            {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="clockCode">Clock Code</Label>
+                            <Input
+                                id="clockCode"
+                                name='clock-code'
+                                value={clockCode}
+                                onChange={(e) => setClockCode(e.target.value)}
+                                placeholder="Enter clock code"
+                                required
+                            />
+                        </div>
+                    </>
+                    <Button type="submit" className="w-full" disabled={isPending}>
+                        {isPending ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Adding Masjid...
+                            </>
+                        ) : (
+                            'Add Masjid'
+                        )}
+                    </Button>
                 </form>
             </DialogContent>
         </Dialog>
