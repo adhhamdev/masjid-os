@@ -1,5 +1,4 @@
 "use client";
-import NotificationPopover from '@/components/dashboard/NotificationPopover';
 import { LogoutButton } from '@/components/logout-button';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -57,7 +56,6 @@ export default function DashboardHeader({ masjidName }: { masjidName: string }) 
                         </div>
                     </div>
                     <div className="flex items-center space-x-2 md:hidden">
-                        <NotificationPopover isMobile={true} />
                         <Sheet>
                             <SheetTrigger asChild>
                                 <Button variant="ghost" size="sm" className="text-emerald-50 hover:text-emerald-200">
@@ -83,7 +81,6 @@ export default function DashboardHeader({ masjidName }: { masjidName: string }) 
                     </div>
                 </div>
                 <nav className="hidden md:flex items-center space-x-4">
-                    <NotificationPopover />
                     <ProfileDropdown />
                     <Link href="/admin/protected/masjid/clock-settings">
                         <Button variant="ghost" className="hidden md:flex items-center text-emerald-50 hover:text-emerald-200">
