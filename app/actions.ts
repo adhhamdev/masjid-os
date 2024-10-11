@@ -595,3 +595,90 @@ export async function updateGlobalSettings(data: { hijri_date: string }) {
 
   revalidatePath('/superadmin');
 }
+
+export async function updateMasjidProStatus(
+  masjidId: number,
+  proStatus: boolean
+) {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from('masjid')
+    .update({ pro: proStatus })
+    .eq('id', masjidId);
+
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteMasjid(masjidId: number) {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase
+    .from('masjid')
+    .delete()
+    .eq('id', masjidId)
+    .select('user')
+    .single();
+
+  if (error) throw error;
+
+  if (data?.user) {
+    const { error: userError } = await supabase.auth.admin.deleteUser(
+      data.user
+    );
+    if (userError) throw userError;
+  }
+
+  return { success: true };
+}
+
+export async function createMasjid(data: {
+  masjidName: string;
+  email: string;
+}) {
+  const supabase = createAdminClient();
+
+  // First, create a new user
+  const { data: userData, error: userError } =
+    await supabase.auth.admin.createUser({
+      email: data.email,
+      password: generateTemporaryPassword(), // Implement this function to generate a secure temporary password
+      email_confirm: true,
+    });
+
+  if (userError) {
+    console.error('Error creating user:', userError);
+    return { error: userError.message };
+  }
+
+  // Then, create the masjid entry
+  const { data: masjidData, error: masjidError } = await supabase
+    .from('masjid')
+    .insert({
+      user: userData.user.id,
+      contact: {
+        masjid_name: data.masjidName,
+        email: data.email,
+      },
+      prayer_settings: {},
+      clock_settings: {},
+    })
+    .select()
+    .single();
+
+  if (masjidError) {
+    console.error('Error creating masjid:', masjidError);
+    // If masjid creation fails, delete the user we just created
+    await supabase.auth.admin.deleteUser(userData.user.id);
+    return { error: masjidError.message };
+  }
+
+  // TODO: Send email to the new user with their temporary password
+
+  return { masjid: masjidData };
+}
+
+function generateTemporaryPassword() {
+  // Implement a secure password generation function
+  // This is a simple example and should be replaced with a more secure implementation
+  return Math.random().toString(36).slice(-8);
+}

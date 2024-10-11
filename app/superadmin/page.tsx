@@ -1,8 +1,9 @@
-import GlobalSettingsModal from "@/components/GlobalSettingsModal";
+import { AddMasjidModal } from '@/components/AddMasjidModal';
+import GlobalSettingsModal from '@/components/GlobalSettingsModal';
 import { Masjid } from "@/components/Masjid";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { Input } from "@/components/ui/input";
-import { Plus, Search, Settings } from "lucide-react";
+import { Search, Settings } from "lucide-react";
 import { getGlobalSettings, getMosquesAdmin } from "../actions";
 
 export default async function SuperAdminPage() {
@@ -18,14 +19,11 @@ export default async function SuperAdminPage() {
     }
 
     return (
-        <div className="container mx-auto p-4 space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <h1 className="text-3xl font-bold text-primary">Super Administration</h1>
-                <div className="flex gap-2">
-                    <Button className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add New Masjid
-                    </Button>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4 sm:gap-2">
+                <h1 className="text-2xl sm:text-3xl font-bold">Super Admin Dashboard</h1>
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <AddMasjidModal />
                     <GlobalSettingsModal globalSettings={globalSettings}>
                         <Button variant="outline" className="w-full sm:w-auto">
                             <Settings className="w-4 h-4 mr-2" />
@@ -35,7 +33,7 @@ export default async function SuperAdminPage() {
                 </div>
             </div>
 
-            <div className="relative">
+            <div className="relative mb-6">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
                 <Input
                     className="pl-10 w-full bg-background text-foreground border-input"
@@ -44,7 +42,7 @@ export default async function SuperAdminPage() {
                 />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {mosques?.map((mosque) => (
                     <Masjid key={mosque.id} mosque={mosque} />
                 ))}
