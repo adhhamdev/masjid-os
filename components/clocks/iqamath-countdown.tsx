@@ -15,14 +15,6 @@ export default function IqamahCountdown({ countdown }: IqamahCountdownProps) {
                     {countdown.toString().padStart(2, '0')}
                 </div>
             </div>
-            <div className="bg-gray-200 p-4 flex items-center justify-center">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-red-600 rounded-full flex items-center justify-center mr-4">
-                    <span className="text-white text-2xl sm:text-3xl">🚫</span>
-                </div>
-                <p className="text-black text-lg sm:text-xl md:text-2xl font-semibold leading-tight">
-                    Please Turn off Your<br />Mobile Phones
-                </p>
-            </div>
         </div>
     );
 }

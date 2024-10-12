@@ -580,13 +580,8 @@ export async function getGlobalSettings() {
   return { globalSettings };
 }
 
-export async function updateGlobalSettings(
-  day: string,
-  month: string,
-  year: string
-) {
+export async function updateGlobalSettings(hijriDate: string) {
   const supabase = createAdminClient();
-  const hijriDate = `${day} ${month} ${year} AH`;
   const { error } = await supabase
     .from('global_settings')
     .update({

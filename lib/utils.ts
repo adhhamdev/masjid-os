@@ -82,10 +82,10 @@ export function formatTime(date: Date, use12Hour: boolean = false): string {
 const hijriMonths = [
   'Muharram',
   'Safar',
-  'Rabi-al-Awwal',
-  'Rabi-al-Akhir',
-  'Jumada-al-Ula',
-  'Jumada-al-Akhir',
+  "Rabi' al-Awwal",
+  "Rabi' al-Thani",
+  'Jumada al-Ula',
+  'Jumada al-Thani',
   'Rajab',
   "Sha'ban",
   'Ramadan',
@@ -93,26 +93,3 @@ const hijriMonths = [
   "Dhu al-Qi'dah",
   'Dhu al-Hijjah',
 ];
-
-export function incrementHijriDate(currentDate: string): string {
-  const [day, month, year] = currentDate.split(' ');
-  let dayNum = parseInt(day, 10);
-  let monthIndex = hijriMonths.indexOf(month);
-  let yearNum = parseInt(year.split(' ')[0], 10);
-
-  dayNum++;
-
-  // Check if we need to move to the next month
-  if (dayNum > 30 || (monthIndex % 2 === 0 && dayNum > 29)) {
-    dayNum = 1;
-    monthIndex++;
-
-    // Check if we need to move to the next year
-    if (monthIndex >= 12) {
-      monthIndex = 0;
-      yearNum++;
-    }
-  }
-
-  return `${dayNum} ${hijriMonths[monthIndex]} ${yearNum} AH`;
-}

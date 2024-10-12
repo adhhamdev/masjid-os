@@ -1,6 +1,6 @@
 "use client"
 
-import { formatTime, getEnglishDate, getTemperature, incrementHijriDate } from '@/lib/utils'
+import { formatTime, getEnglishDate, getTemperature } from '@/lib/utils'
 import { CalculationMethod, Coordinates, PrayerTimes } from 'adhan'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
@@ -9,11 +9,11 @@ const FullDark = dynamic(() => import('@/components/clocks/full-dark'), {
     loading: () => <p>Loading...</p>
 })
 
-const Poster = dynamic(() => import('@/components/clocks/poster'), {
+const IqamahCountdown = dynamic(() => import('@/components/clocks/iqamath-countdown'), {
     loading: () => <p>Loading...</p>
 })
 
-const IqamahCountdown = dynamic(() => import('@/components/clocks/iqamath-countdown'), {
+const SwitchOffPhones = dynamic(() => import('@/components/clocks/switch-off-phones'), {
     loading: () => <p>Loading...</p>
 })
 
@@ -42,8 +42,11 @@ function addMinutes(date: Date, minutes: number): Date {
 function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, masjidName, globalSettings }: ClockProps) {
     const [temperature, setTemperature] = useState<string>('')
     const [time, setTime] = useState(new Date())
-    const [nextPrayer, setNextPrayer] = useState<{ name: string; time: Date; iqamah: string } | null>(null)
+    const [nextPrayer, setNextPrayer] = useState<{ name: string; time: Date; iqamah: Date } | null>(null)
     const [hijriDate, setHijriDate] = useState(globalSettings.hijri_date)
+    const [showIqamahCountdown, setShowIqamahCountdown] = useState(false)
+    const [showSwitchOffPhones, setShowSwitchOffPhones] = useState(false)
+    const [iqamahCountdown, setIqamahCountdown] = useState(0)
 
     useEffect(() => {
         async function fetchTemperature() {
@@ -58,20 +61,23 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
             const now = new Date()
             setTime(now)
             calculateNextPrayer(now)
-            updateHijriDate(now)
+
+            if (nextPrayer) {
+                if (now >= nextPrayer.time && now < nextPrayer.iqamah) {
+                    setShowIqamahCountdown(true)
+                    const countdown = Math.floor((nextPrayer.iqamah.getTime() - now.getTime()) / 1000)
+                    setIqamahCountdown(countdown)
+                } else if (now >= nextPrayer.iqamah && now < addMinutes(nextPrayer.iqamah, 0.2)) { // 12 seconds
+                    setShowIqamahCountdown(false)
+                    setShowSwitchOffPhones(true)
+                } else {
+                    setShowIqamahCountdown(false)
+                    setShowSwitchOffPhones(false)
+                }
+            }
         }, 1000)
         return () => clearInterval(timer)
-    }, [prayerSettings, globalSettings.hijri_date])
-
-    function updateHijriDate(currentDate: Date) {
-        const lastUpdateDate = localStorage.getItem('lastHijriUpdateDate')
-        if (!lastUpdateDate || new Date(lastUpdateDate).getDate() !== currentDate.getDate()) {
-            const newHijriDate = incrementHijriDate(hijriDate)
-            setHijriDate(newHijriDate)
-            localStorage.setItem('lastHijriUpdateDate', currentDate.toISOString())
-            localStorage.setItem('currentHijriDate', newHijriDate)
-        }
-    }
+    }, [nextPrayer, prayerSettings, globalSettings.hijri_date])
 
     function calculateNextPrayer(currentTime: Date) {
         const coordinates = new Coordinates(
@@ -81,12 +87,12 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
         const params = CalculationMethod.MuslimWorldLeague()
         const prayerTimes = new PrayerTimes(coordinates, currentTime, params)
 
-        function getIqamahTime(prayerTime: Date, iqamahSetting: string[]): string {
+        function getIqamahTime(prayerTime: Date, iqamahSetting: string[]): Date {
             if (iqamahSetting[2] === "1") {
-                return formatTime(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), parseInt(iqamahSetting[1].slice(0, 2)), parseInt(iqamahSetting[1].slice(3, 5)), parseInt(iqamahSetting[1].slice(6, 8))), true)
+                return new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), parseInt(iqamahSetting[1].slice(0, 2)), parseInt(iqamahSetting[1].slice(3, 5)), parseInt(iqamahSetting[1].slice(6, 8)))
             } else {
                 const minutesToAdd = parseInt(iqamahSetting[0], 10)
-                return formatTime(addMinutes(prayerTime, minutesToAdd), true)
+                return addMinutes(prayerTime, minutesToAdd)
             }
         }
 
@@ -103,27 +109,25 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
     }
 
     function renderClockComponent() {
-        const commonProps = {
-            iqamathTime,
-            masjidName,
-            temperature,
-            clockSettings,
-            prayerSettings,
-            hijriDate,
-            time,
-            nextPrayer,
-            getEnglishDate,
-            formatTime,
-        }
-
-        if (clockSettings?.theme === "1") {
+        if (showIqamahCountdown) {
+            return <IqamahCountdown countdown={iqamahCountdown} />
+        } else if (showSwitchOffPhones) {
+            return <SwitchOffPhones />
+        } else {
+            const commonProps = {
+                iqamathTime,
+                masjidName,
+                temperature,
+                clockSettings,
+                prayerSettings,
+                hijriDate,
+                time,
+                nextPrayer,
+                getEnglishDate,
+                formatTime,
+            }
             return <FullDark {...commonProps} />
-        } else if (clockSettings?.theme === "2") {
-            return <Poster {...commonProps} />
         }
-
-        // Default to FullDark if theme is not 1 or 2
-        return <FullDark {...commonProps} />
     }
 
     return (

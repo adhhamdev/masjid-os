@@ -14,7 +14,7 @@ interface FullDarkProps {
     prayerSettings: any;
     hijriDate: string;
     time: Date;
-    nextPrayer: { name: string; time: Date; iqamah: string } | null;
+    nextPrayer: { name: string; time: Date; iqamah: Date } | null;
     getEnglishDate: () => string;
     formatTime: (date: Date, includeSeconds?: boolean) => string;
 }
@@ -59,7 +59,7 @@ export default function FullDark({
                                 dangerouslySetInnerHTML={{ __html: formatTime(nextPrayer.time, true) }}>
                             </div>
                             <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-500 ${lcdTime.className}`} suppressHydrationWarning
-                                dangerouslySetInnerHTML={{ __html: nextPrayer.iqamah }}>
+                                dangerouslySetInnerHTML={{ __html: formatTime(nextPrayer.iqamah, true) }}>
                             </div>
                         </>
                     )}

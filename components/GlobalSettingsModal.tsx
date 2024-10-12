@@ -42,7 +42,7 @@ export default function GlobalSettingsModal({ children, globalSettings }: Global
 
     const handleSubmit = async () => {
         startTransition(async () => {
-            await updateGlobalSettings(day, month, year);
+            await updateGlobalSettings(`${day} ${month} ${year} AH`);
             setOpen(false);
         });
     };
