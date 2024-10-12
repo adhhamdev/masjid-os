@@ -1,10 +1,13 @@
 import Clock from "@/components/Clock";
 import { createClient } from "@/utils/supabase/server";
-
+import { notFound } from "next/navigation";
 
 const ClientTime = async ({ params }: { params: any }) => {
     const supabase = createClient();
-    const { data: masjid } = await supabase.from("masjid").select("*").eq('clock_code', params.code).single();
+    const { data: masjid, error: masjidError } = await supabase.from("masjid").select("*").eq('clock_code', params.code).single();
+    if (masjidError) {
+        notFound();
+    }
     const { data: contact } = await supabase.from("contact").select("*").eq('id', masjid?.contact).single();
     const [clockSettings, prayerSettings, globalSettings] = await Promise.all([
         await supabase.from("clock_settings").select("*").eq('id', masjid?.clock_settings).single(),

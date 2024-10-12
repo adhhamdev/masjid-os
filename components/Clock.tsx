@@ -116,9 +116,9 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
             formatTime,
         }
 
-        if (clockSettings.theme === "1") {
+        if (clockSettings?.theme === "1") {
             return <FullDark {...commonProps} />
-        } else if (clockSettings.theme === "2") {
+        } else if (clockSettings?.theme === "2") {
             return <Poster {...commonProps} />
         }
 
