@@ -570,6 +570,7 @@ export async function getGlobalSettings() {
     .from('global_settings')
     .select('*')
     .single();
+  console.log(globalSettings);
 
   if (error) {
     console.error('Error fetching global settings:', error);
@@ -579,12 +580,17 @@ export async function getGlobalSettings() {
   return { globalSettings };
 }
 
-export async function updateGlobalSettings(formData: FormData) {
+export async function updateGlobalSettings(
+  day: string,
+  month: string,
+  year: string
+) {
   const supabase = createAdminClient();
+  const hijriDate = `${day} ${month} ${year} AH`;
   const { error } = await supabase
     .from('global_settings')
     .update({
-      hijri_date: formData.get('hijri_date') as string,
+      hijri_date: hijriDate,
     })
     .eq('id', 1);
 

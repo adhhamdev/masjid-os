@@ -7,14 +7,10 @@ import { getGlobalSettings, getMosquesAdmin } from "../actions";
 
 export default async function SuperAdminPage() {
     const { mosques, error } = await getMosquesAdmin();
-    const { globalSettings, error: globalSettingsError } = await getGlobalSettings();
+    const { globalSettings } = await getGlobalSettings();
 
     if (error) {
         console.error('Error fetching mosques:', error);
-    }
-
-    if (globalSettingsError) {
-        console.error('Error fetching global settings:', globalSettingsError);
     }
 
     return (

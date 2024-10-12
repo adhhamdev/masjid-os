@@ -1,6 +1,6 @@
 "use client"
 
-import { formatTime, getEnglishDate, getIslamicDate, getTemperature } from '@/lib/utils'
+import { formatTime, getEnglishDate, getTemperature, incrementHijriDate } from '@/lib/utils'
 import { CalculationMethod, Coordinates, PrayerTimes } from 'adhan'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
@@ -24,6 +24,7 @@ interface ClockProps {
     iqamathTime: any
     nightMode: boolean
     masjidName: string
+    globalSettings: any
 }
 
 const locationCoordinates = {
@@ -38,10 +39,11 @@ function addMinutes(date: Date, minutes: number): Date {
     return new Date(date.getTime() + minutes * 60000)
 }
 
-function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, masjidName }: ClockProps) {
+function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, masjidName, globalSettings }: ClockProps) {
     const [temperature, setTemperature] = useState<string>('')
     const [time, setTime] = useState(new Date())
     const [nextPrayer, setNextPrayer] = useState<{ name: string; time: Date; iqamah: string } | null>(null)
+    const [hijriDate, setHijriDate] = useState(globalSettings.hijri_date)
 
     useEffect(() => {
         async function fetchTemperature() {
@@ -56,9 +58,20 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
             const now = new Date()
             setTime(now)
             calculateNextPrayer(now)
+            updateHijriDate(now)
         }, 1000)
         return () => clearInterval(timer)
-    }, [prayerSettings])
+    }, [prayerSettings, globalSettings.hijri_date])
+
+    function updateHijriDate(currentDate: Date) {
+        const lastUpdateDate = localStorage.getItem('lastHijriUpdateDate')
+        if (!lastUpdateDate || new Date(lastUpdateDate).getDate() !== currentDate.getDate()) {
+            const newHijriDate = incrementHijriDate(hijriDate)
+            setHijriDate(newHijriDate)
+            localStorage.setItem('lastHijriUpdateDate', currentDate.toISOString())
+            localStorage.setItem('currentHijriDate', newHijriDate)
+        }
+    }
 
     function calculateNextPrayer(currentTime: Date) {
         const coordinates = new Coordinates(
@@ -96,10 +109,10 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
             temperature,
             clockSettings,
             prayerSettings,
+            hijriDate,
             time,
             nextPrayer,
             getEnglishDate,
-            getIslamicDate,
             formatTime,
         }
 

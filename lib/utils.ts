@@ -1,5 +1,4 @@
 import { type ClassValue, clsx } from 'clsx';
-import { toHijri } from 'hijri-converter';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -34,36 +33,6 @@ export const getTemperature = async (): Promise<string> => {
     return 'N/A';
   }
 };
-
-export function getIslamicDate(): string {
-  const today = new Date();
-  const hijriDate = toHijri(
-    today.getFullYear(),
-    today.getMonth() + 1,
-    today.getDate()
-  );
-
-  const monthNames = [
-    'Muharram',
-    'Safar',
-    "Rabi' al-Awwal",
-    "Rabi' al-Akhir",
-    'Jumada al-Ula',
-    'Jumada al-Akhir',
-    'Rajab',
-    "Sha'ban",
-    'Ramadan',
-    'Shawwal',
-    "Dhu al-Qi'dah",
-    'Dhu al-Hijjah',
-  ];
-
-  const day = hijriDate.hd;
-  const month = monthNames[hijriDate.hm - 1];
-  const year = hijriDate.hy;
-
-  return `${day} ${month} ${year} AH`;
-}
 
 export function getEnglishDate(): string {
   const today = new Date();
@@ -108,4 +77,42 @@ export function formatTime(date: Date, use12Hour: boolean = false): string {
   return use12Hour
     ? `${formattedHours}:${formattedMinutes}:${formattedSeconds}<span class="text-7xl font-normal align-top font-sans">${ampm}</span>`
     : `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+}
+
+const hijriMonths = [
+  'Muharram',
+  'Safar',
+  'Rabi-al-Awwal',
+  'Rabi-al-Akhir',
+  'Jumada-al-Ula',
+  'Jumada-al-Akhir',
+  'Rajab',
+  "Sha'ban",
+  'Ramadan',
+  'Shawwal',
+  "Dhu al-Qi'dah",
+  'Dhu al-Hijjah',
+];
+
+export function incrementHijriDate(currentDate: string): string {
+  const [day, month, year] = currentDate.split(' ');
+  let dayNum = parseInt(day, 10);
+  let monthIndex = hijriMonths.indexOf(month);
+  let yearNum = parseInt(year.split(' ')[0], 10);
+
+  dayNum++;
+
+  // Check if we need to move to the next month
+  if (dayNum > 30 || (monthIndex % 2 === 0 && dayNum > 29)) {
+    dayNum = 1;
+    monthIndex++;
+
+    // Check if we need to move to the next year
+    if (monthIndex >= 12) {
+      monthIndex = 0;
+      yearNum++;
+    }
+  }
+
+  return `${dayNum} ${hijriMonths[monthIndex]} ${yearNum} AH`;
 }

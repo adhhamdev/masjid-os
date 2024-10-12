@@ -12,10 +12,10 @@ interface FullDarkProps {
     masjidName: string;
     clockSettings: any;
     prayerSettings: any;
+    hijriDate: string;
     time: Date;
     nextPrayer: { name: string; time: Date; iqamah: string } | null;
     getEnglishDate: () => string;
-    getIslamicDate: () => string;
     formatTime: (date: Date, includeSeconds?: boolean) => string;
 }
 
@@ -25,10 +25,10 @@ export default function FullDark({
     masjidName,
     clockSettings,
     prayerSettings,
+    hijriDate,
     time,
     nextPrayer,
     getEnglishDate,
-    getIslamicDate,
     formatTime,
 }: FullDarkProps) {
     return (
@@ -44,7 +44,7 @@ export default function FullDark({
             <div className="flex-1 flex flex-col">
                 <div className="py-1 flex-shrink-0">
                     <div className="text-xs sm:text-sm md:text-base text-center text-yellow-300">
-                        {getIslamicDate()} <span className='text-white'>|</span> {getEnglishDate()} <span className='text-white'>|</span> {temperature}°C <span className='text-white'>|</span> <span className='font-bold text-white'>{masjidName}</span>
+                        {hijriDate} <span className='text-white'>|</span> {getEnglishDate()} <span className='text-white'>|</span> {temperature}°C <span className='text-white'>|</span> <span className='font-bold text-white'>{masjidName}</span>
                     </div>
                 </div>
                 <div className="flex-1 flex flex-col justify-center items-center space-y-4">

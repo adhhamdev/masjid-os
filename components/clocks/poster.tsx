@@ -1,5 +1,5 @@
 import { lcdTime } from '@/fonts'
-import { formatTime, getEnglishDate, getIslamicDate } from '@/lib/utils'
+import { formatTime, getEnglishDate } from '@/lib/utils'
 import { CalculationMethod, Coordinates, PrayerTimes } from 'adhan'
 import { useEffect, useState } from 'react'
 
@@ -15,6 +15,7 @@ interface PosterProps {
     masjidName: string
     clockSettings: any
     prayerSettings: any
+    hijriDate: string
 }
 
 const locationCoordinates = {
@@ -29,7 +30,7 @@ function addMinutes(date: Date, minutes: number): Date {
     return new Date(date.getTime() + minutes * 60000)
 }
 
-export default function Poster({ iqamathTime, temperature, masjidName, clockSettings, prayerSettings }: PosterProps) {
+export default function Poster({ iqamathTime, temperature, masjidName, clockSettings, prayerSettings, hijriDate }: PosterProps) {
     const [time, setTime] = useState(new Date())
     const [prayerTimes, setPrayerTimes] = useState<{ name: string; time: Date; iqamah: string }[]>([])
 
@@ -75,7 +76,7 @@ export default function Poster({ iqamathTime, temperature, masjidName, clockSett
             <header className="p-4 text-center border-b border-green-700">
                 <h1 className="text-3xl font-bold text-green-400">{masjidName}</h1>
                 <p className="text-xl mt-2">
-                    {getIslamicDate()} | {getEnglishDate()} | {temperature}°C
+                    {hijriDate} | {getEnglishDate()} | {temperature}°C
                 </p>
             </header>
 
