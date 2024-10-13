@@ -1,9 +1,10 @@
 import { AddMasjidModal } from '@/components/AddMasjidModal';
 import GlobalSettingsModal from '@/components/GlobalSettingsModal';
+import { LogoutButton } from '@/components/logout-button';
 import { Masjid } from "@/components/Masjid";
 import { Button } from '@/components/ui/button';
 import { Settings } from "lucide-react";
-import { getGlobalSettings, getMosquesAdmin } from "../actions";
+import { getGlobalSettings, getMosquesAdmin, superAdminLogout } from "../actions";
 
 export default async function SuperAdminPage() {
     const { mosques, error } = await getMosquesAdmin();
@@ -25,6 +26,7 @@ export default async function SuperAdminPage() {
                             Global Settings
                         </Button>
                     </GlobalSettingsModal>
+                    <LogoutButton logoutAction={superAdminLogout} />
                 </div>
             </div>
 

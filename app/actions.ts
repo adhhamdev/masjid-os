@@ -55,6 +55,12 @@ export async function signOutAction() {
   redirect('/admin/sign-in?logout=true');
 }
 
+export async function superAdminLogout() {
+  const supabase = createAdminClient();
+  await supabase.auth.signOut();
+  redirect('/superadmin/sign-in');
+}
+
 export async function getMasjidDetails() {
   const supabase = createClient();
   const {
@@ -495,10 +501,6 @@ type FileData = {
 
 export async function getMasjidDetailsAdmin(masjidId: string) {
   const supabase = createAdminClient();
-  const { data } = await supabase.auth.admin.getUserById(
-    '3d974148-a02c-4a19-92cd-869e9c246249'
-  );
-  console.log(data.user);
   const { data: masjid, error } = await supabase
     .from('masjid')
     .select(
@@ -515,6 +517,8 @@ export async function getMasjidDetailsAdmin(masjidId: string) {
     )
     .eq('id', masjidId)
     .single();
+
+  console.log(masjid);
 
   if (error) {
     console.error('Error fetching masjid details:', error);
@@ -829,4 +833,46 @@ export async function createMasjid(formData: FormData) {
       return { error: 'An unexpected error occurred' };
     }
   }
+}
+
+export async function resetPassword(email: string) {
+  console.log('sendOtp started');
+  const supabase = createAdminClient();
+  console.log(email);
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://masjidos.vercel.app/superadmin/masjid/reset-password',
+  });
+
+  console.log(data, error);
+  if (error) throw error;
+  return data;
+}
+
+export async function verifyOtp(
+  otp: string,
+  masjidId: string,
+  newPassword: string
+) {
+  console.log('verify started');
+  const supabase = createAdminClient();
+  const { masjid } = await getMasjidDetailsAdmin(masjidId);
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.verifyOtp({
+    phone: masjid.contact.tel_no,
+    token: otp,
+    type: 'sms',
+  });
+
+  console.log(session?.user);
+
+  if (error) throw error;
+
+  // If OTP is verified, update the password
+  const { error: updateError } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  if (updateError) throw updateError;
 }

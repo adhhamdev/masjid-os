@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteMasjid, updateMasjidProStatus } from '@/app/actions'
+import { deleteMasjid, resetPassword, updateMasjidProStatus } from '@/app/actions'
 import { useToast } from '@/components/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -54,6 +54,14 @@ export default function MasjidForm({ masjid }: { masjid: any }) {
         setIsDeleteDialogOpen(false)
     }
 
+    const handleResetPassword = async () => {
+        await resetPassword(masjid.contact.email);
+        toast({
+            title: 'Verification Code Sent',
+            description: `A verification code has been sent to ${masjid.contact.email}.`,
+        })
+    }
+
     return (
         <div className="space-y-6 w-full sm:max-w-sm">
             <form action={handleSubmit} className="space-y-4">
@@ -80,37 +88,42 @@ export default function MasjidForm({ masjid }: { masjid: any }) {
                     )}
                 </Button>
             </form>
-            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                <DialogTrigger asChild>
-                    <Button variant="destructive" className="w-full sm:w-auto">
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete Masjid
-                    </Button>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Are you sure you want to delete {masjid.contact.masjid_name}?</DialogTitle>
-                        <DialogDescription>
-                            This action cannot be undone. This will permanently delete the Masjid and all associated data.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-                            Cancel
+            <div className="flex flex-col sm:flex-row gap-4">
+                <Button onClick={handleResetPassword} className="w-full sm:w-auto">
+                    Reset Password
+                </Button>
+                <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                    <DialogTrigger asChild>
+                        <Button variant="destructive" className="w-full sm:w-auto">
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete Masjid
                         </Button>
-                        <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
-                            {isDeleting ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Deleting...
-                                </>
-                            ) : (
-                                'Delete'
-                            )}
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Are you sure you want to delete {masjid.contact.masjid_name}?</DialogTitle>
+                            <DialogDescription>
+                                This action cannot be undone. This will permanently delete the Masjid and all associated data.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+                                Cancel
+                            </Button>
+                            <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
+                                {isDeleting ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Deleting...
+                                    </>
+                                ) : (
+                                    'Delete'
+                                )}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            </div>
         </div>
     )
 }

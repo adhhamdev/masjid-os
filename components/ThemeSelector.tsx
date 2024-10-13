@@ -13,10 +13,6 @@ export default function ThemeSelector({ theme }: { theme: string }) {
 
     const themes = [
         { id: '1', name: 'Black', image: '/clocks/black.png' },
-        { id: '2', name: 'White', image: '/clocks/white.png' },
-        { id: '3', name: 'Blue', image: '/clocks/blue.png' },
-        { id: '4', name: 'Green', image: '/clocks/green.png' },
-        { id: '5', name: 'Red', image: '/clocks/red.png' },
     ]
 
     return (

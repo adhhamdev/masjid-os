@@ -1,10 +1,17 @@
 import { getMasjidDetailsAdmin } from '@/app/actions'
 import MasjidForm from '@/components/MasjidForm'
 import { Button } from '@/components/ui/button'
+import { createAdminClient } from '@/utils/supabase/server'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 export default async function Page({ params }: { params: { id: string } }) {
+    const supabase = createAdminClient();
+    const { error: checkMasjid } = await supabase.from("masjid").select("*").eq('id', params.id).single();
+    if (checkMasjid) {
+        notFound();
+    }
     const { masjid, error: masjidError } = await getMasjidDetailsAdmin(params.id)
 
     if (masjidError) {

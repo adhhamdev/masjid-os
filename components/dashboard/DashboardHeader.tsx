@@ -1,4 +1,5 @@
 "use client";
+import { signOutAction } from '@/app/actions';
 import { LogoutButton } from '@/components/logout-button';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -7,7 +8,7 @@ import { ChevronDown, Clock, Menu, Settings, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-function ProfileDropdown({ isMobile = false }) {
+function ProfileDropdown({ isMobile = false }: { isMobile?: boolean }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -38,7 +39,7 @@ function ProfileDropdown({ isMobile = false }) {
                     </Link>
                 </DropdownMenuItem>
                 <hr className="my-2 h-[2px] w-5/6 mx-auto bg-gray-400 rounded-full" />
-                <LogoutButton />
+                <LogoutButton logoutAction={signOutAction} />
             </DropdownMenuContent>
         </DropdownMenu>
     )

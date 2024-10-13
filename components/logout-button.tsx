@@ -1,16 +1,15 @@
 "use client";
-import { signOutAction } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
 import { useTransition } from 'react';
 
-export function LogoutButton() {
+export function LogoutButton({ logoutAction }: { logoutAction: () => Promise<void> }) {
     const [isPending, startTransition] = useTransition();
 
     function handleLogout(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         startTransition(() => {
-            signOutAction();
+            logoutAction();
         });
     }
 

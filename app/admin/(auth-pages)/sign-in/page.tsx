@@ -100,7 +100,7 @@ export default function Login() {
             <hr className="my-8" />
             <div className="text-center mt-6">
               <p className="text-sm text-emerald-700">Not an admin?</p>
-              <Link href={whatsappLink} target="_blank" className="text-emerald-700 font-bold underline">WhatsApp Us</Link> to get the product get started.
+              <Link href={whatsappLink} target="_blank" className="text-emerald-700 font-bold underline">WhatsApp Us</Link> to get the product and get started.
             </div>
           </div>
         </div>
