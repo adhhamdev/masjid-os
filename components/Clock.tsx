@@ -9,6 +9,10 @@ const FullDark = dynamic(() => import('@/components/clocks/full-dark'), {
     loading: () => <p>Loading...</p>
 })
 
+const FullLight = dynamic(() => import('@/components/clocks/full-light'), {
+    loading: () => <p>Loading...</p>
+})
+
 const IqamahCountdown = dynamic(() => import('@/components/clocks/iqamath-countdown'), {
     loading: () => <p>Loading...</p>
 })
@@ -126,7 +130,14 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
                 getEnglishDate,
                 formatTime,
             }
-            return <FullDark {...commonProps} />
+            switch (clockSettings.theme) {
+                case '1':
+                    return <FullDark {...commonProps} />
+                case '2':
+                    return <FullLight {...commonProps} />
+                default:
+                    return <FullDark {...commonProps} />
+            }
         }
     }
 

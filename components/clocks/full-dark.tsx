@@ -33,11 +33,11 @@ export default function FullDark({
 }: FullDarkProps) {
     return (
         <div className="flex h-screen bg-black text-white overflow-hidden">
-            <div className="flex flex-col justify-center items-center w-16 border-2 border-white py-4 bg-gradient-to-r from-gray-900 to-gray-700">
+            <div className="flex flex-col justify-center items-center w-20 border-2 border-white py-4 bg-gradient-to-r from-gray-900 to-gray-700">
                 <div className="flex flex-col items-center justify-between h-4/5">
-                    <div className="text-lg sm:text-xl md:text-3xl font-extrabold transform rotate-180 whitespace-nowrap writing-vertical text-white">TIME</div>
-                    <div className="text-lg sm:text-xl md:text-3xl font-extrabold transform rotate-180 whitespace-nowrap writing-vertical text-white">{nextPrayer?.name.toUpperCase() || 'Next Prayer'}</div>
-                    <div className="text-lg sm:text-xl md:text-3xl font-extrabold transform rotate-180 whitespace-nowrap writing-vertical text-white">IQAMAH</div>
+                    <div className="text-lg sm:text-xl md:text-4xl font-extrabold transform rotate-180 whitespace-nowrap writing-vertical text-white">TIME</div>
+                    <div className="text-lg sm:text-xl md:text-4xl font-extrabold transform rotate-180 whitespace-nowrap writing-vertical text-white">{nextPrayer?.name.toUpperCase() || 'Next Prayer'}</div>
+                    <div className="text-lg sm:text-xl md:text-4xl font-extrabold transform rotate-180 whitespace-nowrap writing-vertical text-white">IQAMAH</div>
                 </div>
             </div>
 

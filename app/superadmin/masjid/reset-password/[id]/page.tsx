@@ -9,7 +9,7 @@ import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 
-export default function ResetPasswordPage() {
+export default function ResetPasswordPage({ params }: { params: { id: string } }) {
     const [isPending, startTransition] = useTransition()
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -40,7 +40,7 @@ export default function ResetPasswordPage() {
 
         startTransition(async () => {
             try {
-                await resetPassword(formData.get('newPassword') as string)
+                await resetPassword(formData.get('newPassword') as string, params.id)
 
                 toast({
                     title: 'Password Reset Successful',

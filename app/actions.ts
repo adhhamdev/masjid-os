@@ -839,10 +839,20 @@ export async function requestResetPassword(email: string) {
   return { error: error?.message };
 }
 
-export async function resetPassword(newPassword: string) {
+export async function resetPassword(newPassword: string, masjidId: string) {
   const supabase = createAdminClient();
+  const { data: masjidData, error: masjidError } = await supabase
+    .from('masjid')
+    .select('user')
+    .eq('id', masjidId)
+    .single();
+  if (masjidError) throw masjidError;
+  const { data: userData, error: userError } =
+    await supabase.auth.admin.getUserById(masjidData.user);
+  if (userError) throw userError;
   const { data, error } = await supabase.auth.updateUser({
     password: newPassword,
+    email: userData.user.email,
   });
   console.log('updated password', data);
   if (error) throw error;
