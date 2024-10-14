@@ -1,5 +1,5 @@
 import { lcdTime } from '@/fonts'
-import { formatTime, getEnglishDate } from '@/lib/utils'
+import { addMinutes, formatTime, getEnglishDate, locationCoordinates } from '@/lib/utils'
 import { CalculationMethod, Coordinates, PrayerTimes } from 'adhan'
 import { useEffect, useState } from 'react'
 
@@ -18,17 +18,7 @@ interface PosterProps {
     hijriDate: string
 }
 
-const locationCoordinates = {
-    colombo: { latitude: 6.9271, longitude: 79.8612 },
-    kandy: { latitude: 7.2906, longitude: 80.6337 },
-    batticaloa: { latitude: 7.7170, longitude: 81.7000 },
-    jaffna: { latitude: 9.6615, longitude: 80.0255 },
-    galle: { latitude: 6.0535, longitude: 80.2210 },
-}
 
-function addMinutes(date: Date, minutes: number): Date {
-    return new Date(date.getTime() + minutes * 60000)
-}
 
 export default function Poster({ iqamathTime, temperature, masjidName, clockSettings, prayerSettings, hijriDate }: PosterProps) {
     const [time, setTime] = useState(new Date())

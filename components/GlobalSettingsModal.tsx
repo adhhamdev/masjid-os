@@ -5,44 +5,31 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState, useTransition } from 'react';
-
-const hijriMonths = [
-    'Muharram', 'Safar', "Rabi-al-Awwal", "Rabi-al-Akhir",
-    'Jumada-al-Ula', 'Jumada-al-Akhir', 'Rajab', "Sha'ban",
-    'Ramadan', 'Shawwal', "Dhu-al-Qi'dah", 'Dhu-al-Hijjah'
-];
 
 interface GlobalSettingsModalProps {
     children: React.ReactNode;
     globalSettings: {
         id: number;
-        hijri_date: string;
+        hijri_adjust: number;
     };
 }
 
 export default function GlobalSettingsModal({ children, globalSettings }: GlobalSettingsModalProps) {
     const [open, setOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
-    const [day, setDay] = useState('');
-    const [month, setMonth] = useState('');
-    const [year, setYear] = useState('');
-    console.log(day, month, year);
+    const [hijriAdjust, setHijriAdjust] = useState(globalSettings.hijri_adjust);
 
     useEffect(() => {
-        if (globalSettings.hijri_date) {
-            const [d, m, y] = globalSettings.hijri_date.split(' ');
-            setDay(d);
-            setMonth(m);
-            setYear(y.replace(' AH', ''));
+        if (globalSettings.hijri_adjust) {
+            setHijriAdjust(globalSettings.hijri_adjust);
         }
-    }, [globalSettings.hijri_date]);
+    }, [globalSettings.hijri_adjust]);
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (formData: FormData) => {
         startTransition(async () => {
-            await updateGlobalSettings(`${day} ${month} ${year} AH`);
+            await updateGlobalSettings(formData);
             setOpen(false);
         });
     };
@@ -61,41 +48,19 @@ export default function GlobalSettingsModal({ children, globalSettings }: Global
                 </DialogDescription>
                 <form action={handleSubmit} className="space-y-4">
                     <div>
-                        <Label htmlFor="hijri_date">Hijri Date</Label>
-                        <div className="flex space-x-2">
-                            <Input
-                                id="hijri_day"
-                                type="number"
-                                placeholder="Day"
-                                min="1"
-                                max="30"
-                                value={day}
-                                onChange={(e) => setDay(e.target.value)}
-                                className="w-20"
-                            />
-                            <Select value={month} onValueChange={setMonth}>
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Month" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {hijriMonths.map((m) => (
-                                        <SelectItem key={m} value={m}>
-                                            {m}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            <Input
-                                id="hijri_year"
-                                type="number"
-                                placeholder="Year"
-                                min="1"
-                                value={year}
-                                onChange={(e) => setYear(e.target.value)}
-                                className="w-24"
-                            />
-                            <span className="flex items-center">AH</span>
-                        </div>
+                        <Label htmlFor="hijri_adjust">Adjust Hijri Date</Label>
+                        <Input
+                            id="hijri_adjust"
+                            name="hijri_adjust"
+                            type="number"
+                            value={hijriAdjust}
+                            onChange={(e) => setHijriAdjust(Number(e.target.value))}
+                            className="w-full"
+                            placeholder="Enter days to adjust (-30 to 30)"
+                        />
+                        <p className="text-sm text-gray-500 mt-1">
+                            Adjust the Hijri date by -30 to 30 days if needed.
+                        </p>
                     </div>
                     <Button type="submit" disabled={isPending}>
                         {isPending ? (

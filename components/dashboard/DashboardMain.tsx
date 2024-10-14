@@ -1,6 +1,6 @@
 import StatCard from '@/components/dashboard/StatCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { BarChart2, DollarSign, FileText, Globe, Grid, Users } from 'lucide-react'
+import { BarChart2, Crown, DollarSign, FileText, Globe, Grid, Users } from 'lucide-react'
 
 
 
@@ -26,7 +26,11 @@ export default function DashboardMain() {
                     <StatCard title="Donations" value={`$${data.donations}`} icon={DollarSign} />
                     <StatCard title="Members" value={data.members} icon={Users} tooltip="Mahallah" />
                     <StatCard title="Events" value={data.events} icon={FileText} />
-                    <Card className="md:col-span-2 bg-emerald-50 border-emerald-200">
+                    <Card className="md:col-span-2 bg-emerald-50 border-emerald-200 relative">
+                        <div className="absolute -top-3 left-4 flex items-center space-x-1 bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-1 rounded-full">
+                            <Crown className="h-3 w-3" />
+                            <span>PRO</span>
+                        </div>
                         <CardHeader>
                             <CardTitle className="text-emerald-800">Finance</CardTitle>
                         </CardHeader>

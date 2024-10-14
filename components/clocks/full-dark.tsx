@@ -1,4 +1,5 @@
 import { lcdTime } from '@/fonts';
+import { useEffect, useState } from 'react';
 
 interface FullDarkProps {
     iqamathTime: {
@@ -31,6 +32,34 @@ export default function FullDark({
     getEnglishDate,
     formatTime,
 }: FullDarkProps) {
+    const [countdown, setCountdown] = useState<string | null>(null)
+
+    useEffect(() => {
+        let intervalId: NodeJS.Timeout
+
+        const updateCountdown = () => {
+            if (nextPrayer) {
+                const now = new Date()
+                const diffMs = nextPrayer.iqamah.getTime() - now.getTime()
+
+                if (diffMs > 0) {
+                    const minutes = Math.floor(diffMs / 60000)
+                    const seconds = Math.floor((diffMs % 60000) / 1000)
+                    setCountdown(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`)
+                } else {
+                    setCountdown(null)
+                }
+            } else {
+                setCountdown(null)
+            }
+        }
+
+        intervalId = setInterval(updateCountdown, 1000)
+        updateCountdown() // Initial update
+
+        return () => clearInterval(intervalId)
+    }, [nextPrayer])
+
     return (
         <div className="flex h-screen bg-black text-white overflow-hidden">
             <div className="flex flex-col justify-center items-center w-20 border-2 border-white py-4 bg-gradient-to-r from-gray-900 to-gray-700">
@@ -58,9 +87,15 @@ export default function FullDark({
                             <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-yellow-400 ${lcdTime.className}`} suppressHydrationWarning
                                 dangerouslySetInnerHTML={{ __html: formatTime(nextPrayer.time, true) }}>
                             </div>
-                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-500 ${lcdTime.className}`} suppressHydrationWarning
-                                dangerouslySetInnerHTML={{ __html: formatTime(nextPrayer.iqamah, true) }}>
-                            </div>
+                            {countdown ? (
+                                <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-500 ${lcdTime.className}`}>
+                                    {countdown}
+                                </div>
+                            ) : (
+                                <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-500 ${lcdTime.className}`} suppressHydrationWarning
+                                    dangerouslySetInnerHTML={{ __html: formatTime(nextPrayer.iqamah, true) }}>
+                                </div>
+                            )}
                         </>
                     )}
                 </div>

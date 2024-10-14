@@ -93,3 +93,15 @@ const hijriMonths = [
   "Dhu al-Qi'dah",
   'Dhu al-Hijjah',
 ];
+
+export function addMinutes(date: Date, minutes: number): Date {
+  return new Date(date.getTime() + minutes * 60000);
+}
+
+export const locationCoordinates = {
+  colombo: { latitude: 6.9271, longitude: 79.8612 },
+  kandy: { latitude: 7.2906, longitude: 80.6337 },
+  batticaloa: { latitude: 7.717, longitude: 81.7 },
+  jaffna: { latitude: 9.6615, longitude: 80.0255 },
+  galle: { latitude: 6.0535, longitude: 80.221 },
+};

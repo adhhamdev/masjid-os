@@ -580,12 +580,12 @@ export async function getGlobalSettings() {
   return { globalSettings };
 }
 
-export async function updateGlobalSettings(hijriDate: string) {
+export async function updateGlobalSettings(formData: FormData) {
   const supabase = createAdminClient();
   const { error } = await supabase
     .from('global_settings')
     .update({
-      hijri_date: hijriDate,
+      hijri_adjust: formData.get('hijri_adjust'),
     })
     .eq('id', 1);
 
@@ -850,10 +850,12 @@ export async function resetPassword(newPassword: string, masjidId: string) {
   const { data: userData, error: userError } =
     await supabase.auth.admin.getUserById(masjidData.user);
   if (userError) throw userError;
-  const { data, error } = await supabase.auth.updateUser({
-    password: newPassword,
-    email: userData.user.email,
-  });
+  const { data, error } = await supabase.auth.admin.updateUserById(
+    userData.user.id,
+    {
+      password: newPassword,
+    }
+  );
   console.log('updated password', data);
   if (error) throw error;
 }
