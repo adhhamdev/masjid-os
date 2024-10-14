@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteMasjid, resetPassword, updateMasjidProStatus } from '@/app/actions'
+import { deleteMasjid, requestResetPassword, updateMasjidProStatus } from '@/app/actions'
 import { useToast } from '@/components/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -13,8 +13,9 @@ export default function MasjidForm({ masjid }: { masjid: any }) {
     const { toast } = useToast()
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
+    const [isResetting, setIsResetting] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     const handleSubmit = async (formData: FormData) => {
         setIsLoading(true)
@@ -55,11 +56,26 @@ export default function MasjidForm({ masjid }: { masjid: any }) {
     }
 
     const handleResetPassword = async () => {
-        await resetPassword(masjid.contact.email);
-        toast({
-            title: 'Verification Code Sent',
-            description: `A verification code has been sent to ${masjid.contact.email}.`,
-        })
+        setIsResetting(true)
+        try {
+            const { error } = await requestResetPassword(masjid.contact.email)
+            if (error) {
+                throw new Error(error || 'Failed to send verification code')
+            }
+            toast({
+                title: 'Success',
+                description: `A password reset link has been sent to ${masjid.contact.email}.`,
+            })
+        } catch (error) {
+            console.error('Password reset error:', error)
+            toast({
+                title: 'Error',
+                description: error instanceof Error ? error.message : 'An unexpected error occurred',
+                variant: 'destructive',
+            })
+        } finally {
+            setIsResetting(false)
+        }
     }
 
     return (
@@ -89,8 +105,15 @@ export default function MasjidForm({ masjid }: { masjid: any }) {
                 </Button>
             </form>
             <div className="flex flex-col sm:flex-row gap-4">
-                <Button onClick={handleResetPassword} className="w-full sm:w-auto">
-                    Reset Password
+                <Button onClick={() => handleResetPassword()} className="w-full sm:w-auto">
+                    {isResetting ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Resetting...
+                        </>
+                    ) : (
+                        'Reset Password'
+                    )}
                 </Button>
                 <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                     <DialogTrigger asChild>

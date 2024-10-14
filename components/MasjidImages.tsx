@@ -60,7 +60,6 @@ export function MasjidImages({ initialImages, masjidId }: MasjidImagesProps) {
 
             const uploadedImages = await Promise.all(uploadPromises)
             const newImages = [...images, ...uploadedImages]
-            console.log('newImages: ', newImages)
             setImages(newImages)
             await updateMasjidPhotos(masjidId, newImages)
             showToast("Images uploaded successfully", "Your masjid photos have been updated.")

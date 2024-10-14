@@ -1,32 +1,33 @@
 'use client'
 
-import { verifyOtp } from '@/app/actions'
+import { resetPassword } from '@/app/actions'
 import { useToast } from '@/components/hooks/use-toast'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 
-export default function ResetPasswordPage({ params }: { params: { id: string } }) {
+export default function ResetPasswordPage() {
     const [isPending, startTransition] = useTransition()
-    const [otp, setOtp] = useState('')
     const [newPassword, setNewPassword] = useState('')
-    const [errors, setErrors] = useState({ otp: '', newPassword: '' })
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [errors, setErrors] = useState({ newPassword: '', confirmPassword: '' })
     const router = useRouter()
     const { toast } = useToast()
 
     const validateForm = () => {
         let isValid = true
-        const newErrors = { otp: '', newPassword: '' }
-
-        if (otp.length !== 6) {
-            newErrors.otp = 'OTP must be 6 characters long'
-            isValid = false
-        }
+        const newErrors = { newPassword: '', confirmPassword: '' }
 
         if (newPassword.length < 8) {
             newErrors.newPassword = 'Password must be at least 8 characters long'
+            isValid = false
+        }
+
+        if (newPassword !== confirmPassword) {
+            newErrors.confirmPassword = 'Passwords do not match'
             isValid = false
         }
 
@@ -34,12 +35,12 @@ export default function ResetPasswordPage({ params }: { params: { id: string } }
         return isValid
     }
 
-    const onSubmit = async () => {
+    const onSubmit = async (formData: FormData) => {
         if (!validateForm()) return
 
         startTransition(async () => {
             try {
-                await verifyOtp(otp, params.id, newPassword);
+                await resetPassword(formData.get('newPassword') as string)
 
                 toast({
                     title: 'Password Reset Successful',
@@ -58,44 +59,57 @@ export default function ResetPasswordPage({ params }: { params: { id: string } }
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-                <h1 className="text-2xl font-bold text-center">Reset Password</h1>
-                <form action={onSubmit} className="space-y-4">
-                    <div>
-                        <label htmlFor="otp" className="block text-sm font-medium text-gray-700">OTP Code</label>
-                        <Input
-                            id="otp"
-                            type="text"
-                            placeholder="Enter 6-digit OTP"
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value)}
-                        />
-                        {errors.otp && <p className="mt-1 text-sm text-red-600">{errors.otp}</p>}
-                    </div>
-                    <div>
-                        <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">New Password</label>
-                        <Input
-                            id="newPassword"
-                            type="password"
-                            placeholder="Enter new password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                        {errors.newPassword && <p className="mt-1 text-sm text-red-600">{errors.newPassword}</p>}
-                    </div>
-                    <Button type="submit" className="w-full" disabled={isPending}>
-                        {isPending ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Resetting...
-                            </>
-                        ) : (
-                            'Reset Password'
-                        )}
-                    </Button>
-                </form>
-            </div>
+        <div className="flex items-center justify-center min-h-screen bg-background px-4 sm:px-6 lg:px-8">
+            <Card className="w-full max-w-md">
+                <CardHeader>
+                    <CardTitle className="text-2xl font-bold text-center">Reset Your Password</CardTitle>
+                    <CardDescription className="text-center">Enter your new password below</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <form className="space-y-4" action={onSubmit}>
+                        <div className="space-y-2">
+                            <label htmlFor="new-password" className="text-sm font-medium text-foreground">New Password</label>
+                            <Input
+                                id="new-password"
+                                name="newPassword"
+                                type="password"
+                                required
+                                placeholder="Enter new password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                            />
+                            {errors.newPassword && <p className="text-sm text-destructive">{errors.newPassword}</p>}
+                        </div>
+                        <div className="space-y-2">
+                            <label htmlFor="confirm-password" className="text-sm font-medium text-foreground">Confirm Password</label>
+                            <Input
+                                id="confirm-password"
+                                name="confirmPassword"
+                                type="password"
+                                required
+                                placeholder="Confirm new password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                            {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
+                        </div>
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={isPending}
+                        >
+                            {isPending ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Resetting...
+                                </>
+                            ) : (
+                                'Reset Password'
+                            )}
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
         </div>
     )
 }

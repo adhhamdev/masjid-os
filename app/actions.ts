@@ -460,7 +460,6 @@ export async function removeMasjidImage(imageUrl: string) {
 }
 
 export async function updateMasjidPhotos(masjidId: string, photos: string[]) {
-  console.log('photos: ', photos);
   const supabase = createClient();
   const { error } = await supabase
     .from('masjid')
@@ -518,8 +517,6 @@ export async function getMasjidDetailsAdmin(masjidId: string) {
     .eq('id', masjidId)
     .single();
 
-  console.log(masjid);
-
   if (error) {
     console.error('Error fetching masjid details:', error);
     return { error: error.message };
@@ -574,7 +571,6 @@ export async function getGlobalSettings() {
     .from('global_settings')
     .select('*')
     .single();
-  console.log(globalSettings);
 
   if (error) {
     console.error('Error fetching global settings:', error);
@@ -835,44 +831,19 @@ export async function createMasjid(formData: FormData) {
   }
 }
 
-export async function resetPassword(email: string) {
-  console.log('sendOtp started');
+export async function requestResetPassword(email: string) {
   const supabase = createAdminClient();
-  console.log(email);
-  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: 'https://masjidos.vercel.app/superadmin/masjid/reset-password',
   });
-
-  console.log(data, error);
-  if (error) throw error;
-  return data;
+  return { error: error?.message };
 }
 
-export async function verifyOtp(
-  otp: string,
-  masjidId: string,
-  newPassword: string
-) {
-  console.log('verify started');
+export async function resetPassword(newPassword: string) {
   const supabase = createAdminClient();
-  const { masjid } = await getMasjidDetailsAdmin(masjidId);
-  const {
-    data: { session },
-    error,
-  } = await supabase.auth.verifyOtp({
-    phone: masjid.contact.tel_no,
-    token: otp,
-    type: 'sms',
-  });
-
-  console.log(session?.user);
-
-  if (error) throw error;
-
-  // If OTP is verified, update the password
-  const { error: updateError } = await supabase.auth.updateUser({
+  const { data, error } = await supabase.auth.updateUser({
     password: newPassword,
   });
-
-  if (updateError) throw updateError;
+  console.log('updated password', data);
+  if (error) throw error;
 }
