@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
+import { DateTime } from 'luxon';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -35,49 +36,33 @@ export const getTemperature = async (): Promise<string> => {
 };
 
 export function getEnglishDate(): string {
-  const today = new Date();
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  const day = today.getDate();
-  const month = monthNames[today.getMonth()];
-  const year = today.getFullYear();
-
-  return `${day} ${month} ${year}`;
+  return DateTime.now().toLocaleString(DateTime.DATE_FULL);
 }
 
 export function formatTime(date: Date, use12Hour: boolean = false): string {
-  let hours = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-  let ampm = '';
+  const dateTime = DateTime.fromJSDate(date);
+  const format = use12Hour ? 'hh:mm:ss' : 'HH:mm:ss';
+  const formattedTime = dateTime.toFormat(format);
 
   if (use12Hour) {
-    ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
+    const ampm = dateTime.toFormat('a');
+    return `${formattedTime}<span class="text-7xl font-normal align-top font-sans">${ampm}</span>`;
   }
 
-  const formattedHours = hours.toString().padStart(2, '0');
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  const formattedSeconds = seconds.toString().padStart(2, '0');
-
-  return use12Hour
-    ? `${formattedHours}:${formattedMinutes}:${formattedSeconds}<span class="text-7xl font-normal align-top font-sans">${ampm}</span>`
-    : `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+  return formattedTime;
 }
+
+export function addMinutes(date: Date, minutes: number): Date {
+  return DateTime.fromJSDate(date).plus({ minutes }).toJSDate();
+}
+
+export const locationCoordinates = {
+  colombo: { latitude: 6.9271, longitude: 79.8612 },
+  kandy: { latitude: 7.2906, longitude: 80.6337 },
+  batticaloa: { latitude: 7.717, longitude: 81.7 },
+  jaffna: { latitude: 9.6615, longitude: 80.0255 },
+  galle: { latitude: 6.0535, longitude: 80.221 },
+};
 
 const hijriMonths = [
   'Muharram',
@@ -93,15 +78,3 @@ const hijriMonths = [
   "Dhu al-Qi'dah",
   'Dhu al-Hijjah',
 ];
-
-export function addMinutes(date: Date, minutes: number): Date {
-  return new Date(date.getTime() + minutes * 60000);
-}
-
-export const locationCoordinates = {
-  colombo: { latitude: 6.9271, longitude: 79.8612 },
-  kandy: { latitude: 7.2906, longitude: 80.6337 },
-  batticaloa: { latitude: 7.717, longitude: 81.7 },
-  jaffna: { latitude: 9.6615, longitude: 80.0255 },
-  galle: { latitude: 6.0535, longitude: 80.221 },
-};

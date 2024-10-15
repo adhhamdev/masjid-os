@@ -836,6 +836,7 @@ export async function requestResetPassword(email: string) {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: 'https://masjidos.vercel.app/superadmin/masjid/reset-password',
   });
+  console.log(error?.message, error?.name);
   return { error: error?.message };
 }
 

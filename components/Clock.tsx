@@ -1,10 +1,12 @@
 "use client"
 
 import { useClockLogic } from '@/components/hooks/useClockLogic'
-import { formatTime, getEnglishDate } from '@/lib/utils'
+import { getEnglishDate } from '@/lib/utils'
 import { ClockProps } from '@/types/clock'
 import dynamic from 'next/dynamic'
 import { useTemperature } from './hooks/useTemperature'
+
+console.log(getEnglishDate())
 
 const FullDark = dynamic(() => import('@/components/clocks/full-dark'), {
     loading: () => <p>Loading...</p>
@@ -26,12 +28,13 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
     const temperature = useTemperature()
     const {
         time,
+        hijriDate,
         nextPrayer,
         showIqamahCountdown,
         showSwitchOffPhones,
         iqamahCountdown,
-        hijriDate
     } = useClockLogic(prayerSettings, iqamathTime, globalSettings.hijri_adjust)
+    console.log(iqamahCountdown)
 
     function renderClockComponent() {
         if (showIqamahCountdown) {
@@ -40,16 +43,15 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
             return <SwitchOffPhones />
         } else {
             const commonProps = {
+                hijriDate,
+                time,
+                nextPrayer,
                 iqamathTime,
                 masjidName,
                 temperature,
                 clockSettings,
                 prayerSettings,
-                hijriDate,
-                time,
-                nextPrayer,
                 getEnglishDate,
-                formatTime,
             }
             return clockSettings.theme === '2' ? <FullLight {...commonProps} /> : <FullDark {...commonProps} />
         }

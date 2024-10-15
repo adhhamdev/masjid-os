@@ -1,4 +1,5 @@
 import { lcdTime } from '@/fonts'
+import { formatTime } from '@/lib/utils'
 
 interface FullLightProps {
     iqamathTime: {
@@ -16,7 +17,6 @@ interface FullLightProps {
     time: Date
     nextPrayer: { name: string; time: Date; iqamah: Date } | null
     getEnglishDate: () => string
-    formatTime: (date: Date, includeSeconds?: boolean) => string
 }
 
 export default function FullLight({
@@ -29,7 +29,6 @@ export default function FullLight({
     time,
     nextPrayer,
     getEnglishDate,
-    formatTime,
 }: FullLightProps) {
     return (
         <div className="flex h-screen bg-white text-black overflow-hidden">

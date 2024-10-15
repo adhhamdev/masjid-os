@@ -1,6 +1,7 @@
 import { addMinutes, locationCoordinates } from '@/lib/utils';
 import { IqamathTime, Prayer, PrayerSettings } from '@/types/clock';
 import { CalculationMethod, Coordinates, PrayerTimes } from 'adhan';
+import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 import { useHijriDate } from './useHijriDate';
 
@@ -22,7 +23,7 @@ export function useClockLogic(
       setTime(now);
       calculateNextPrayer(now);
       if (nextPrayer) {
-        updateClockState(now, nextPrayer);
+        updateClockState(DateTime.fromJSDate(now), nextPrayer);
       }
     }, 1000);
     return () => clearInterval(timer);
@@ -85,15 +86,19 @@ export function useClockLogic(
     }
   }
 
-  function updateClockState(now: Date, prayer: Prayer) {
-    if (now >= prayer.time && now < prayer.iqamah) {
+  function updateClockState(now: DateTime, prayer: Prayer) {
+    const prayerTime = DateTime.fromJSDate(prayer.time);
+    const prayerIqamah = DateTime.fromJSDate(prayer.iqamah);
+
+    if (now >= prayerTime && now < prayerIqamah) {
       setShowIqamahCountdown(true);
-      const countdown = Math.floor(
-        (prayer.iqamah.getTime() - now.getTime()) / 1000
-      );
+      const countdown = Math.floor(prayerIqamah.diff(now, 'minutes').minutes);
+      console.log(countdown);
       setIqamahCountdown(countdown);
-    } else if (now >= prayer.iqamah && now < addMinutes(prayer.iqamah, 0.2)) {
-      // 12 seconds
+    } else if (
+      now >= prayerIqamah &&
+      now < prayerIqamah.plus({ seconds: 12 })
+    ) {
       setShowIqamahCountdown(false);
       setShowSwitchOffPhones(true);
     } else {
