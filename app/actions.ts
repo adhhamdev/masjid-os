@@ -834,7 +834,7 @@ export async function createMasjid(formData: FormData) {
 export async function requestResetPassword(email: string) {
   const supabase = createAdminClient();
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://masjidos.vercel.app/superadmin/masjid/reset-password',
+    redirectTo: 'http://localhost:3000/superadmin/masjid/reset-password',
   });
   console.log(error?.message, error?.name);
   return { error: error?.message };

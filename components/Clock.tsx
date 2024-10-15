@@ -34,7 +34,6 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
         showSwitchOffPhones,
         iqamahCountdown,
     } = useClockLogic(prayerSettings, iqamathTime, globalSettings.hijri_adjust)
-    console.log(iqamahCountdown)
 
     function renderClockComponent() {
         if (showIqamahCountdown) {

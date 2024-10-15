@@ -14,14 +14,16 @@ export function useClockLogic(
   const [nextPrayer, setNextPrayer] = useState<Prayer | null>(null);
   const [showIqamahCountdown, setShowIqamahCountdown] = useState(false);
   const [showSwitchOffPhones, setShowSwitchOffPhones] = useState(false);
-  const [iqamahCountdown, setIqamahCountdown] = useState(0);
+  const [iqamahCountdown, setIqamahCountdown] = useState<string>('00:00');
   const hijriDate = useHijriDate({ now: time, adjust: hijriAdjust });
 
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
       setTime(now);
-      calculateNextPrayer(now);
+      if (!nextPrayer || now >= nextPrayer.iqamah) {
+        calculateNextPrayer(now);
+      }
       if (nextPrayer) {
         updateClockState(DateTime.fromJSDate(now), nextPrayer);
       }
@@ -36,7 +38,6 @@ export function useClockLogic(
     );
     const params = CalculationMethod.MuslimWorldLeague();
     const prayerTimes = new PrayerTimes(coordinates, currentTime, params);
-
     const prayers: Prayer[] = [
       {
         name: 'Fajr',
@@ -92,8 +93,10 @@ export function useClockLogic(
 
     if (now >= prayerTime && now < prayerIqamah) {
       setShowIqamahCountdown(true);
-      const countdown = Math.floor(prayerIqamah.diff(now, 'minutes').minutes);
-      console.log(countdown);
+      const diff = prayerIqamah.diff(now, ['minutes', 'seconds']);
+      const minutes = Math.floor(diff.minutes);
+      const seconds = Math.floor(diff.seconds);
+      const countdown = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       setIqamahCountdown(countdown);
     } else if (
       now >= prayerIqamah &&

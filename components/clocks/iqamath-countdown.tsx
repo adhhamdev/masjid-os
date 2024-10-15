@@ -1,10 +1,6 @@
 "use client"
 
-interface IqamahCountdownProps {
-    countdown: number;
-}
-
-export default function IqamahCountdown({ countdown }: IqamahCountdownProps) {
+export default function IqamahCountdown({ countdown }: { countdown: string }) {
     return (
         <div className="flex flex-col h-screen w-screen bg-gray-900 text-white font-sans overflow-hidden">
             <div className="bg-gray-800 p-4 text-center text-2xl sm:text-3xl md:text-4xl font-bold border-b-2 border-gray-700">
