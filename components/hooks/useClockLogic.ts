@@ -13,7 +13,7 @@ export function useClockLogic(
   const [time, setTime] = useState(new Date());
   const [nextPrayer, setNextPrayer] = useState<Prayer | null>(null);
   const [showIqamahCountdown, setShowIqamahCountdown] = useState(false);
-  const [showSwitchOffPhones, setShowSwitchOffPhones] = useState(false);
+  const [showWait, setShowWait] = useState(false);
   const [iqamahCountdown, setIqamahCountdown] = useState<string>('00:00');
   const hijriDate = useHijriDate({ now: time, adjust: hijriAdjust });
 
@@ -31,6 +31,16 @@ export function useClockLogic(
     return () => clearInterval(timer);
   }, [nextPrayer, prayerSettings, hijriAdjust]);
 
+  useEffect(() => {
+    if (showWait) {
+      const waitTimer = setTimeout(() => {
+        setShowWait(false);
+      }, 12000);
+
+      return () => clearTimeout(waitTimer);
+    }
+  }, [showWait]);
+
   function calculateNextPrayer(currentTime: Date) {
     const coordinates = new Coordinates(
       locationCoordinates[prayerSettings.location].latitude,
@@ -38,6 +48,12 @@ export function useClockLogic(
     );
     const params = CalculationMethod.MuslimWorldLeague();
     const prayerTimes = new PrayerTimes(coordinates, currentTime, params);
+    const nextDayPrayerTimes = new PrayerTimes(
+      coordinates,
+      addDays(currentTime, 1),
+      params
+    );
+
     const prayers: Prayer[] = [
       {
         name: 'Fajr',
@@ -63,6 +79,11 @@ export function useClockLogic(
         name: 'Isha',
         time: prayerTimes.isha,
         iqamah: getIqamahTime(prayerTimes.isha, iqamathTime.isha),
+      },
+      {
+        name: 'Fajr (Next Day)',
+        time: nextDayPrayerTimes.fajr,
+        iqamah: getIqamahTime(nextDayPrayerTimes.fajr, iqamathTime.fajr),
       },
     ];
 
@@ -90,23 +111,27 @@ export function useClockLogic(
   function updateClockState(now: DateTime, prayer: Prayer) {
     const prayerTime = DateTime.fromJSDate(prayer.time);
     const prayerIqamah = DateTime.fromJSDate(prayer.iqamah);
+    const waitEndTime = prayerIqamah.plus({ seconds: 12 });
 
     if (now >= prayerTime && now < prayerIqamah) {
       setShowIqamahCountdown(true);
+      setShowWait(false);
       const diff = prayerIqamah.diff(now, ['minutes', 'seconds']);
       const minutes = Math.floor(diff.minutes);
       const seconds = Math.floor(diff.seconds);
       const countdown = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       setIqamahCountdown(countdown);
-    } else if (
-      now >= prayerIqamah &&
-      now < prayerIqamah.plus({ seconds: 12 })
-    ) {
+    } else if (now >= prayerIqamah && now < waitEndTime) {
       setShowIqamahCountdown(false);
-      setShowSwitchOffPhones(true);
+      setShowWait(true);
     } else {
       setShowIqamahCountdown(false);
-      setShowSwitchOffPhones(false);
+      setShowWait(false);
+    }
+
+    // If we're in the "Wait..." period, schedule the end of it
+    if (showWait && now >= waitEndTime) {
+      setShowWait(false);
     }
   }
 
@@ -114,8 +139,14 @@ export function useClockLogic(
     time,
     nextPrayer,
     showIqamahCountdown,
-    showSwitchOffPhones,
+    showWait,
     iqamahCountdown,
     hijriDate,
   };
+}
+
+function addDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
 }

@@ -20,10 +20,6 @@ const IqamahCountdown = dynamic(() => import('@/components/clocks/iqamath-countd
     loading: () => <p>Loading...</p>
 })
 
-const SwitchOffPhones = dynamic(() => import('@/components/clocks/switch-off-phones'), {
-    loading: () => <p>Loading...</p>
-})
-
 function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, masjidName, globalSettings }: ClockProps) {
     const temperature = useTemperature()
     const {
@@ -31,15 +27,15 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
         hijriDate,
         nextPrayer,
         showIqamahCountdown,
-        showSwitchOffPhones,
+        showWait,
         iqamahCountdown,
     } = useClockLogic(prayerSettings, iqamathTime, globalSettings.hijri_adjust)
 
     function renderClockComponent() {
         if (showIqamahCountdown) {
             return <IqamahCountdown countdown={iqamahCountdown} />
-        } else if (showSwitchOffPhones) {
-            return <SwitchOffPhones />
+        } else if (showWait) {
+            return <div className='flex items-center justify-center h-screen w-screen text-4xl font-bold'>Wait...</div>
         } else {
             const commonProps = {
                 hijriDate,

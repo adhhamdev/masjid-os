@@ -28,7 +28,6 @@ export default function FullDark({
     getEnglishDate,
 }: FullDarkProps) {
     const [countdown, setCountdown] = useState<string | null>(null);
-    console.log(countdown)
 
     useEffect(() => {
         let intervalId: NodeJS.Timeout;
@@ -36,11 +35,11 @@ export default function FullDark({
         const updateCountdown = () => {
             if (nextPrayer) {
                 const now = DateTime.local();
-                const diff = DateTime.fromJSDate(nextPrayer.iqamah).diff(now);
-                console.log(diff)
+                const prayerTime = DateTime.fromJSDate(nextPrayer.iqamah);
+                const diff = prayerTime.diff(now);
 
                 if (diff.as('milliseconds') > 0) {
-                    const duration = Duration.fromObject({ minute: diff.minutes, second: diff.seconds });
+                    const duration = Duration.fromObject({ minutes: diff.as('minutes'), seconds: diff.as('seconds') });
                     setCountdown(duration.toFormat('mm:ss'));
                 } else {
                     setCountdown(null);
@@ -76,7 +75,7 @@ function SideBar({ nextPrayer }: { nextPrayer: FullDarkProps['nextPrayer'] }) {
         <div className="flex flex-col justify-center items-center w-20 border-2 border-white py-4 bg-gradient-to-r from-gray-900 to-gray-700">
             <div className="flex flex-col items-center justify-between h-4/5">
                 <SideBarText text="TIME" />
-                <SideBarText text={nextPrayer?.name.toUpperCase() || 'Next Prayer'} />
+                <SideBarText text={nextPrayer?.name.replace(' (Next Day)', '').toUpperCase() || 'Next Prayer'} />
                 <SideBarText text="IQAMAH" />
             </div>
         </div>
