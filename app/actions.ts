@@ -857,6 +857,5 @@ export async function resetPassword(newPassword: string, masjidId: string) {
       password: newPassword,
     }
   );
-  console.log('updated password', data);
   if (error) throw error;
 }

@@ -5,7 +5,7 @@ export interface ClockProps {
   clockSettings: any;
   prayerSettings: PrayerSettings;
   iqamathTime: IqamathTime;
-  nightMode: boolean;
+  nightMode: NightMode;
   masjidName: string;
   globalSettings: any;
 }
@@ -27,4 +27,10 @@ export interface IqamathTime {
   asr: string[];
   maghrib: string[];
   isha: string[];
+}
+
+export interface NightMode {
+  active: boolean;
+  from: string;
+  to: string;
 }

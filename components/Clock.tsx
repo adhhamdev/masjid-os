@@ -6,8 +6,6 @@ import { ClockProps } from '@/types/clock'
 import dynamic from 'next/dynamic'
 import { useTemperature } from './hooks/useTemperature'
 
-console.log(getEnglishDate())
-
 const FullDark = dynamic(() => import('@/components/clocks/full-dark'), {
     loading: () => <p>Loading...</p>
 })
@@ -20,6 +18,10 @@ const IqamahCountdown = dynamic(() => import('@/components/clocks/iqamath-countd
     loading: () => <p>Loading...</p>
 })
 
+const IshrakScreen = dynamic(() => import('@/components/clocks/ishrak-screen'), {
+    loading: () => <p>Loading...</p>
+})
+
 function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, masjidName, globalSettings }: ClockProps) {
     const temperature = useTemperature()
     const {
@@ -28,11 +30,14 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
         nextPrayer,
         showIqamahCountdown,
         showWait,
+        showIshrak,
         iqamahCountdown,
-    } = useClockLogic(prayerSettings, iqamathTime, globalSettings.hijri_adjust)
+    } = useClockLogic(prayerSettings, iqamathTime, globalSettings.hijri_adjust, nightMode)
 
     function renderClockComponent() {
-        if (showIqamahCountdown) {
+        if (showIshrak) {
+            return <IshrakScreen />
+        } else if (showIqamahCountdown) {
             return <IqamahCountdown countdown={iqamahCountdown} />
         } else if (showWait) {
             return <div className='flex items-center justify-center h-screen w-screen text-4xl font-bold'>Wait...</div>

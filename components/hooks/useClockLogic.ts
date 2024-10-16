@@ -1,5 +1,5 @@
 import { addMinutes, locationCoordinates } from '@/lib/utils';
-import { IqamathTime, Prayer, PrayerSettings } from '@/types/clock';
+import { IqamathTime, NightMode, Prayer, PrayerSettings } from '@/types/clock';
 import { CalculationMethod, Coordinates, PrayerTimes } from 'adhan';
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
@@ -8,12 +8,14 @@ import { useHijriDate } from './useHijriDate';
 export function useClockLogic(
   prayerSettings: PrayerSettings,
   iqamathTime: IqamathTime,
-  hijriAdjust: number
+  hijriAdjust: number,
+  nightMode: NightMode
 ) {
   const [time, setTime] = useState(new Date());
   const [nextPrayer, setNextPrayer] = useState<Prayer | null>(null);
   const [showIqamahCountdown, setShowIqamahCountdown] = useState(false);
   const [showWait, setShowWait] = useState(false);
+  const [showIshrak, setShowIshrak] = useState(false);
   const [iqamahCountdown, setIqamahCountdown] = useState<string>('00:00');
   const hijriDate = useHijriDate({ now: time, adjust: hijriAdjust });
 
@@ -27,6 +29,7 @@ export function useClockLogic(
       if (nextPrayer) {
         updateClockState(DateTime.fromJSDate(now), nextPrayer);
       }
+      checkIshrakTime(now);
     }, 1000);
     return () => clearInterval(timer);
   }, [nextPrayer, prayerSettings, hijriAdjust]);
@@ -135,11 +138,28 @@ export function useClockLogic(
     }
   }
 
+  function checkIshrakTime(currentTime: Date) {
+    const coordinates = new Coordinates(
+      locationCoordinates[prayerSettings.location].latitude,
+      locationCoordinates[prayerSettings.location].longitude
+    );
+    const params = CalculationMethod.MuslimWorldLeague();
+    const prayerTimes = new PrayerTimes(coordinates, currentTime, params);
+
+    const sunrise = DateTime.fromJSDate(prayerTimes.sunrise);
+    const ishrakStart = sunrise.plus({ minutes: 20 });
+    const ishrakEnd = sunrise.plus({ minutes: 30 });
+    const now = DateTime.fromJSDate(currentTime);
+
+    setShowIshrak(now >= ishrakStart && now < ishrakEnd);
+  }
+
   return {
     time,
     nextPrayer,
     showIqamahCountdown,
     showWait,
+    showIshrak,
     iqamahCountdown,
     hijriDate,
   };
