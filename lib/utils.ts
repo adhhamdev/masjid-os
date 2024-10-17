@@ -39,17 +39,20 @@ export function getEnglishDate(): string {
   return DateTime.now().toLocaleString(DateTime.DATE_FULL);
 }
 
-export function formatTime(date: Date, use12Hour: boolean = false): string {
+export function formatTime(
+  date: Date,
+  use12Hour: boolean = false
+): { time: string; ampm?: string } {
   const dateTime = DateTime.fromJSDate(date);
   const format = use12Hour ? 'hh:mm:ss' : 'HH:mm:ss';
   const formattedTime = dateTime.toFormat(format);
 
   if (use12Hour) {
     const ampm = dateTime.toFormat('a');
-    return `${formattedTime}<span class="text-7xl font-normal align-top font-sans">${ampm}</span>`;
+    return { time: formattedTime, ampm: ampm };
   }
 
-  return formattedTime;
+  return { time: formattedTime };
 }
 
 export function addMinutes(date: Date, minutes: number): Date {

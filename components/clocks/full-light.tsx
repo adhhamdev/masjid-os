@@ -46,19 +46,35 @@ export default function FullLight({
                         {hijriDate} <span className='text-black'>|</span> {getEnglishDate()} <span className='text-black'>|</span> {temperature}°C <span className='text-black'>|</span> <span className='font-bold text-black'>{masjidName}</span>
                     </div>
                 </div>
-                <div className="flex-1 flex flex-col justify-center items-center space-y-4">
+                <div className="flex-1 flex flex-col justify-center items-center">
                     <div
-                        className={`text-6xl sm:text-8xl md:text-10xl lg:text-[17.5vw] font-extrabold ${lcdTime.className}`}
+                        className={`text-6xl sm:text-8xl md:text-10xl lg:text-[17.5vw] font-extrabold`}
                         suppressHydrationWarning
-                        dangerouslySetInnerHTML={{ __html: formatTime(time, true) }}
-                    />
+                    >
+                        <span className={`${lcdTime.className}`}>
+                            {formatTime(time, true).time}
+                        </span>
+                        <span className='text-6xl'>
+                            {formatTime(time, true).ampm}
+                        </span>
+                    </div>
                     {nextPrayer && (
                         <>
-                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-yellow-600 ${lcdTime.className}`} suppressHydrationWarning
-                                dangerouslySetInnerHTML={{ __html: formatTime(nextPrayer.time, true) }}>
+                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-yellow-600`} suppressHydrationWarning>
+                                <span className={`${lcdTime.className}`}>
+                                    {formatTime(nextPrayer.time, true).time}
+                                </span>
+                                <span className='text-6xl'>
+                                    {formatTime(nextPrayer.time, true).ampm}
+                                </span>
                             </div>
-                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-600 ${lcdTime.className}`} suppressHydrationWarning
-                                dangerouslySetInnerHTML={{ __html: formatTime(nextPrayer.iqamah, true) }}>
+                            <div className={`text-5xl sm:text-7xl md:text-9xl lg:text-[17.5vw] font-extrabold text-center text-red-600`} suppressHydrationWarning>
+                                <span className={`${lcdTime.className}`}>
+                                    {formatTime(nextPrayer.iqamah, true).time}
+                                </span>
+                                <span className='text-6xl'>
+                                    {formatTime(nextPrayer.iqamah, true).ampm}
+                                </span>
                             </div>
                         </>
                     )}

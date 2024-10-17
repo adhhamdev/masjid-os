@@ -25,10 +25,16 @@ export default function IshrakScreen() {
             </div>
             <div className="flex justify-center items-center p-4 sm:p-8">
                 <div
-                    className={`text-6xl sm:text-8xl md:text-9xl lg:text-[14rem] font-bold ${lcdTime.className}`}
+                    className={`text-6xl sm:text-8xl md:text-9xl lg:text-[14rem] font-bold`}
                     suppressHydrationWarning
-                    dangerouslySetInnerHTML={{ __html: formatTime(now, true) }}
-                />
+                >
+                    <span className={`${lcdTime.className}`}>
+                        {formatTime(now, true).time}
+                    </span>
+                    <span className='text-6xl'>
+                        {formatTime(now, true).ampm}
+                    </span>
+                </div>
             </div>
         </div>
     )

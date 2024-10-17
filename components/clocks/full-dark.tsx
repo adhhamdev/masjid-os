@@ -128,7 +128,7 @@ function Header({
 
 function ClockDisplay({ time, nextPrayer }: Pick<FullDarkProps, 'time' | 'nextPrayer'>) {
     return (
-        <div className="flex-1 flex flex-col justify-center items-center space-y-4">
+        <div className="flex-1 flex flex-col justify-center items-center">
             <TimeDisplay time={DateTime.fromJSDate(time)} />
             {nextPrayer && (
                 <>
@@ -143,9 +143,17 @@ function ClockDisplay({ time, nextPrayer }: Pick<FullDarkProps, 'time' | 'nextPr
 function TimeDisplay({ time, color = 'text-white' }: { time: DateTime; color?: string }) {
     return (
         <div
-            className={`text-6xl sm:text-8xl md:text-10xl lg:text-[17.5vw] font-extrabold ${lcdTime.className} ${color}`}
+            className={`text-6xl sm:text-8xl md:text-10xl lg:text-[17.5vw] font-extrabold ${color}`}
             suppressHydrationWarning
-            dangerouslySetInnerHTML={{ __html: formatTime(time.toJSDate(), true) }}
-        />
+        >
+            <span className={`${lcdTime.className}`}>
+
+                {formatTime(time.toJSDate(), true).time}
+            </span>
+            <span className='text-7xl'>
+                {formatTime(time.toJSDate(), true).ampm}
+            </span>
+        </div>
+
     );
 }

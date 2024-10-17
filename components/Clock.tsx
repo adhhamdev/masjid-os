@@ -39,6 +39,17 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
     } = useClockLogic(prayerSettings, iqamathTime, globalSettings.hijri_adjust, nightMode)
 
     function renderClockComponent() {
+        const commonProps = {
+            hijriDate,
+            time,
+            nextPrayer,
+            iqamathTime,
+            masjidName,
+            temperature,
+            clockSettings,
+            prayerSettings,
+            getEnglishDate,
+        }
         if (nightMode.active && isNightModeActive) {
             return <NightModeScreen />
         } else if (showIshrak) {
@@ -46,17 +57,6 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
         } else if (showIqamahCountdown) {
             return <IqamahCountdown countdown={iqamahCountdown} />
         } else {
-            const commonProps = {
-                hijriDate,
-                time,
-                nextPrayer,
-                iqamathTime,
-                masjidName,
-                temperature,
-                clockSettings,
-                prayerSettings,
-                getEnglishDate,
-            }
             return clockSettings.theme === '2' ? <FullLight {...commonProps} /> : <FullDark {...commonProps} />
         }
     }
