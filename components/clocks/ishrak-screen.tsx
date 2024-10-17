@@ -1,22 +1,34 @@
 import { lcdTime } from '@/fonts'
 import { formatTime } from '@/lib/utils'
+import Image from 'next/image'
 
 export default function IshrakScreen() {
     const now = new Date()
 
     return (
-        <div className="flex flex-col h-screen w-screen bg-emerald-100 text-emerald-900 font-sans overflow-hidden">
-            <div className="bg-emerald-600 p-4 text-center text-2xl sm:text-3xl md:text-4xl font-bold text-white border-b-2 border-emerald-700">
-                ISHRAK PRAYER TIME
+        <div className="flex flex-col h-screen w-screen font-sans overflow-hidden">
+            <div className="relative h-1/2 w-full">
+                <Image
+                    src="/ishrak-sunrise.jpeg"
+                    alt="Sunrise Landscape"
+                    className='w-full h-full object-cover'
+                    priority
+                    width={735}
+                    height={489}
+                    quality={100}
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                    <h1 className="text-4xl sm:text-5xl md:text-8xl font-bold text-white text-center">
+                        ISHRAK PRAYER TIME
+                    </h1>
+                </div>
             </div>
-            <div className="flex-1 flex flex-col justify-center items-center p-8">
-                <div className={`text-6xl sm:text-8xl md:text-9xl lg:text-[12rem] font-bold ${lcdTime.className} text-emerald-700 mb-8`}
+            <div className="flex justify-center items-center p-4 sm:p-8">
+                <div
+                    className={`text-6xl sm:text-8xl md:text-9xl lg:text-[14rem] font-bold ${lcdTime.className}`}
                     suppressHydrationWarning
                     dangerouslySetInnerHTML={{ __html: formatTime(now, true) }}
                 />
-                <p className="text-2xl sm:text-3xl md:text-4xl text-center font-semibold text-emerald-800">
-                    It's time for Ishrak prayer.<br />May Allah accept our prayers.
-                </p>
             </div>
         </div>
     )

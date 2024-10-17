@@ -22,6 +22,10 @@ const IshrakScreen = dynamic(() => import('@/components/clocks/ishrak-screen'), 
     loading: () => <p>Loading...</p>
 })
 
+const NightModeScreen = dynamic(() => import('@/components/clocks/night-mode-screen'), {
+    loading: () => <p>Loading...</p>
+})
+
 function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, masjidName, globalSettings }: ClockProps) {
     const temperature = useTemperature()
     const {
@@ -29,18 +33,18 @@ function Clock({ masjid, clockSettings, prayerSettings, iqamathTime, nightMode, 
         hijriDate,
         nextPrayer,
         showIqamahCountdown,
-        showWait,
         showIshrak,
         iqamahCountdown,
+        isNightModeActive,
     } = useClockLogic(prayerSettings, iqamathTime, globalSettings.hijri_adjust, nightMode)
 
     function renderClockComponent() {
-        if (showIshrak) {
+        if (nightMode.active && isNightModeActive) {
+            return <NightModeScreen />
+        } else if (showIshrak) {
             return <IshrakScreen />
         } else if (showIqamahCountdown) {
             return <IqamahCountdown countdown={iqamahCountdown} />
-        } else if (showWait) {
-            return <div className='flex items-center justify-center h-screen w-screen text-4xl font-bold'>Wait...</div>
         } else {
             const commonProps = {
                 hijriDate,

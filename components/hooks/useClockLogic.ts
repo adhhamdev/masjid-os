@@ -14,11 +14,10 @@ export function useClockLogic(
   const [time, setTime] = useState(new Date());
   const [nextPrayer, setNextPrayer] = useState<Prayer | null>(null);
   const [showIqamahCountdown, setShowIqamahCountdown] = useState(false);
-  const [showWait, setShowWait] = useState(false);
   const [showIshrak, setShowIshrak] = useState(false);
   const [iqamahCountdown, setIqamahCountdown] = useState<string>('00:00');
   const hijriDate = useHijriDate({ now: time, adjust: hijriAdjust });
-  console.log(nightMode);
+  const [isNightModeActive, setIsNightModeActive] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -31,19 +30,10 @@ export function useClockLogic(
         updateClockState(DateTime.fromJSDate(now), nextPrayer);
       }
       checkIshrakTime(now);
+      checkNightModeActive(now);
     }, 1000);
     return () => clearInterval(timer);
-  }, [nextPrayer, prayerSettings, hijriAdjust]);
-
-  useEffect(() => {
-    if (showWait) {
-      const waitTimer = setTimeout(() => {
-        setShowWait(false);
-      }, 12000);
-
-      return () => clearTimeout(waitTimer);
-    }
-  }, [showWait]);
+  }, [nextPrayer, prayerSettings, hijriAdjust, nightMode]);
 
   function calculateNextPrayer(currentTime: Date) {
     const coordinates = new Coordinates(
@@ -119,7 +109,6 @@ export function useClockLogic(
 
     if (now >= prayerTime && now < prayerIqamah) {
       setShowIqamahCountdown(true);
-      setShowWait(false);
       const diff = prayerIqamah.diff(now, ['minutes', 'seconds']);
       const minutes = Math.floor(diff.minutes);
       const seconds = Math.floor(diff.seconds);
@@ -127,15 +116,8 @@ export function useClockLogic(
       setIqamahCountdown(countdown);
     } else if (now >= prayerIqamah && now < waitEndTime) {
       setShowIqamahCountdown(false);
-      setShowWait(true);
     } else {
       setShowIqamahCountdown(false);
-      setShowWait(false);
-    }
-
-    // If we're in the "Wait..." period, schedule the end of it
-    if (showWait && now >= waitEndTime) {
-      setShowWait(false);
     }
   }
 
@@ -155,14 +137,32 @@ export function useClockLogic(
     setShowIshrak(now >= ishrakStart && now < ishrakEnd);
   }
 
+  function checkNightModeActive(currentTime: Date) {
+    if (!nightMode.active) {
+      setIsNightModeActive(false);
+      return;
+    }
+
+    const now = DateTime.fromJSDate(currentTime);
+    const fromTime = DateTime.fromFormat(nightMode.from, 'HH:mm');
+    const toTime = DateTime.fromFormat(nightMode.to, 'HH:mm');
+
+    if (toTime < fromTime) {
+      // Night mode spans across midnight
+      setIsNightModeActive(now >= fromTime || now < toTime);
+    } else {
+      setIsNightModeActive(now >= fromTime && now < toTime);
+    }
+  }
+
   return {
     time,
     nextPrayer,
     showIqamahCountdown,
-    showWait,
     showIshrak,
     iqamahCountdown,
     hijriDate,
+    isNightModeActive,
   };
 }
 
