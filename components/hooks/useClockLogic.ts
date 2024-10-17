@@ -18,6 +18,7 @@ export function useClockLogic(
   const [showIshrak, setShowIshrak] = useState(false);
   const [iqamahCountdown, setIqamahCountdown] = useState<string>('00:00');
   const hijriDate = useHijriDate({ now: time, adjust: hijriAdjust });
+  console.log(nightMode);
 
   useEffect(() => {
     const timer = setInterval(() => {

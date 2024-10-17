@@ -30,8 +30,8 @@ export default function IqamahCountdown({ countdown }: { countdown: string }) {
                 </div>
             </div>
 
-            <div className="w-full h-[25vh] flex items-center justify-center bg-gradient-to-t from-red-600 to-red-800">
-                <div className="text-6xl lg:text-9xl font-bold text-white">{countdown}</div>
+            <div className="w-full h-[35vh] flex items-center justify-center bg-gradient-to-t from-red-600 to-red-800">
+                <div className="text-6xl lg:text-11xl font-bold text-white">{countdown}</div>
             </div>
         </div>
     )
