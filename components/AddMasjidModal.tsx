@@ -3,7 +3,7 @@
 import { createMasjid } from '@/app/actions'
 import { useToast } from '@/components/hooks/use-toast'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader2, Plus } from 'lucide-react'
@@ -63,6 +63,9 @@ export function AddMasjidModal({ includeAdditionalFields = false }: AddMasjidMod
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>Add New Masjid</DialogTitle>
+                    <DialogDescription>
+                        Add a new masjid.
+                    </DialogDescription>
                 </DialogHeader>
                 <form action={handleSubmit} className="space-y-4">
                     <div className="space-y-2">

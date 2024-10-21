@@ -85,7 +85,10 @@ export function useClockLogic(
     setNextPrayer(nextPrayer || prayers[0]);
   }
 
-  function getIqamahTime(prayerTime: Date, iqamahSetting: string[]): Date {
+  function getIqamahTime(
+    prayerTime: Date,
+    iqamahSetting: string[] = ['0', '00:00', '0']
+  ): Date {
     if (iqamahSetting[2] === '1') {
       const nowDate = new Date();
       return new Date(

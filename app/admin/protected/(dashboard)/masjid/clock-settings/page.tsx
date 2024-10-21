@@ -1,4 +1,4 @@
-import { getClockSettings, getContactDetails, getIqamathTime, getMasjidDetails, getNightMode } from '@/app/actions'
+import { getMasjidDetails } from '@/app/actions'
 import { FormMessage } from '@/components/form-message'
 import IqamathTimeTab from '@/components/IqamathTimeTab'
 import MasjidDetailsTab from '@/components/MasjidDetailsTab'
@@ -7,11 +7,7 @@ import ThemeTab from '@/components/ThemeTab'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default async function ClockSettings({ searchParams }: { searchParams: { success: string, error: string, message: string } }) {
-  const { masjid } = await getMasjidDetails()
-  const { clockSettings } = await getClockSettings(masjid?.clock_settings)
-  const { iqamathTime } = await getIqamathTime(clockSettings?.iqamath_time)
-  const { nightMode } = await getNightMode(clockSettings?.night_mode)
-  const { contact } = await getContactDetails(masjid?.contact)
+  const { masjid } = await getMasjidDetails();
 
   const msg = searchParams.success ? { success: searchParams.success } : searchParams.error ? { error: searchParams.error } : searchParams.message ? { message: searchParams.message } : null
 
@@ -47,19 +43,19 @@ export default async function ClockSettings({ searchParams }: { searchParams: { 
           </div>
 
           <TabsContent value='masjid-details'>
-            <MasjidDetailsTab masjid={masjid} masjidName={contact?.masjid_name} />
+            <MasjidDetailsTab masjid={masjid} masjidName={masjid?.contact?.masjid_name} />
           </TabsContent>
 
           <TabsContent value='iqamath-time'>
-            <IqamathTimeTab iqamathTime={iqamathTime} clockSettings={clockSettings} />
+            <IqamathTimeTab iqamathTime={masjid?.clock_settings?.iqamath_time} clockSettings={masjid?.clock_settings} />
           </TabsContent>
 
           <TabsContent value='theme'>
-            <ThemeTab theme={clockSettings?.theme} masjid={masjid} />
+            <ThemeTab theme={masjid?.clock_settings?.theme} masjid={masjid} />
           </TabsContent>
 
           <TabsContent value='night-mode'>
-            <NightModeTab nightMode={nightMode} clockSettings={clockSettings} />
+            <NightModeTab nightMode={masjid?.clock_settings?.night_mode} clockSettings={masjid?.clock_settings} />
           </TabsContent>
         </Tabs>
       </main>

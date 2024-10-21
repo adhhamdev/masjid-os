@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Loader2, Save } from 'lucide-react'
 import { useState, useTransition } from 'react'
 
-export default function PrayerSettingsTab({ prayerSettings, prayerSettingsId }: { prayerSettings: any, prayerSettingsId: any }) {
+export default function PrayerSettingsTab({ prayerSettings }: { prayerSettings: any }) {
 
     const [isPending, startTransition] = useTransition()
     const [message, setMessage] = useState<any>(null)
@@ -16,7 +16,7 @@ export default function PrayerSettingsTab({ prayerSettings, prayerSettingsId }: 
     const handleSubmit = async (formData: FormData) => {
         setMessage(null)
         startTransition(async () => {
-            const response = await updatePrayerSettings(formData, prayerSettingsId);
+            const response = await updatePrayerSettings(formData, prayerSettings.id);
             setMessage(response)
         })
     }

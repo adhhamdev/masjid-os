@@ -1,7 +1,7 @@
 'use server';
 import { createAdminClient, createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function signInAction(formData: FormData) {
@@ -79,7 +79,18 @@ export async function getMasjidDetails() {
 
   const { data: masjid, error: masjidError } = await supabase
     .from('masjid')
-    .select('*')
+    .select(
+      `
+      *,
+      contact (*),
+      prayer_settings (*),
+      clock_settings (
+        *,
+        iqamath_time (*),
+        night_mode (*)
+      )
+    `
+    )
     .eq('user', user.id)
     .single();
 
@@ -92,120 +103,6 @@ export async function getMasjidDetails() {
   revalidatePath('/admin/protected/dashboard');
 
   return { masjid };
-}
-
-export async function getContactDetails(contactId: string) {
-  const supabase = createClient();
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (userError) {
-    console.error('Error fetching user:', userError);
-    return { error: userError.message };
-  }
-
-  if (!user) {
-    return { error: 'User not authenticated' };
-  }
-
-  const { data: contact, error: contactError } = await supabase
-    .from('contact')
-    .select('*')
-    .eq('id', contactId)
-    .single();
-
-  if (contactError) {
-    console.error('Error fetching contact details:', contactError);
-    return { error: contactError.message };
-  }
-
-  // Revalidate the path to ensure fresh data
-  revalidatePath('/admin/protected/dashboard');
-
-  return { contact };
-}
-
-export async function getPrayerSettings(prayerId: string) {
-  const supabase = createClient();
-  const { error: userError } = await supabase.auth.getUser();
-
-  if (userError) {
-    console.error('Error fetching user:', userError);
-    return { error: userError.message };
-  }
-
-  const { data: prayerSettings, error: prayerError } = await supabase
-    .from('prayer_settings')
-    .select('*')
-    .eq('id', Number(prayerId))
-    .single();
-
-  if (prayerError) {
-    console.error('Error fetching prayer details:', prayerError);
-    return { error: prayerError.message };
-  }
-
-  // Revalidate the path to ensure fresh data
-  revalidatePath('/admin/protected/dashboard');
-
-  return { prayerSettings };
-}
-
-export async function getClockSettings(clockSettingsId: string) {
-  const supabase = createClient();
-  const { error: userError } = await supabase.auth.getUser();
-
-  if (userError) {
-    console.error('Error fetching user:', userError);
-    return { error: userError.message };
-  }
-
-  const { data: clockSettings, error: clockError } = await supabase
-    .from('clock_settings')
-    .select('*')
-    .eq('id', clockSettingsId)
-    .single();
-
-  if (clockError) {
-    console.error('Error fetching clock settings:', clockError);
-    return { error: clockError.message };
-  }
-
-  return { clockSettings };
-}
-
-export async function getIqamathTime(iqamathTimeId: string) {
-  const supabase = createClient();
-  const { data: iqamathTime, error: iqamathError } = await supabase
-    .from('iqamath_time')
-    .select('*')
-    .eq('id', iqamathTimeId)
-    .single();
-
-  if (iqamathError) {
-    console.error('Error fetching iqamath time:', iqamathError);
-    return { error: iqamathError.message };
-  }
-
-  return { iqamathTime };
-}
-
-export async function getNightMode(nightModeId: string) {
-  const supabase = createClient();
-  const { data: nightMode, error: nightModeError } = await supabase
-    .from('night_mode')
-    .select('*')
-    .eq('id', nightModeId)
-    .single();
-
-  if (nightModeError) {
-    console.error('Error fetching night mode:', nightModeError);
-    return { error: nightModeError.message };
-  }
-
-  return { nightMode };
 }
 
 export async function updateWebInfo(formData: FormData, masjidId: any) {
@@ -474,21 +371,30 @@ export async function updateMasjidPhotos(masjidId: string, photos: string[]) {
 }
 
 // SUPERADMIN
-export async function getMosquesAdmin() {
+export async function getSuperAdminData() {
   const supabase = createAdminClient();
-  const { data: mosques, error } = await supabase.from('masjid').select(`
+  const { data: mosques, error: mosquesError } = await supabase.from('masjid')
+    .select(`
       *,
       contact (
         masjid_name
       )
     `);
+  const { data: globalSettings, error: globalSettingsError } = await supabase
+    .from('global_settings')
+    .select('*')
+    .single();
 
-  if (error) {
-    console.error('Error fetching mosques:', error);
-    return { error: error.message };
+  if (mosquesError) {
+    console.error('Error fetching mosques:', mosquesError);
+    return { error: 'Failed to fetch mosques. Please try again.' };
+  }
+  if (globalSettingsError) {
+    console.error('Error fetching global settings:', globalSettingsError);
+    return { error: 'Failed to fetch global settings. Please try again.' };
   }
 
-  return { mosques };
+  return { mosques, globalSettings };
 }
 
 type FileData = {
@@ -498,8 +404,18 @@ type FileData = {
   content: string; // base64 encoded file content
 };
 
-export async function getMasjidDetailsAdmin(masjidId: string) {
+export async function getSuperAdminMasjidData(masjidId: string) {
   const supabase = createAdminClient();
+  const { error: checkMasjid } = await supabase
+    .from('masjid')
+    .select('*')
+    .eq('id', masjidId)
+    .single();
+
+  if (checkMasjid) {
+    notFound();
+  }
+
   const { data: masjid, error } = await supabase
     .from('masjid')
     .select(
@@ -563,21 +479,6 @@ export async function updatePrayerSettingsAdmin(
     console.error('Error updating prayer settings:', error);
     throw error;
   }
-}
-
-export async function getGlobalSettings() {
-  const supabase = createAdminClient();
-  const { data: globalSettings, error } = await supabase
-    .from('global_settings')
-    .select('*')
-    .single();
-
-  if (error) {
-    console.error('Error fetching global settings:', error);
-    return { error: error.message };
-  }
-
-  return { globalSettings };
 }
 
 export async function updateGlobalSettings(formData: FormData) {
