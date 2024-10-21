@@ -1,4 +1,4 @@
-import { getContactDetails, getMasjidDetails, getPrayerSettings } from "@/app/actions"
+import { getMasjidDetails } from "@/app/actions"
 import ContactTab from "@/components/ContactTab"
 import { MasjidImages } from "@/components/MasjidImages"
 import PrayerSettingsTab from "@/components/PrayerSettingsTab"
@@ -7,8 +7,6 @@ import WebTab from "@/components/WebTab"
 
 export default async function Info() {
     const { masjid } = await getMasjidDetails();
-    const { contact } = await getContactDetails(masjid?.contact);
-    const { prayerSettings } = await getPrayerSettings(masjid?.prayer_settings);
 
     return (
         <div className="min-h-screen py-8">
@@ -26,10 +24,10 @@ export default async function Info() {
                         <WebTab webInfo={masjid?.web_info} />
                     </TabsContent>
                     <TabsContent value="contact">
-                        <ContactTab contact={contact} contactId={masjid?.contact} />
+                        <ContactTab contact={masjid?.contact} contactId={masjid?.contact} />
                     </TabsContent>
                     <TabsContent value="prayer">
-                        <PrayerSettingsTab prayerSettings={prayerSettings} prayerSettingsId={masjid?.prayer_settings} />
+                        <PrayerSettingsTab prayerSettings={masjid?.prayer_settings} />
                     </TabsContent>
                 </Tabs>
                 <MasjidImages
