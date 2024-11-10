@@ -71,7 +71,7 @@ export default function DashboardHeader({ masjidName }: { masjidName: string }) 
                                 <nav className="flex flex-col space-y-4 mt-8">
                                     <ProfileDropdown isMobile={true} />
                                     <Link href="/admin/protected/masjid/clock-settings">
-                                        <Button variant="ghost" size="lg" className="justify-start text-emerald-50 hover:text-emerald-200">
+                                        <Button variant="ghost" size="lg" className="justify-start text-emerald-50 hover:text-emerald-200 w-full">
                                             <Clock className="mr-2 h-5 w-5" />
                                             Clock Settings
                                         </Button>

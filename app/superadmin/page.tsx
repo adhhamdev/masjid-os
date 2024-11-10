@@ -4,11 +4,10 @@ import { LogoutButton } from '@/components/logout-button';
 import { Masjid } from "@/components/Masjid";
 import { Button } from '@/components/ui/button';
 import { Settings } from "lucide-react";
-import { getGlobalSettings, getMosquesAdmin, superAdminLogout } from "../actions";
+import { getSuperAdminData, superAdminLogout } from "../actions";
 
 export default async function SuperAdminPage() {
-    const { mosques, error } = await getMosquesAdmin();
-    const { globalSettings } = await getGlobalSettings();
+    const { mosques, globalSettings, error } = await getSuperAdminData();
 
     if (error) {
         console.error('Error fetching mosques:', error);
