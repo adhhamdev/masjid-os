@@ -50,5 +50,26 @@
     "tailwindcss": "^3.4.12",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.6.2"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "android >= 4",
+    "chrome >= 4",
+    "edge >= 12",
+    "firefox >= 2",
+    "ie >= 9",
+    "ios >= 4",
+    "opera >= 12",
+    "safari >= 4",
+    "samsung >= 4",
+    "and_chr >= 4",
+    "and_ff >= 4",
+    "and_qq >= 1",
+    "and_uc >= 12",
+    "baidu >= 7",
+    "kaios >= 2",
+    "op_mini all",
+    "op_mob >= 12",
+    "not dead"
+  ]
 }
